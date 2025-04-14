@@ -56,6 +56,16 @@ public class utilisateur {
         this.status = status;
     }
 
+    public utilisateur(String email, String nom_user, String roles, String num_tel, String password, boolean status, String matricule_fiscale) {
+        this.email = email;
+        this.nom_user = nom_user;
+        this.roles = roles;
+        this.num_tel = num_tel;
+        this.password = password;
+        this.status = status;
+        this.matricule_fiscale = matricule_fiscale;
+    }
+
     // Standard getters and setters
     public int getId() {
         return id;
