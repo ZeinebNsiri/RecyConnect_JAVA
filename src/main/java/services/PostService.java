@@ -4,15 +4,61 @@ import entities.Post;
 import utils.MyDataBase;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostService implements IService<Post>{
     Connection conx;
     public PostService() {conx = MyDataBase.getInstance().getConx();}
 
+
+    public List<String> getMediaForPost(int postId) {
+        List<String> mediaUrls = new ArrayList<>();
+        String sql = "SELECT chemin FROM media_post WHERE post_id = ?";
+
+        try {
+            PreparedStatement ps = conx.prepareStatement(sql);
+            ps.setInt(1, postId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                mediaUrls.add(rs.getString("chemin"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return mediaUrls;
+    }
+
+
     @Override
     public List<Post> displayList() throws SQLException {
-        return List.of();
+        List<Post> posts = new ArrayList<>();
+        String sql = "SELECT * FROM post";
+
+        try {
+            Statement stmt = conx.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                Post p = new Post();
+                p.setId(rs.getInt("id"));
+                p.setUser_p_id(rs.getInt("user_p_id"));
+                p.setContenu(rs.getString("contenu"));
+                p.setDate_publication(rs.getTimestamp("date_publication").toLocalDateTime());
+                p.setNbr_jaime(rs.getInt("nbr_jaime"));
+                p.setStatus_post(rs.getBoolean("status_post"));
+
+
+
+                posts.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return posts;
     }
 
     @Override

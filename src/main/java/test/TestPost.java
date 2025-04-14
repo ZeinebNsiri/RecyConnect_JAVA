@@ -10,22 +10,33 @@ import java.util.List;
 public class TestPost {
     public static void main(String[] args) {
         try {
-            // 1. Créer un objet PostService
             PostService postService = new PostService();
 
-            // 2. Créer un objet Post à insérer
-            Post post = new Post();
-            post.setUser_p_id(1); // Remplace par un ID utilisateur valide
-            post.setContenu("Ceci est un test de post depuis la console");
-            post.setDate_publication(LocalDateTime.now());
-            post.setNbr_jaime(0);
-            post.setStatus_post(true);
+
+            System.out.println("\n--- Liste des posts ---");
+            List<Post> posts = postService.displayList();
+
+            for (Post p : posts) {
+                System.out.println("ID: " + p.getId());
+                System.out.println("Contenu: " + p.getContenu());
+                System.out.println("Date: " + p.getDate_publication());
+                System.out.println("Nombre de j'aime: " + p.getNbr_jaime());
+                System.out.println("Status: " + p.isStatus_post());
 
 
+                List<String> images = postService.getMediaForPost(p.getId());
+                if (images.isEmpty()) {
+                    System.out.println("Aucune image.");
+                } else {
+                    System.out.println("Images associées :");
+                    for (String img : images) {
+                        System.out.println("  - " + img);
+                    }
+                }
 
-            // 3. Option B : Ajouter avec des chemins d'images
-            List<String> mediaPaths = Arrays.asList("chemin/image1.jpg", "chemin/image2.png");
-            postService.addWithMedia(post, mediaPaths);
+                System.out.println("------------------------------------");
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
