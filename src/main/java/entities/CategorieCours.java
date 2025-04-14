@@ -9,10 +9,11 @@ public class CategorieCours {
     public CategorieCours() {
     }
 
-    public CategorieCours(int id, String descriptionCategorie, String nomCategorie) {
+    public CategorieCours(int id, String nomCategorie, String descriptionCategorie) {
         this.id = id;
-        this.descriptionCategorie = descriptionCategorie;
         this.nomCategorie = nomCategorie;
+        this.descriptionCategorie = descriptionCategorie;
+
     }
 
     public int getId() {

@@ -21,12 +21,10 @@ public class AjoutCategorieCours {
     private TextField nomCategorieID;
     @FXML
     private TextArea descriptionCategorieID;
-
     @FXML
     private Label errorNom;
     @FXML
     private Label errorDescription;
-
     @FXML
     private Button btnSubmitID;
     @FXML
@@ -34,13 +32,10 @@ public class AjoutCategorieCours {
 
     @FXML
     void ajoutercategorie(ActionEvent event) {
-
         errorNom.setText("");
         errorDescription.setText("");
 
         boolean valid = true;
-
-
         if (nomCategorieID.getText().trim().isEmpty()) {
             errorNom.setText("Ce champ est obligatoire.");
             valid = false;
@@ -49,10 +44,7 @@ public class AjoutCategorieCours {
             errorDescription.setText("Ce champ est obligatoire.");
             valid = false;
         }
-
-
         if (!valid) return;
-
 
         CategorieCoursService service = new CategorieCoursService();
         try {
@@ -64,12 +56,10 @@ public class AjoutCategorieCours {
                 }
             }
         } catch (SQLException e) {
-
             showAlert("Erreur Critique", "Erreur lors de la vérification : " + e.getMessage(), Alert.AlertType.ERROR);
             e.printStackTrace();
             return;
         }
-
 
         try {
             CategorieCours nouvelleCategorie = new CategorieCours();
@@ -78,27 +68,25 @@ public class AjoutCategorieCours {
 
             service.add(nouvelleCategorie);
 
-
             showAlert("Succès", "Catégorie ajoutée avec succès", Alert.AlertType.CONFIRMATION);
 
-            clearForm();
+            retourAfficherCategorie();
 
         } catch (SQLIntegrityConstraintViolationException ex) {
-
             errorNom.setText("Ce nom de catégorie existe déjà");
-
             ex.printStackTrace();
-
         } catch (Exception e) {
-
             showAlert("Erreur Critique", "Erreur : " + e.getMessage(), Alert.AlertType.ERROR);
             e.printStackTrace();
         }
     }
 
-
     @FXML
     void cancel(ActionEvent event) {
+        retourAfficherCategorie();
+    }
+
+    private void retourAfficherCategorie() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/AfficherCategorieCours.fxml"));
             Parent root = loader.load();
@@ -109,15 +97,6 @@ public class AjoutCategorieCours {
             e.printStackTrace();
         }
     }
-
-
-    private void clearForm() {
-        nomCategorieID.clear();
-        descriptionCategorieID.clear();
-        errorNom.setText("");
-        errorDescription.setText("");
-    }
-
 
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
