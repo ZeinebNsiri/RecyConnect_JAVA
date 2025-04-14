@@ -23,13 +23,18 @@ public class AfficherCategorieCours {
     @FXML
     private TableColumn<CategorieCours, Integer> colId;
 
+
     @FXML
     private TableColumn<CategorieCours, String> colNom;
+
+
     @FXML
     private TableColumn<CategorieCours, String> colDescription;
 
+
     @FXML
     private TableColumn<CategorieCours, Void> colDetails;
+
 
     @FXML
     private Button btnAjouter;
@@ -38,16 +43,16 @@ public class AfficherCategorieCours {
 
     @FXML
     private void initialize() {
-        // ID -> "id"
+
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        // « Nom de la catégorie » -> nomCategorie
+
         colNom.setCellValueFactory(new PropertyValueFactory<>("nomCategorie"));
 
-        // « Description » -> descriptionCategorie
+
         colDescription.setCellValueFactory(new PropertyValueFactory<>("descriptionCategorie"));
 
-        // Réduire le texte si la description est trop longue (> 50 caractères)
+
         colDescription.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -64,26 +69,24 @@ public class AfficherCategorieCours {
             }
         });
 
-        // Créer les boutons "Modifier" et "Supprimer"
+
         colDetails.setCellFactory(param -> new TableCell<>() {
             private final Button btnModifier = new Button("Modifier");
             private final Button btnSupprimer = new Button("Supprimer");
 
             {
+                // Style des boutons
                 btnModifier.setStyle("-fx-background-color: #28a745; -fx-text-fill: white;");
                 btnSupprimer.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white;");
 
-                // Bouton Modifier
+
                 btnModifier.setOnAction(event -> {
                     CategorieCours selected = getTableView().getItems().get(getIndex());
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/ModifierCategorieCours.fxml"));
                         Parent root = loader.load();
-
-                        // Récupérer le contrôleur
                         ModifierCategorieCours controller = loader.getController();
                         controller.setCategorieCours(selected);
-
                         Stage stage = (Stage) getTableView().getScene().getWindow();
                         stage.setScene(new Scene(root));
                         stage.show();
@@ -92,11 +95,26 @@ public class AfficherCategorieCours {
                     }
                 });
 
-                // Bouton Supprimer (logique à implémenter)
+
                 btnSupprimer.setOnAction(event -> {
                     CategorieCours selected = getTableView().getItems().get(getIndex());
-                    System.out.println("Supprimer : " + selected.getNomCategorie());
-                    // TODO : implémenter la logique de suppression (service.delete(...) etc.)
+                    Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmationAlert.setTitle("Confirmation de suppression");
+                    confirmationAlert.setHeaderText("Supprimer la catégorie ?");
+                    confirmationAlert.setContentText("Voulez-vous vraiment supprimer la catégorie \"" + selected.getNomCategorie() + "\" ?");
+                    ButtonType okButton = ButtonType.OK;
+                    ButtonType cancelButton = ButtonType.CANCEL;
+                    confirmationAlert.getButtonTypes().setAll(okButton, cancelButton);
+                    confirmationAlert.showAndWait().ifPresent(response -> {
+                        if (response == okButton) {
+                            try {
+                                service.delete(selected);
+                                loadCategories();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 });
             }
 
@@ -112,12 +130,13 @@ public class AfficherCategorieCours {
             }
         });
 
-        // Charger la liste des catégories
+
         loadCategories();
 
-        // Bouton "+ Ajouter catégorie"
+
         btnAjouter.setOnAction(event -> handleAjouterCategorie());
     }
+
 
     private void loadCategories() {
         try {
@@ -128,6 +147,8 @@ public class AfficherCategorieCours {
         }
     }
 
+ 
+    @FXML
     private void handleAjouterCategorie() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/AjoutCategorieCours.fxml"));
