@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.EventController">
+
+    <top>
+        <Label text="Event Manager" styleClass="header"/>
+    </top>
+
+    <center>
+        <TableView fx:id="eventTable">
+            <columns>
+                <TableColumn fx:id="nameColumn" text="Event Name" prefWidth="200"/>
+                <TableColumn fx:id="locationColumn" text="Location" prefWidth="150"/>
+                <TableColumn fx:id="dateColumn" text="Date" prefWidth="120"/>
+                <TableColumn text="Actions">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="dummy"/>
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" style="-fx-padding: 10; -fx-alignment: center;">
+            <Button text="Add Event" onAction="#handleAdd" styleClass="btn-primary"/>
+            <Button text="Delete" onAction="#handleDelete" styleClass="btn-danger"/>
+        </HBox>
+    </bottom>
+</BorderPane>

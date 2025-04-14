@@ -1,0 +1,19 @@
+.header {
+    -fx-font-size: 24px;
+    -fx-padding: 20;
+    -fx-alignment: center;
+}
+
+.btn-primary {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+
+.btn-danger {
+    -fx-background-color: #f44336;
+    -fx-text-fill: white;
+}
+
+.table-view {
+    -fx-padding: 5;
+}

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class MyDataBase {
 
-    private final String URL = "jdbc:mysql://localhost:3307/recyconnect4";
+    private final String URL = "jdbc:mysql://localhost:3306/recyconnect2";
     private final String USERNAME = "root";
     private final String PASSWORD = "";
     private Connection conx ;
