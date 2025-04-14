@@ -1,4 +1,4 @@
-package controllers;
+package controllers.Events;
 
 import entities.Event;
 import javafx.collections.FXCollections;
@@ -8,6 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import services.EventService;
+
+import java.net.URL;
 import java.sql.SQLException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,30 +18,28 @@ import javafx.stage.Stage;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.io.IOException;
 
+
 public class EventController {
     @FXML private TableView<Event> eventTable;
     @FXML private TableColumn<Event, String> nameColumn;
     @FXML private TableColumn<Event, String> locationColumn;
     @FXML private TableColumn<Event, String> dateColumn;
     @FXML private TableColumn<Event, Void> actionsColumn;
+    @FXML private Label descriptionErrorLabel;
 
     private final EventService eventService = new EventService();
     private final ObservableList<Event> events = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        // Setup column bindings
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-        // Add buttons to table
         addButtonsToTable();
-
-        // Load data
         refreshEvents();
-    }
 
+    }
 
     private void addButtonsToTable() {
         actionsColumn.setCellFactory(new Callback<>() {
@@ -81,8 +81,14 @@ public class EventController {
         openEventForm(null);
     }
 
-    private void handleEdit(Event event) {
-        openEventForm(event);
+    @FXML
+    public void handleDelete() {
+        Event selected = eventTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            handleDelete(selected);
+        } else {
+            showAlert("Warning", "No event selected", Alert.AlertType.WARNING);
+        }
     }
 
     private void handleDelete(Event event) {
@@ -105,9 +111,16 @@ public class EventController {
         });
     }
 
+    private void handleEdit(Event event) {
+        openEventForm(event);
+    }
+
     private void openEventForm(Event event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventForm.fxml"));
+            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventViews/EventForm.fxml"));
+            URL url = getClass().getResource("/EventViews/EventForm.fxml");
+            System.out.println("Form URL: " + url); // if null → path is wrong
+            FXMLLoader loader = new FXMLLoader(url);
             Parent root = loader.load();
 
             EventFormController controller = loader.getController();

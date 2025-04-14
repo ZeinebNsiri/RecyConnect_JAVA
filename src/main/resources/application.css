@@ -17,3 +17,16 @@
 .table-view {
     -fx-padding: 5;
 }
+.table-view .column-header-background {
+    -fx-background-color: #f1f1f1;
+}
+
+.button {
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 5;
+}
+
+.button:hover {
+    -fx-opacity: 0.85;
+}

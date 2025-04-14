@@ -2,31 +2,90 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.EventController"
-            stylesheets="@../application.css">
-
-    <top>
-        <Label text="Event Manager" styleClass="header"/>
-    </top>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17"
+            fx:controller="controllers.Events.EventFormController"
+            prefWidth="600" prefHeight="650"
+            style="-fx-background-color: white;">
 
     <center>
-        <TableView fx:id="eventTable">
-            <columns>
-                <TableColumn fx:id="nameColumn" text="Event Name" prefWidth="200"/>
-                <TableColumn fx:id="locationColumn" text="Location" prefWidth="150"/>
-                <TableColumn fx:id="dateColumn" text="Date" prefWidth="120"/>
-            </columns>
-        </TableView>
+        <VBox spacing="10" alignment="TOP_LEFT">
+            <padding><Insets top="20" left="30" right="30" bottom="20"/></padding>
+            <children>
+
+                <Label text="Ajouter / Modifier un événement" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+                <!-- Name -->
+                <VBox spacing="3">
+                    <TextField fx:id="nameField" promptText="Nom de l'événement" />
+                    <Label fx:id="nameErrorLabel" textFill="red" visible="false" />
+                </VBox>
+
+                <!-- Location -->
+                <VBox spacing="3">
+                    <TextField fx:id="locationField" promptText="Lieu" />
+                    <Label fx:id="locationErrorLabel" textFill="red" visible="false" />
+                </VBox>
+
+                <!-- Date -->
+                <VBox spacing="3">
+                    <DatePicker fx:id="datePicker" />
+                    <Label fx:id="dateErrorLabel" textFill="red" visible="false" />
+                </VBox>
+
+                <!-- Time -->
+                <VBox spacing="3">
+                    <TextField fx:id="timeField" promptText="Heure (hh:mm)" />
+                    <Label fx:id="timeErrorLabel" textFill="red" visible="false" />
+                </VBox>
+
+                <!-- End Time -->
+                <VBox spacing="3">
+                    <TextField fx:id="endTimeField" promptText="Heure de fin (hh:mm)" />
+                    <Label fx:id="endTimeErrorLabel" textFill="red" visible="false" />
+                </VBox>
+
+                <!-- Description -->
+                <VBox spacing="3">
+                    <TextField fx:id="descriptionField" promptText="Description" />
+                    <Label fx:id="descriptionErrorLabel" textFill="red" visible="false" />
+                </VBox>
+
+                <!-- Image -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button text="Choisir une image" onAction="#handleImageBrowse" />
+                    <Label fx:id="imageLabel" text="Aucune image choisie" />
+                </HBox>
+                <Label fx:id="imageErrorLabel" textFill="red" />
+
+
+                <!-- Capacity -->
+                <VBox spacing="3">
+                    <TextField fx:id="capacityField" promptText="Capacité totale" />
+                    <Label fx:id="capacityErrorLabel" textFill="red" visible="false" />
+                </VBox>
+
+                <!-- Remaining -->
+                <VBox spacing="3">
+                    <TextField fx:id="remainingField" promptText="Places restantes" />
+                    <Label fx:id="remainingErrorLabel" textFill="red" visible="false" />
+                </VBox>
+
+                <!-- Optional Fields -->
+                <TextField fx:id="linkField" promptText="Lien Google Meet" />
+                <TextField fx:id="coordinatesField" promptText="Coordonnées carte" />
+
+                <!-- Buttons -->
+                <HBox spacing="10" alignment="CENTER">
+                    <Button text="Enregistrer" onAction="#saveEvent"
+                            style="-fx-background-color: #28a745; -fx-text-fill: white;" />
+                    <Button text="Annuler" onAction="#cancelForm"
+                            style="-fx-background-color: #dc3545; -fx-text-fill: white;" />
+                </HBox>
+
+            </children>
+        </VBox>
     </center>
 
-    <bottom>
-        <HBox spacing="10" style="-fx-padding: 10; -fx-alignment: center;">
-            <Button text="Add Event" onAction="#handleAdd" styleClass="btn-primary"/>
-            <Button text="Delete" onAction="#handleDelete" styleClass="btn-danger"/>
-        </HBox>
-    </bottom>
 </BorderPane>
