@@ -9,11 +9,16 @@ import javafx.stage.Stage;
 public class mainFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ajoutPersonne.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/workshop/AfficherCategorieCours.fxml"));
         Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, 1000, 600);
         stage.setScene(scene);
-        stage.setTitle("ajouter personne");
+        stage.setTitle("Gestion des Catégories de Cours");
+        stage.setResizable(false);
         stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
