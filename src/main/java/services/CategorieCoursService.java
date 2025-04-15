@@ -53,7 +53,7 @@ public class CategorieCoursService implements IService<CategorieCours> {
 
 
         ps.executeUpdate();
-        System.out.println("Categorie cours added");
+        System.out.println("Categorie cours ajouté avec succès !");
     }
 
     @Override
@@ -66,7 +66,7 @@ public class CategorieCoursService implements IService<CategorieCours> {
             ps.setInt(3, categorieCours.getId());
 
             ps.executeUpdate();
-            System.out.println("Catégorie mise à jour avec succès !");
+            System.out.println("Catégorie cours mise à jour avec succès !");
         }
     }
 
@@ -85,7 +85,7 @@ public class CategorieCoursService implements IService<CategorieCours> {
         try (PreparedStatement psDeleteCategorie = conx.prepareStatement(deleteCategorieQuery)) {
             psDeleteCategorie.setInt(1, categorieCours.getId());
             psDeleteCategorie.executeUpdate();
-            System.out.println("Catégorie et cours associés supprimés avec succès !");
+            System.out.println("Catégorie cours supprimé avec succès !");
         }
     }
 

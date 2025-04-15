@@ -12,13 +12,13 @@ public class Cours {
     public Cours() {
     }
 
-    public Cours(int id, CategorieCours categorieCours, String titreCours, String descriptionCours, String video, String imageCours) {
+    public Cours(int id,String imageCours, String titreCours ,CategorieCours categorieCours, String descriptionCours, String video) {
         this.id = id;
-        this.categorieCours = categorieCours;
+        this.imageCours = imageCours;
         this.titreCours = titreCours;
+        this.categorieCours = categorieCours;
         this.descriptionCours = descriptionCours;
         this.video = video;
-        this.imageCours = imageCours;
     }
 
     public int getId() {
