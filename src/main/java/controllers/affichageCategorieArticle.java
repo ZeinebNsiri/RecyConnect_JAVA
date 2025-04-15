@@ -1,6 +1,5 @@
 package controllers;
 
-
 import entities.CategorieArticle;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -16,6 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class affichageCategorieArticle {
+
     @FXML
     private TableView<CategorieArticle> categorieTable;
 
@@ -41,26 +41,21 @@ public class affichageCategorieArticle {
     public void initialize() {
         categorieTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-
-        // Set up column mappings
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("image_categorie"));
         nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom_categorie"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description_categorie"));
 
-        // les actions : Modifier/Supprimer buttons
         actionsColumn.setCellFactory(param -> new TableCell<>() {
             private final Button editButton = new Button("✏ Modifier");
             private final Button deleteButton = new Button("🗑 Supprimer");
             private final HBox pane = new HBox(10, editButton, deleteButton);
 
             {
-                // Style buttons
                 pane.setStyle("-fx-alignment: center;");
-                editButton.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-cursor: hand;");
-                deleteButton.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white; -fx-cursor: hand;");
+                editButton.setStyle("-fx-background-color: #28a745; -fx-text-fill: white;");
+                deleteButton.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white;");
 
-                // action Supprimer
                 deleteButton.setOnAction(event -> {
                     CategorieArticle cat = getTableView().getItems().get(getIndex());
                     try {
@@ -73,15 +68,16 @@ public class affichageCategorieArticle {
                     }
                 });
 
-                // action Modifier
                 editButton.setOnAction(event -> {
                     CategorieArticle cat = getTableView().getItems().get(getIndex());
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ajoutCategorieArticle.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
                         Parent root = loader.load();
-                        ajoutCategorieArticle controller = loader.getController();
-                        controller.loadCategorieData(cat);
-                        categorieTable.getScene().setRoot(root);
+
+                        BaseAdminController controller = loader.getController();
+                        controller.showAjoutCategorieViewWithData(cat);
+
+                        addCategorieBtn.getScene().setRoot(root);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -100,7 +96,6 @@ public class affichageCategorieArticle {
             }
         });
 
-        // Load des categories dans la table
         loadCategories();
     }
 
@@ -118,9 +113,13 @@ public class affichageCategorieArticle {
     @FXML
     private void ajouterCategorieAction() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ajoutCategorieArticle.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
             Parent root = loader.load();
-            categorieTable.getScene().setRoot(root);
+
+            BaseAdminController controller = loader.getController();
+            controller.showAjoutCategorieView();
+
+            addCategorieBtn.getScene().setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Erreur lors de l'ouverture du formulaire d'ajout !");
@@ -133,12 +132,3 @@ public class affichageCategorieArticle {
         alert.show();
     }
 }
-
-
-
-
-
-
-
-
-

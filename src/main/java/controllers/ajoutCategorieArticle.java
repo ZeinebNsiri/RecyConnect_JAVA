@@ -5,15 +5,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-
 import javafx.event.ActionEvent;
 import services.CateArtService;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public class ajoutCategorieArticle {
+
     @FXML
     private Button cancelCatBtn;
 
@@ -34,22 +35,22 @@ public class ajoutCategorieArticle {
 
     private boolean isEditMode = false;
 
+    private CateArtService service = new CateArtService();
 
     @FXML
     void ajouterCategorieArticleAction(ActionEvent event) throws SQLException, IOException {
-        CateArtService service = new CateArtService();
+        //  Vérification des champs
+        if (!validerChamps()) return;
 
+        //  Créer ou modifier la catégorie
         if (isEditMode) {
-            // modifier une cat
             CategorieArticle catToUpdate = new CategorieArticle();
             catToUpdate.setId(Integer.parseInt(idCategorieField.getText()));
             catToUpdate.setNom_categorie(nomCategorieField.getText());
             catToUpdate.setDescription_categorie(descriptionCategorieField.getText());
             catToUpdate.setImage_categorie(nomImagecatField.getText());
-
             service.update(catToUpdate);
         } else {
-            // ajouter une nouvelle cat
             CategorieArticle newCat = new CategorieArticle(
                     nomCategorieField.getText(),
                     descriptionCategorieField.getText(),
@@ -58,6 +59,7 @@ public class ajoutCategorieArticle {
             service.add(newCat);
         }
 
+        //  Confirmation
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setHeaderText(null);
@@ -65,20 +67,25 @@ public class ajoutCategorieArticle {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/affichageCategorieArticle.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
             Parent root = loader.load();
+
+            BaseAdminController controller = loader.getController();
+            controller.showCategorieView();
+
             confirmAddCatBtn.getScene().setRoot(root);
         }
-
-
     }
 
-
     @FXML
-    private void annulerAction(javafx.event.ActionEvent event) {
+    private void annulerAction(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/affichageCategorieArticle.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
             Parent root = loader.load();
+
+            BaseAdminController controller = loader.getController();
+            controller.showCategorieView();
+
             cancelCatBtn.getScene().setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,15 +101,37 @@ public class ajoutCategorieArticle {
         confirmAddCatBtn.setText("Modifier");
         isEditMode = true;
     }
+
+    private boolean validerChamps() throws SQLException {
+        String nom = nomCategorieField.getText().trim();
+        String desc = descriptionCategorieField.getText().trim();
+        String image = nomImagecatField.getText().trim();
+
+        if (nom.isEmpty() || desc.isEmpty() || image.isEmpty()) {
+            showAlert("Tous les champs doivent être remplis !");
+            return false;
+        }
+
+        List<CategorieArticle> existantes = service.displayList();
+
+        for (CategorieArticle cat : existantes) {
+            boolean sameName = cat.getNom_categorie().equalsIgnoreCase(nom);
+            boolean isSameId = isEditMode && cat.getId() == Integer.parseInt(idCategorieField.getText());
+
+            if (sameName && !isSameId) {
+                showAlert("Une catégorie avec ce nom existe déjà !");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void showAlert(String msg) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Erreur de saisie");
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.show();
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
