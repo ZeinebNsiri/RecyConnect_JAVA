@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+
+    <!-- HEADER -->
+    <top>
+        <VBox spacing="0">
+            <!-- Top Contact -->
+            <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #004d26; -fx-padding: 8;">
+                <Label text="+216 95 123 742" style="-fx-text-fill: white; -fx-font-size: 14px;" />
+                <Label text="|" style="-fx-text-fill: white;" />
+                <Label text="RecyConnect@gmail.com" style="-fx-text-fill: white; -fx-font-size: 14px;" />
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label text="Suivez-nous : " style="-fx-text-fill: white; -fx-font-size: 14px;" />
+                <Label text="  " style="-fx-text-fill: white; -fx-font-size: 18px;" />
+            </HBox>
+
+            <!-- Navigation Menu -->
+            <HBox spacing="30" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15;">
+                <ImageView fitHeight="40" fitWidth="40">
+                    <Image url="@mainlogo.png"/>
+                </ImageView>
+                <Label text="Accueil" style="-fx-text-fill: green; -fx-font-weight: bold; -fx-font-size: 16px;" />
+                <Label text="Nos produits" style="-fx-font-size: 16px;" />
+                <Label text="Évènements" style="-fx-font-size: 16px;" />
+                <Label text="Workshops" style="-fx-font-size: 16px;" />
+                <Label text="Forum" style="-fx-font-size: 16px;" />
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label text="🔔" style="-fx-font-size: 18px;" />
+                <Label text="🛒" style="-fx-font-size: 18px;" />
+                <MenuButton text="mohamedazizzouari" style="-fx-font-size: 16px; -fx-text-fill: black;">
+                    <graphic>
+                        <ImageView fitHeight="24" fitWidth="24">
+                            <Image url="@mainlogo.png" />
+                        </ImageView>
+                    </graphic>
+                    <items>
+                        <CustomMenuItem hideOnClick="false" >
+                            <content>
+                                <VBox alignment="CENTER" spacing="2" style="-fx-background-color: #e8f4e3; -fx-padding: 10;">
+                                    <Label text="mohamedazizzouari" style="-fx-font-weight: bold;" />
+                                    <Label text="Professionnel" style="-fx-font-size: 12px; -fx-text-fill: gray;" />
+                                </VBox>
+                            </content>
+                        </CustomMenuItem>
+                        <SeparatorMenuItem />
+                        <MenuItem text="👤 Mon Profil" />
+                        <MenuItem text="📑 Mes commandes" />
+                        <SeparatorMenuItem />
+                        <MenuItem text="🚪 Se Déconnecter" />
+                    </items>
+                </MenuButton>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- CENTRE -->
+    <center>
+        <VBox spacing="20" alignment="CENTER" style="-fx-padding: 20;">
+
+            <!-- BANNIÈRE -->
+            <StackPane prefHeight="400">
+                <ImageView fitHeight="400" preserveRatio="true">
+                    <Image url="@carousel-1.jpg" />
+                </ImageView>
+                <Region style="-fx-background-color: rgba(15,66,41,0.6);" StackPane.alignment="CENTER" />
+                <VBox alignment="CENTER" spacing="15">
+                    <Label text="CHEZ RECYCONNECT"
+                           style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;" />
+                    <Label text="Vous trouverez une grande variété d’articles à recycler"
+                           wrapText="true"
+                           textAlignment="CENTER"
+                           style="-fx-text-fill: white; -fx-font-size: 42px; -fx-font-weight: bold;" />
+                </VBox>
+            </StackPane>
+
+            <!-- BOUTONS -->
+            <HBox spacing="20" alignment="CENTER">
+                <Button text="Proposez un article" style="-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 16px;" />
+                <Button text="Mes articles" style="-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 16px;" />
+            </HBox>
+
+            <!-- FILTRES -->
+            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #eafae8; -fx-padding: 10;">
+                <Label text="Tous les articles" style="-fx-text-fill: green; -fx-font-size: 15px;" />
+                <Label text="Métaux" style="-fx-font-size: 15px;" />
+                <Label text="Plastiques" style="-fx-underline: true; -fx-font-size: 15px;" />
+                <Label text="Vêtements et textiles" style="-fx-font-size: 15px;" />
+                <Label text="Verres" style="-fx-font-size: 15px;" />
+                <Label text="Carton" style="-fx-font-size: 15px;" />
+                <Label text="Produits alimentaires" style="-fx-font-size: 15px;" />
+            </HBox>
+
+            <!-- ARTICLES EN LIGNE -->
+            <HBox spacing="20" alignment="CENTER">
+                <!-- Carte 1 -->
+                <StackPane prefWidth="300" prefHeight="250"
+                           style="-fx-background-image: url('carousel-1.jpg');
+                                  -fx-background-size: cover;
+                                  -fx-background-position: center;
+                                  -fx-background-radius: 10;
+                                  -fx-border-radius: 10;
+                                  -fx-border-color: lightgray;">
+                    <VBox alignment="BOTTOM_LEFT" spacing="8"
+                          style="-fx-background-color: rgba(255,255,255,0.8); -fx-background-radius: 10; -fx-padding: 10;">
+                        <Label text="Déchet plastiques" style="-fx-font-weight: bold; -fx-font-size: 16px;" />
+                        <Label text="PU: 9 TN/Kg | 7 Kg" style="-fx-font-size: 14px;" />
+                        <Button text="Details" style="-fx-background-color: green; -fx-text-fill: white;" />
+                    </VBox>
+                </StackPane>
+
+                <!-- Carte 2 -->
+                <StackPane prefWidth="300" prefHeight="250"
+                           style="-fx-background-image: url('carousel-1.jpg');
+                                  -fx-background-size: cover;
+                                  -fx-background-position: center;
+                                  -fx-background-radius: 10;
+                                  -fx-border-radius: 10;
+                                  -fx-border-color: lightgray;">
+                    <VBox alignment="BOTTOM_LEFT" spacing="8"
+                          style="-fx-background-color: rgba(255,255,255,0.8); -fx-background-radius: 10; -fx-padding: 10;">
+                        <Label text="Jouets plastiques" style="-fx-font-weight: bold; -fx-font-size: 16px;" />
+                        <Label text="PU: 5 TN/Kg | 9 Kg" style="-fx-font-size: 14px;" />
+                        <Button text="Details" style="-fx-background-color: green; -fx-text-fill: white;" />
+                    </VBox>
+                </StackPane>
+
+                <!-- Carte 3 -->
+                <StackPane prefWidth="300" prefHeight="250"
+                           style="-fx-background-image: url('carousel-1.jpg');
+                                  -fx-background-size: cover;
+                                  -fx-background-position: center;
+                                  -fx-background-radius: 10;
+                                  -fx-border-radius: 10;
+                                  -fx-border-color: lightgray;">
+                    <VBox alignment="BOTTOM_LEFT" spacing="8"
+                          style="-fx-background-color: rgba(255,255,255,0.8); -fx-background-radius: 10; -fx-padding: 10;">
+                        <Label text="Carton recyclé" style="-fx-font-weight: bold; -fx-font-size: 16px;" />
+                        <Label text="PU: 20 TN/Kg | 14 Kg" style="-fx-font-size: 14px;" />
+                        <Button text="Details" style="-fx-background-color: green; -fx-text-fill: white;" />
+                    </VBox>
+                </StackPane>
+            </HBox>
+        </VBox>
+    </center>
+
+    <!-- FOOTER -->
+    <bottom>
+        <VBox spacing="0">
+            <HBox spacing="80" alignment="CENTER" style="-fx-background-color: #064d2d; -fx-padding: 30;">
+                <VBox spacing="8">
+                    <Label text="Nos contacts" style="-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 18px;" />
+                    <Label text="📍 Esprit Ariana" style="-fx-text-fill: white;" />
+                    <Label text="📞 +216 95 123 742" style="-fx-text-fill: white;" />
+                    <Label text="✉ RecyConnect@gmail.com" style="-fx-text-fill: white;" />
+                    <HBox spacing="10">
+                        <Label text="" style="-fx-text-fill: white; -fx-font-size: 18px;" />
+                        <Label text="" style="-fx-text-fill: white; -fx-font-size: 18px;" />
+                        <Label text="" style="-fx-text-fill: white; -fx-font-size: 18px;" />
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="8">
+                    <Label text="Services" style="-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 18px;" />
+                    <Label text="› Vente De Produits À Recyclés" style="-fx-text-fill: white;" />
+                    <Label text="› Organisation Des Évènements" style="-fx-text-fill: white;" />
+                    <Label text="› Prossition De Workshops" style="-fx-text-fill: white;" />
+                    <Label text="› Forum Et Communauté" style="-fx-text-fill: white;" />
+                    <Label text="› Green Technology" style="-fx-text-fill: white;" />
+                </VBox>
+
+                <VBox spacing="8">
+                    <Label text="Liens Utiles" style="-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 18px;" />
+                    <Label text="› À Propos De Nous" style="-fx-text-fill: white;" />
+                    <Label text="› Nos Services" style="-fx-text-fill: white;" />
+                </VBox>
+            </HBox>
+
+            <HBox style="-fx-background-color: #02351e; -fx-padding: 10;" alignment="CENTER">
+                <Label text="© RecyConnect, Tous droits réservés." style="-fx-text-fill: white;" />
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label text="Développé par TechSquad" style="-fx-text-fill: white;" />
+            </HBox>
+        </VBox>
+    </bottom>
+</BorderPane>
