@@ -13,6 +13,11 @@ public class BaseUserController {
     private BorderPane rootBorderPane;
 
     @FXML
+    public void initialize() {
+        loadView("/formAjoutArticle.fxml"); // Charge dynamiquement le body
+    }
+
+    @FXML
     public void showHomeView() {
         loadView("/accueilUser.fxml");
     }

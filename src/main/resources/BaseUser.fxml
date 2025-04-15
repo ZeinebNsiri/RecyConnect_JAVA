@@ -58,38 +58,6 @@
         <Label text="Bienvenue sur RecyConnect" style="-fx-font-size: 24px; -fx-text-fill: #444;" />
     </center>
 
-    <!-- FOOTER -->
-    <bottom>
-        <VBox spacing="0">
-            <HBox spacing="80" alignment="CENTER" styleClass="footer-top">
-                <VBox spacing="6">
-                    <Label text="Nos contacts" styleClass="footer-title"/>
-                    <Label text="📍 Esprit Ariana" />
-                    <Label text="📞 +216 95 123 742" />
-                    <Label text="✉ RecyConnect@gmail.com" />
-                    <Label text="  " />
-                </VBox>
 
-                <VBox spacing="6">
-                    <Label text="Services" styleClass="footer-title"/>
-                    <Label text="› Vente De Produits À Recyclés" />
-                    <Label text="› Organisation Des Évènements" />
-                    <Label text="› Workshops" />
-                    <Label text="› Forum et Communauté" />
-                </VBox>
 
-                <VBox spacing="6">
-                    <Label text="Liens Utiles" styleClass="footer-title"/>
-                    <Label text="› À Propos De Nous" />
-                    <Label text="› Nos Services" />
-                </VBox>
-            </HBox>
-
-            <HBox alignment="CENTER" styleClass="footer-bottom">
-                <Label text="© RecyConnect, Tous droits réservés." />
-                <Pane HBox.hgrow="ALWAYS"/>
-                <Label text="Développé par TechSquad" />
-            </HBox>
-        </VBox>
-    </bottom>
 </BorderPane>
