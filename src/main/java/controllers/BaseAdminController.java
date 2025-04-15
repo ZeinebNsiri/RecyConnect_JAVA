@@ -1,11 +1,13 @@
 
 package controllers;
 
+import entities.utilisateur;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import utils.Session;
 
 import java.io.IOException;
 
@@ -13,6 +15,18 @@ public class BaseAdminController {
 
     @FXML
     private BorderPane rootBorderPane;
+    @FXML
+    private MenuButton userMenuButton;
+
+
+    @FXML
+    public void initialize() {
+        utilisateur user = Session.getInstance().getCurrentUser();
+        if (user != null) {
+            String fullName = user.getPrenom() + " " + user.getNom_user();
+            userMenuButton.setText(fullName);
+        }
+    }
 
     @FXML
     private void showCategorieView() {
@@ -28,7 +42,7 @@ public class BaseAdminController {
 
     @FXML
     private void showUsersView() {
-        loadView("/utilisateur.fxml");
+        loadView("/AffichageUtilisateur.fxml");
     }
 
     @FXML

@@ -64,7 +64,7 @@ public class LoginController {
     }
 
     @FXML
-    public void Login(ActionEvent event) throws SQLException {
+    public void Login(ActionEvent event) throws SQLException, IOException {
         String email = emailField.getText();
         String password = passwordField.getText();
         Connection connection = MyDataBase.getInstance().getConx();
@@ -108,18 +108,19 @@ public class LoginController {
                 // Étape 4 : Vérifier le rôle
                 String role = emailResult.getString("roles");
                 int id = emailResult.getInt("id");
-                //String nom = emailResult.getString("nom");
-//                utilisateur user = new utilisateur(id, username, role);
-//                Session.getInstance().setCurrentUser(user);
+
+
+                utilisateur user = new utilisateur(id,emailResult.getString(2),emailResult.getString(4),emailResult.getString(5),emailResult.getString("roles"),emailResult.getString(6),emailResult.getString(7),emailResult.getString(8),emailResult.getBoolean(10),emailResult.getString(9),emailResult.getString(11));
+               Session.getInstance().setCurrentUser(user);
 
                 // Redirection
                 Parent page;
                 if (role.contains("ROLE_ADMIN")) {
-//                page = FXMLLoader.load(getClass().getResource("/dashboardAdmin.fxml"));
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("roles");
-                    alert.setContentText("ADMIN.");
-                    alert.show();
+                    page = FXMLLoader.load(getClass().getResource("/BaseAdmin.fxml"));
+                    Scene scene = new Scene(page);
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
                 } else {
 //                page = FXMLLoader.load(getClass().getResource("/Home.fxml"));
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -127,13 +128,10 @@ public class LoginController {
                     alert.setContentText("user");
                     alert.show();
                 }
+
+
+
             }
-
-//            Scene scene = new Scene(page);
-//            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//            stage.setScene(scene);
-//            stage.show();
-
         } catch (SQLException e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
