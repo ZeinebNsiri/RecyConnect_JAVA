@@ -1,111 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1"
-            xmlns="http://javafx.com/javafx/17"
-            fx:controller="controllers.Events.EventController"
-            prefWidth="1200.0" prefHeight="800.0"
-            style="-fx-background-color: #edf7ef;">
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/17"
+      fx:controller="controllers.Events.EventListController"
+      spacing="20.0" alignment="TOP_LEFT">
 
-    <!-- ======= HEADER ======= -->
-    <top>
-        <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-background-color: white;">
-            <padding><Insets top="10" right="20" bottom="10" left="20"/></padding>
-            <children>
-                <Label text="RecyConnect"
-                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #28a745;" />
-                <TextField promptText="recherche" prefWidth="250"
-                           style="-fx-background-radius: 20; -fx-background-color: #f1f1f1; -fx-padding: 5 10;" />
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button text="🔔" style="-fx-font-size: 16px; -fx-background-color: transparent;" />
-                <MenuButton text="adminn admin">
-                    <items>
-                        <MenuItem text="Profil"/>
-                        <MenuItem text="Déconnexion"/>
-                    </items>
-                </MenuButton>
-            </children>
-        </HBox>
-    </top>
+    <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
 
-    <!-- ======= SIDEBAR ======= -->
-    <left>
-        <VBox spacing="10" alignment="TOP_LEFT"
-              style="-fx-background-color: white;" prefWidth="230">
-            <padding><Insets top="20" right="10" bottom="10" left="20"/></padding>
-            <children>
-                <Label text="📊 Dashboard" style="-fx-font-size: 14px;" />
-                <Label text="👤 Utilisateurs" style="-fx-font-size: 14px;" />
+    <Label text="Gestion des Événements"
+           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
-                <TitledPane text="🏬 Ventes" expanded="false">
-                    <content>
-                        <VBox spacing="5">
-                            <Label text="• Catégories articles"/>
-                            <Label text="• Articles"/>
-                            <Label text="• Commandes"/>
-                        </VBox>
-                    </content>
-                </TitledPane>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField promptText="Rechercher un événement" />
+        <TextField promptText="Lieu" />
+        <DatePicker promptText="jj/mm/aaaa" />
+        <ComboBox promptText="Tous les types" />
+        <Button text="🔍 Rechercher"
+                style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;" />
+        <Button text="Ajouter un événement" onAction="#handleAddEvent"
+                style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;" />
+    </HBox>
 
-                <TitledPane text="🗓️ Événement" expanded="true">
-                    <content>
-                        <VBox spacing="5">
-                            <Label text="• Gestion Événement" style="-fx-font-weight: bold;"/>
-                            <Label text="• Gestion Réservations"/>
-                        </VBox>
-                    </content>
-                </TitledPane>
+    <TableView fx:id="eventTable" prefWidth="1140"
+               style="-fx-background-color: white; -fx-border-color: lightgray;">
+        <columns>
+            <TableColumn fx:id="idColumn" text="#" prefWidth="40"/>
+            <TableColumn fx:id="imageColumn" text="Image" prefWidth="80"/>
+            <TableColumn fx:id="nameColumn" text="Nom" prefWidth="250"/>
+            <TableColumn fx:id="locationColumn" text="Lieu" prefWidth="250"/>
+            <TableColumn fx:id="dateColumn" text="Date" prefWidth="120"/>
+            <TableColumn fx:id="timeColumn" text="Heure" prefWidth="100"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="200"/>
+        </columns>
+    </TableView>
 
-                <TitledPane text="📈 Workshops" expanded="false">
-                    <content>
-                        <VBox spacing="5">
-                            <Label text="• Catégories workshops"/>
-                            <Label text="• Workshops"/>
-                        </VBox>
-                    </content>
-                </TitledPane>
-
-                <Label text="📝 Posts" style="-fx-font-size: 14px;" />
-            </children>
-        </VBox>
-    </left>
-
-    <!-- ======= MAIN CENTER (Gestion des événements) ======= -->
-    <center>
-        <VBox spacing="20.0" alignment="TOP_LEFT">
-            <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
-            <children>
-                <Label text="Gestion des Événements"
-                       style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-
-
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <!-- <TextField fx:id="searchField" promptText="Rechercher un événement" prefWidth="200"/>
-                     <TextField fx:id="locationField" promptText="Lieu" prefWidth="150"/>
-                     <DatePicker fx:id="datePicker"/>
-                     <ComboBox fx:id="typeComboBox" promptText="Tous les types" prefWidth="150"/>
-                     <Button text="🔍 Rechercher"
-                             style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;" />
-                              -->
-                    <Button text="Ajouter un événement" onAction="#handleAdd"
-                            style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;" />
-                </HBox>
-
-                <!-- Tableau -->
-                <TableView fx:id="eventTable" prefWidth="800" style="-fx-background-color: white;">
-                    <columns>
-                        <TableColumn fx:id="nameColumn" text="Nom" prefWidth="250"/>
-                        <TableColumn fx:id="locationColumn" text="Lieu" prefWidth="250"/>
-                        <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
-                        <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
-                    </columns>
-                </TableView>
-            </children>
-        </VBox>
-    </center>
-
-</BorderPane>
+</VBox>

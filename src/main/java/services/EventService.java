@@ -2,21 +2,22 @@ package services;
 
 import entities.Event;
 import utils.MyDataBase;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventService {
+public class EventService implements IService<Event> {
     private final Connection cnx;
 
     public EventService() {
         this.cnx = MyDataBase.getInstance().getConx();
     }
 
-    // CREATE
-    public int addEvent(Event event) throws SQLException {
+    @Override
+    public void add(Event event) throws SQLException {
         String query = "INSERT INTO evenement (nom_event, description_event, lieu_event, date_event, " +
                 "heure_event, image_event, capacite, nb_restant, google_meet_link, " +
                 "map_coordinates, end_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -35,16 +36,11 @@ public class EventService {
             stmt.setTime(11, Time.valueOf(event.getEndTime()));
 
             stmt.executeUpdate();
-
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) return rs.getInt(1);
-            }
         }
-        return -1;
     }
 
-    // READ ALL
-    public List<Event> getAllEvents() throws SQLException {
+    @Override
+    public List<Event> displayList() throws SQLException {
         List<Event> events = new ArrayList<>();
         String query = "SELECT * FROM evenement";
 
@@ -71,8 +67,17 @@ public class EventService {
         return events;
     }
 
-    // UPDATE
-    public boolean updateEvent(Event event) throws SQLException {
+    @Override
+    public void delete(Event event) throws SQLException {
+        String query = "DELETE FROM evenement WHERE id=?";
+        try (PreparedStatement stmt = cnx.prepareStatement(query)) {
+            stmt.setInt(1, event.getId());
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void update(Event event) throws SQLException {
         String query = "UPDATE evenement SET nom_event=?, description_event=?, lieu_event=?, " +
                 "date_event=?, heure_event=?, image_event=?, capacite=?, nb_restant=?, " +
                 "google_meet_link=?, map_coordinates=?, end_time=? WHERE id=?";
@@ -91,16 +96,19 @@ public class EventService {
             stmt.setTime(11, Time.valueOf(event.getEndTime()));
             stmt.setInt(12, event.getId());
 
-            return stmt.executeUpdate() > 0;
+            stmt.executeUpdate();
         }
     }
 
-    // DELETE
+    // Optional: convenience method if needed
+    public List<Event> getAllEvents() throws SQLException {
+        return displayList();
+    }
+
     public boolean deleteEvent(int id) throws SQLException {
-        String query = "DELETE FROM evenement WHERE id=?";
-        try (PreparedStatement stmt = cnx.prepareStatement(query)) {
-            stmt.setInt(1, id);
-            return stmt.executeUpdate() > 0;
-        }
+        Event e = new Event();
+        e.setId(id);
+        delete(e);
+        return true;
     }
 }

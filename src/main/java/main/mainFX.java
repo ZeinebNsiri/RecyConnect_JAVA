@@ -10,11 +10,11 @@ public class mainFX extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/EventViews/EventList.fxml")); // 👈 Your FXML
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml")); // ✅ Load main layout
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root, 1000, 800);
         stage.setScene(scene);
-        stage.setTitle("Gestion des Événements");
+        stage.setTitle("RecyConnect Admin Dashboard");
         stage.setResizable(false);
         stage.show();
     }

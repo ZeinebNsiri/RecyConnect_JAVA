@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/17"
+      fx:controller="controllers.Reservations.ReservationEditController"
+      spacing="15" alignment="CENTER" prefWidth="400" prefHeight="400"
+      style="-fx-background-color: white;">
+
+    <padding><Insets top="20" left="20" right="20" bottom="20"/></padding>
+
+    <Label text="Modifier Réservation" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+    <TextField fx:id="nameField" promptText="Nom"/>
+    <TextField fx:id="emailField" promptText="Email"/>
+    <TextField fx:id="phoneField" promptText="Téléphone"/>
+    <Spinner fx:id="placesSpinner"/>
+    <ComboBox fx:id="statusCombo" promptText="Statut"/>
+
+    <HBox spacing="10">
+        <Button text="Mettre à jour" onAction="#handleSave"
+                style="-fx-background-color: #007bff; -fx-text-fill: white;"/>
+        <Button text="Annuler" onAction="#handleCancel"
+                style="-fx-background-color: #6c757d; -fx-text-fill: white;"/>
+    </HBox>
+</VBox>

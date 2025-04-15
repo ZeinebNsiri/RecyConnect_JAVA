@@ -3,6 +3,10 @@ package entities;
 import javafx.beans.property.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import java.io.InputStream;
+
 
 public class Event {
     private final IntegerProperty id = new SimpleIntegerProperty();
@@ -64,6 +68,24 @@ public class Event {
     public int getRemaining() { return remaining.get(); }
     public String getMeetingLink() { return meetingLink.get(); }
     public String getCoordinates() { return coordinates.get(); }
+    public ImageView getImageView() {
+        String filename = getImage(); // like "67c038565a819.png"
+        if (filename == null || filename.isEmpty()) {
+            return new ImageView(); // or optionally show nothing
+        }
+
+        // Full path to /uploads/ directory (you can adjust this if needed)
+        String path = "file:uploads/" + filename;
+
+        Image img = new Image(path, 50, 50, true, true);
+        ImageView view = new ImageView(img);
+        view.setFitHeight(50);
+        view.setFitWidth(50);
+        return view;
+    }
+
+
+
     public LocalTime getEndTime() { return endTime.get(); }
 
     // Standard setters
