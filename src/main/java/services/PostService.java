@@ -99,13 +99,58 @@ public class PostService implements IService<Post>{
 
     @Override
     public void delete(Post post) throws SQLException {
+        String deleteMediaSQL = "DELETE FROM media_post WHERE post_id = ?";
+        PreparedStatement psMedia = conx.prepareStatement(deleteMediaSQL);
+        psMedia.setInt(1, post.getId());
+        psMedia.executeUpdate();
 
+
+        String deletePostSQL = "DELETE FROM post WHERE id = ?";
+        PreparedStatement psPost = conx.prepareStatement(deletePostSQL);
+        psPost.setInt(1, post.getId());
+        psPost.executeUpdate();
+
+        System.out.println("Post supprimé avec succès (et ses images aussi).");
     }
+
 
     @Override
     public void update(Post post) throws SQLException {
-
+        update(post, null);
     }
+
+    public void update(Post post, List<String> newMediaPaths) throws SQLException {
+        String updateQuery = "UPDATE post SET contenu = ? WHERE id = ?";
+        try (PreparedStatement ps = conx.prepareStatement(updateQuery)) {
+            ps.setString(1, post.getContenu());
+            ps.setInt(2, post.getId());
+            ps.executeUpdate();
+            System.out.println("Contenu du post mis à jour !");
+        }
+
+        // 2. Mise à jour des médias (si fourni)
+        if (newMediaPaths != null) {
+            // Supprimer les anciennes images
+            String deleteMediaQuery = "DELETE FROM media_post WHERE post_id = ?";
+            try (PreparedStatement ps = conx.prepareStatement(deleteMediaQuery)) {
+                ps.setInt(1, post.getId());
+                ps.executeUpdate();
+                System.out.println("Anciennes images supprimées !");
+            }
+
+            // Ajouter les nouvelles images
+            for (String path : newMediaPaths) {
+                String insertMediaQuery = "INSERT INTO media_post(post_id, chemin) VALUES (?, ?)";
+                try (PreparedStatement ps = conx.prepareStatement(insertMediaQuery)) {
+                    ps.setInt(1, post.getId());
+                    ps.setString(2, path);
+                    ps.executeUpdate();
+                }
+            }
+            System.out.println("Nouvelles images ajoutées !");
+        }
+    }
+
 
 
 }

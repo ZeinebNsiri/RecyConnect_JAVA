@@ -13,29 +13,12 @@ public class TestPost {
             PostService postService = new PostService();
 
 
-            System.out.println("\n--- Liste des posts ---");
-            List<Post> posts = postService.displayList();
 
-            for (Post p : posts) {
-                System.out.println("ID: " + p.getId());
-                System.out.println("Contenu: " + p.getContenu());
-                System.out.println("Date: " + p.getDate_publication());
-                System.out.println("Nombre de j'aime: " + p.getNbr_jaime());
-                System.out.println("Status: " + p.isStatus_post());
+            int idPostASupprimer = 16; // remplace par l'ID réel
+            Post postASupprimer = new Post();
+            postASupprimer.setId(idPostASupprimer);
 
-
-                List<String> images = postService.getMediaForPost(p.getId());
-                if (images.isEmpty()) {
-                    System.out.println("Aucune image.");
-                } else {
-                    System.out.println("Images associées :");
-                    for (String img : images) {
-                        System.out.println("  - " + img);
-                    }
-                }
-
-                System.out.println("------------------------------------");
-            }
+            postService.delete(postASupprimer);
 
 
         } catch (Exception e) {
