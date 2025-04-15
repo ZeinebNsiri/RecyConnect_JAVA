@@ -15,7 +15,20 @@ public class utilisateur {
     private String matricule_fiscale;
     private String photo_profil;
 
-    // Constructors remain the same
+
+    public utilisateur(int id, String email, String nom_user, String prenom, String roles, String num_tel, String adresse, boolean status, String matricule_fiscale, String photo_profil) {
+        this.id = id;
+        this.email = email;
+        this.nom_user = nom_user;
+        this.prenom = prenom;
+        this.roles = roles;
+        this.num_tel = num_tel;
+        this.adresse = adresse;
+        this.status = status;
+        this.matricule_fiscale = matricule_fiscale;
+        this.photo_profil = photo_profil;
+    }
+
     public utilisateur(int id, String email, String nom_user, String prenom, String roles, String num_tel, String adresse, String password, boolean status, String matricule_fiscale, String photo_profil) {
         this.id = id;
         this.email = email;

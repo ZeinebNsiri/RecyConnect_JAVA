@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="controllers.LoginController">
+
+
+    <!-- Image de fond -->
+    <ImageView fx:id="backgroundImage" fitHeight="800" fitWidth="1200" preserveRatio="false"/>
+    <stylesheets>
+        <URL value="@login_signup.css"/>
+    </stylesheets>
+    <!-- Conteneur du formulaire -->
+    <VBox alignment="CENTER" maxHeight="400" maxWidth="400" spacing="20"
+          style="-fx-background-color: rgba(255,255,255,0.92);">
+
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+
+        <!-- Titre -->
+        <Label text="Se connecter" style="-fx-font-size: 26px; -fx-text-fill: darkgreen; -fx-font-weight: bold;"/>
+
+        <!-- Email -->
+        <TextField fx:id="emailField" promptText="Email" styleClass="styled-textfield"/>
+
+        <!-- Mot de passe avec œil -->
+        <StackPane>
+            <PasswordField fx:id="passwordField" promptText="Mot de passe" styleClass="styled-textfield"/>
+            <TextField fx:id="passwordVisibleField" promptText="Mot de passe" styleClass="styled-textfield"
+                       visible="false" managed="false"/>
+            <Button fx:id="togglePasswordVisibility" text="👁" style="-fx-background-color: transparent;"
+                    StackPane.alignment="CENTER_RIGHT"/>
+        </StackPane>
+
+        <!-- Bouton de connexion -->
+        <Button fx:id="loginButton" text="Connexion" onAction="#Login"
+                style="-fx-background-color: darkgreen; -fx-text-fill: white;"/>
+
+        <!-- Lien vers inscription -->
+        <Label fx:id="signupLink" text="Vous n'avez pas de compte ?" style="-fx-text-fill: #333333;"/><Label onMouseClicked="#signupD" text="S'inscrire" style="-fx-text-fill: #333333;"/>
+    </VBox>
+</StackPane>

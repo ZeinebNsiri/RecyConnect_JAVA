@@ -85,6 +85,6 @@
         <Button fx:id="inscrireButton" onAction="#Sigup" style="-fx-background-color: darkgreen; -fx-text-fill: white;" text="S'inscrire" />
 
         <!-- Lien de connexion -->
-        <Label fx:id="loginLink" style="-fx-text-fill: #333333;" text="Vous avez déjà un compte ?" />
+        <Label fx:id="loginLink" style="-fx-text-fill: #333333;" text="Vous avez déjà un compte ?" /><Label onMouseClicked="#loginD" text="Se connecter" style="-fx-text-fill: #333333;"/>
     </VBox>
 </StackPane>

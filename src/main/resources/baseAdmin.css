@@ -1,0 +1,45 @@
+.root {
+    -fx-background-color: #edf7ef;
+}
+
+.header {
+    -fx-background-color: white;
+}
+
+.sidebar {
+    -fx-background-color: white;
+    -fx-padding: 20 10 10 20;
+}
+
+.sidebar-label {
+    -fx-font-weight: bold;
+    -fx-padding: 5 0 5 0;
+    -fx-font-size: 13px;
+}
+
+.sidebar-link {
+    -fx-text-fill: black;
+    -fx-padding: 2 0 2 15;
+    -fx-font-size: 12px;
+}
+
+.sidebar-link:hover {
+    -fx-text-fill: #2a7f62;
+    -fx-underline: true;
+}
+
+.menu-toggle {
+    -fx-text-fill: black;
+    -fx-background-color: transparent;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 0 5 0;
+}
+.hyperlink:focused {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-effect: none;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+

@@ -25,8 +25,9 @@ public class UtilisateurService implements IService<utilisateur> {
         Statement stm = conx.createStatement();
         ResultSet rs = stm.executeQuery(sql);
         while (rs.next()){
-            //utilisateur user =new user(rs.getInt(1),rs.getString("name"),rs.getString("lastname"));
-            // utilisateurs.add(user);
+
+            utilisateur user =new utilisateur(rs.getInt(1),rs.getString(2),rs.getString(4),rs.getString(5),rs.getString("roles"),rs.getString(6),rs.getString(7),rs.getString(8),rs.getBoolean(10),rs.getString(9),rs.getString(11));
+            utilisateurs.add(user);
         }
         return utilisateurs;
     }
@@ -36,7 +37,7 @@ public class UtilisateurService implements IService<utilisateur> {
         String query = "INSERT INTO `utilisateur`(`email`, `roles`, `nom_user`, `prenom`, `num_tel`, `password`, `matricule_fiscale`, `status`) VALUES (?,?,?,?,?,?,?,?)";
         PreparedStatement ps = conx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         String pass = BCrypt.hashpw(utilisateur.getPassword(), BCrypt.gensalt(13));
-        pass = pass.replaceFirst("^\\$2y\\$", "\\$2a\\$");
+        pass = pass.replaceFirst("^\\$2a\\$", "\\$2y\\$");
         ps.setString(1, utilisateur.getEmail());
         ps.setString(2, utilisateur.getRoles());
         ps.setString(3, utilisateur.getNom_user());
@@ -88,5 +89,44 @@ public class UtilisateurService implements IService<utilisateur> {
 
         ps.executeUpdate();
         System.out.println("Utilisateur updated successfully!");
+    }
+    // Vérifie si l'email est valide
+    public static boolean isValidEmail(String email) {
+        return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
+    }
+
+
+    // Vérifie si le numéro est exactement 8 chiffres
+    public static boolean isValidPhoneNumber(String phone) {
+        return phone.matches("^\\d{8}$");
+    }
+
+    public static boolean isValidMatriculeFiscale(String matricule) {
+        return matricule != null && matricule.matches("^\\d{13}$");
+    }
+
+    public boolean isValidPassword(String password) {
+        if (password == null || password.length() < 8) return false;
+
+        boolean Upper = password.matches(".*[A-Z].*");
+        boolean Num = password.matches(".*\\d.*");
+        boolean Symbol = password.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
+        boolean Lower = password.matches(".*[a-z].*");
+        return Upper && Num && Symbol && Lower;
+    }
+
+    // Affiche les erreurs (facultatif)
+    public  String getPasswordError(String password) {
+        if (password == null || password.length() < 8)
+            return "Le mot de passe doit contenir au moins 8 caractères.";
+        if (!password.matches(".*[A-Z].*"))
+            return "Le mot de passe doit contenir au moins une majuscule.";
+        if (!password.matches(".*[a-z].*"))
+            return "Le mot de passe doit contenir au moins une minuscule.";
+        if (!password.matches(".*\\d.*"))
+            return "Le mot de passe doit contenir au moins un chiffre.";
+        if (!password.matches(".*[!@#$%^&*(),.?\":{}|<>].*"))
+            return "Le mot de passe doit contenir au moins un symbole.";
+        return "";
     }
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.UtilisateurController"
+            style="-fx-background-color: #e6f4ea;" prefWidth="1000" prefHeight="700">
+
+    <VBox fx:id="mainContainer"
+          spacing="20" alignment="TOP_CENTER"
+          style="-fx-background-color: white; -fx-padding: 25; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10,0,0,2);"
+          AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+
+        <!-- TITLE -->
+        <Label text="Liste des utilisateurs" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+        <!-- TABLE -->
+        <TableView fx:id="tableUtilisateur" prefHeight="600" style="-fx-background-color: white;">
+            <columns>
+                <TableColumn fx:id="idColumn" text="#" prefWidth="40"/>
+                <TableColumn fx:id="nomColumn" text="Nom utilisateur" prefWidth="130"/>
+                <TableColumn fx:id="prenomColumn" text="Prénom_utilisateur" prefWidth="130"/>
+                <TableColumn fx:id="emailColumn" text="Email" prefWidth="180"/>
+                <TableColumn fx:id="telColumn" text="Téléphone" prefWidth="100"/>
+                <TableColumn fx:id="roleColumn" text="Role" prefWidth="100"/>
+                <TableColumn fx:id="matriculeColumn" text="Matricule_fiscale" prefWidth="150"/>
+                <TableColumn fx:id="etatColumn" text="État" prefWidth="80"/>
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane>

@@ -3,13 +3,20 @@ package controllers;
 import entities.utilisateur;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import services.UtilisateurService;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class SignupController {
@@ -109,15 +116,19 @@ public class SignupController {
         String confirmerMotDePassePro = proConfirmField.getText();
         if (!ControleVide()){
             if (radioParticulier.isSelected()) {
+                String nom = nomField.getText();
+                String prenom = prenomField.getText();
+                String tel = telField.getText();
+                String email = emailField.getText();
+                UtilisateurService utilisateurService = new UtilisateurService();
+                if (!utilisateurService.isValidEmail(email)) {
+                    showAlertControle("Email invalide !");
+                } else if (!utilisateurService.isValidPhoneNumber(tel)) {
+                    showAlertControle("Le numéro de téléphone doit contenir exactement 8 chiffres.");
+                } else if (!utilisateurService.isValidPassword(motDePasse)) {
+                    showAlertControle(utilisateurService.getPasswordError(motDePasse));
+                } else if (motDePasse.equals(confirmerMotDePasse)) {
 
-                if (motDePasse.equals(confirmerMotDePasse)) {
-                    String nom = nomField.getText();
-                    String prenom = prenomField.getText();
-                    String tel = telField.getText();
-                    String email = emailField.getText();
-
-
-                    UtilisateurService utilisateurService = new UtilisateurService();
                     try {
                         utilisateurService.add(new utilisateur(email, nom, prenom, "ROLE_USER", tel, motDePasse, true));
                         clearAll();
@@ -138,14 +149,22 @@ public class SignupController {
                 }
 
             } else if (radioProfessionnel.isSelected()) {
-                if (motDePassePro.equals(confirmerMotDePassePro)) {
-                    String nom = proNomField.getText();
-                    String matricule = matriculeField.getText();
-                    String tel = proTelField.getText();
-                    String email = proEmailField.getText();
+                String nom = proNomField.getText();
+                String matricule = matriculeField.getText();
+                String tel = proTelField.getText();
+                String email = proEmailField.getText();
+                UtilisateurService utilisateurService = new UtilisateurService();
 
+                if (!utilisateurService.isValidEmail(email)) {
+                    showAlertControle("Email invalide !");
+                } else if (!utilisateurService.isValidPhoneNumber(tel)) {
+                    showAlertControle("Le numéro de téléphone doit contenir exactement 8 chiffres.");
+                } else if (!utilisateurService.isValidPassword(motDePassePro)) {
+                    showAlertControle(utilisateurService.getPasswordError(motDePassePro));
+                } else if (!utilisateurService.isValidMatriculeFiscale(matricule)) {
+                    showAlertControle("La matricule fiscale doit contenir exactement 13 chiffres.");
+                } else if (motDePassePro.equals(confirmerMotDePassePro)) {
 
-                    UtilisateurService utilisateurService = new UtilisateurService();
                     try {
                         utilisateurService.add(new utilisateur(email, nom, "ROLE_PROFESSIONNEL", tel, motDePassePro, true, matricule));
                         clearAll();
@@ -255,7 +274,23 @@ public class SignupController {
         alert.showAndWait();
     }
 
+    private void showAlertControle(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur de validation");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
+
+
+    @FXML
+    void loginD(MouseEvent event) throws IOException {
+        Parent page = FXMLLoader.load(getClass().getResource("/Login.fxml"));
+        Scene scene = new Scene(page);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
 
 
 }
