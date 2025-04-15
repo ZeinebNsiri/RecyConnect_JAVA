@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ArticlePanier"
+            prefWidth="1000.0" prefHeight="600.0"
+            style="-fx-background-color: #edf7ef;">
+
+    <!-- Bar du haut -->
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-background-color: white;">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+            <children>
+                <Label text="RecyConnect" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <TextField promptText="Recherche" prefWidth="200"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🔔" style="-fx-font-size: 16px;"/>
+                <MenuButton text="Sahar Mnif">
+                    <items>
+                        <MenuItem text="Profil"/>
+                        <MenuItem text="Déconnexion"/>
+                    </items>
+                </MenuButton>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- Contenu principal -->
+    <center>
+        <VBox alignment="CENTER">
+            <VBox spacing="20" alignment="TOP_LEFT" maxWidth="850" style="-fx-background-color: #edf7ef;">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <!-- Ligne titre + bouton Commander bien alignés -->
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <Label text="🛒 Liste des articles disponibles"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                </HBox>
+
+                <!-- Conteneur qui sera rempli dynamiquement -->
+                <VBox fx:id="articleContainer" spacing="10"/>
+
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>

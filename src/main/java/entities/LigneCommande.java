@@ -20,6 +20,8 @@ public class LigneCommande {
         this.article = article;
     }
 
+
+
     public int getId() {
         return id;
     }
