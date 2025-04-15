@@ -4,15 +4,20 @@ import entities.Article;
 import entities.LigneCommande;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import utils.SessionPanier;
 import services.LigneCommandeService;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
@@ -59,11 +64,26 @@ public class Panier {
             }
         }
 
-        // Confirmation ou redirection après la commande
+        // Confirmation de la commande
         System.out.println("Commande validée !");
-        // Optionnellement, tu peux rediriger l'utilisateur ou afficher un message de succès
-    }
 
+        // Rediriger l'utilisateur vers la page commande.fxml
+        try {
+            // Charger le fichier FXML de la page commande
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Commande.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec le fichier FXML
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+
+            // Afficher la nouvelle scène
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Gérer l'exception (par exemple afficher un message d'erreur)
+        }
+    }
 
     public void afficherPanier() {
         panierContainer.getChildren().clear();
@@ -99,14 +119,27 @@ public class Panier {
             });
 
             plusBtn.setOnAction(e -> {
-                ligne.setQuantite(ligne.getQuantite() + 1);
-                try {
-                    ligneCommandeService.updateQuantite(ligne); // ⬅️ fonction à créer
-                    afficherPanier();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
+                int stockDisponible = ligne.getArticle().getQuantite_article();
+                int quantiteActuelle = ligne.getQuantite();
+
+                if (quantiteActuelle < stockDisponible) {
+                    ligne.setQuantite(quantiteActuelle + 1);
+                    try {
+                        ligneCommandeService.updateQuantite(ligne);
+                        afficherPanier();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    // Affichage d'une alerte si la quantité max est atteinte
+                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.WARNING);
+                    alert.setTitle("Stock insuffisant");
+                    alert.setHeaderText("Quantité maximale atteinte");
+                    alert.setContentText("La quantité disponible en stock pour cet article est de " + stockDisponible + ".");
+                    alert.showAndWait();
                 }
             });
+
 
             HBox quantiteBox = new HBox(5, moinsBtn, quantiteLabel, plusBtn);
 
@@ -116,9 +149,21 @@ public class Panier {
 
             Button supprimerBtn = new Button("🗑");
             supprimerBtn.setOnAction(e -> {
+                // Supprimer de la base
+                try {
+                    ligneCommandeService.supprimerLigneCommande(ligne.getId());
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    return;
+                }
+
+                // Supprimer du panier temporaire
                 SessionPanier.supprimerArticle(ligne);
+
+                // Rafraîchir l'affichage
                 afficherPanier();
             });
+
 
             ligneHBox.getChildren().addAll(produitLabel, prixLabel, quantiteBox, totalLigneLabel, supprimerBtn);
             panierContainer.getChildren().add(ligneHBox);

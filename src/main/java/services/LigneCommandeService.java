@@ -63,5 +63,14 @@ public class LigneCommandeService {
             ps.executeUpdate();
         }
     }
+    public void supprimerLigneCommande(int id) throws SQLException {
+        String query = "DELETE FROM ligne_commande WHERE id = ?";
+        try (PreparedStatement ps = conx.prepareStatement(query)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            System.out.println("Ligne de commande supprimée de la base avec ID: " + id);
+        }
+    }
+
 
 }

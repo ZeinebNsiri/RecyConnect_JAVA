@@ -22,5 +22,12 @@ public class SessionPanier {
         panier.removeIf(l -> l.getArticle().getId() == ligne.getArticle().getId());
     }
 
+    public static double getTotalPanier() {
+        double total = 0;
+        for (LigneCommande ligne : panier) {
+            total += ligne.getPrix() * ligne.getQuantite();
+        }
+        return total;
+    }
 
 }
