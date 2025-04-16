@@ -18,8 +18,8 @@ public class BaseUserController {
     }
 
     @FXML
-    public void showHomeView() {
-        loadView("/accueilUser.fxml");
+    public void showArticleView() {
+        loadView("/listeArticlesUser.fxml");
     }
 
     public void loadView(String fxmlPath) {

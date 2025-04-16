@@ -29,8 +29,8 @@
                 <ImageView fitHeight="40" fitWidth="40">
                     <Image url="mainlogo.png"/>
                 </ImageView>
-                <Label text="Accueil" onMouseClicked="#showHomeView" styleClass="nav-link"/>
-                <Label text="Nos produits" styleClass="nav-link"/>
+                <Label text="Accueil" styleClass="nav-link"/>
+                <Label text="Nos produits" onMouseClicked="#showArticleView" styleClass="nav-link"/>
                 <Label text="Évènements" styleClass="nav-link"/>
                 <Label text="Workshops" styleClass="nav-link"/>
                 <Label text="Forum" styleClass="nav-link"/>
