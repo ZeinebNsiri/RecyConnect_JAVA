@@ -8,13 +8,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import services.CategorieCoursService;
 import services.CoursService;
 
@@ -41,56 +42,62 @@ public class ModifierCours {
     @FXML
     private Label errorDescription;
 
+    // Labels servant à afficher la preview image / vidéo
+    @FXML
+    private Label imageLabel;
+    @FXML
+    private Label errorImage;
     @FXML
     private Label videoLabel;
     @FXML
     private Label errorVideo;
 
     @FXML
-    private Label imageLabel;
-    @FXML
-    private Label errorImage;
-
+    private Button browseImageBtn;
     @FXML
     private Button browseVideoBtn;
-    @FXML
-    private Button browseImageBtn;
     @FXML
     private Button btnModifier;
     @FXML
     private Button btnAnnuler;
 
-    private File selectedVideoFile;
     private File selectedImageFile;
+    private File selectedVideoFile;
 
     private final CoursService coursService = new CoursService();
     private final CategorieCoursService categorieService = new CategorieCoursService();
 
+    // Le cours en cours de modification
     private Cours currentCours;
+
+    // Champs mémorisant l'état initial
+    private String origTitre;
+    private String origDescription;
+    private CategorieCours origCategorie;
+    private String origImage;
+    private String origVideo;
 
     @FXML
     private void initialize() {
+        // Charge la liste des catégories
         loadCategories();
 
-        categorieCombo.setConverter(new StringConverter<CategorieCours>() {
+        // Affiche uniquement le nom dans le ComboBox
+        categorieCombo.setConverter(new StringConverter<>() {
             @Override
             public String toString(CategorieCours object) {
-                return (object == null) ? "" : object.getNomCategorie();
+                return object == null ? "" : object.getNomCategorie();
             }
             @Override
             public CategorieCours fromString(String string) {
                 return null;
             }
         });
-        categorieCombo.setButtonCell(new ListCell<CategorieCours>() {
+        categorieCombo.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(CategorieCours item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText("");
-                } else {
-                    setText(item.getNomCategorie());
-                }
+                setText(empty || item == null ? "" : item.getNomCategorie());
             }
         });
     }
@@ -104,36 +111,51 @@ public class ModifierCours {
         }
     }
 
-
+    /** Appelé par AfficherCours pour pré‐remplir le formulaire */
     public void setCours(Cours cours) {
         this.currentCours = cours;
+
+        // Remplissage des champs
         titreField.setText(cours.getTitreCours());
         descriptionField.setText(cours.getDescriptionCours());
+
+        // Preview image
         if (cours.getImageCours() != null && !cours.getImageCours().isEmpty()) {
             imageLabel.setText("");
             imageLabel.setGraphic(cours.getImageView());
         } else {
             imageLabel.setText("Aucune image choisie");
         }
+
+        // Preview vidéo
         if (cours.getVideo() != null && !cours.getVideo().isEmpty()) {
             videoLabel.setText("");
             videoLabel.setGraphic(cours.getVideoView());
         } else {
             videoLabel.setText("Aucune vidéo choisie");
         }
+
+        // Sélection de la catégorie
         if (cours.getCategorieCours() != null) {
             categorieCombo.setValue(cours.getCategorieCours());
         }
+
+        // --- Mémorisation de l'état initial ---
+        origTitre       = cours.getTitreCours();
+        origDescription = cours.getDescriptionCours();
+        origCategorie   = cours.getCategorieCours();
+        origImage       = cours.getImageCours();
+        origVideo       = cours.getVideo();
     }
 
     @FXML
     private void handleImageBrowse() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir une image");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Images", "*.jpg", "*.jpeg", "*.png", "*.webp")
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Choisir une image");
+        fc.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Images", "*.jpg","*.jpeg","*.png","*.webp")
         );
-        File file = fileChooser.showOpenDialog(null);
+        File file = fc.showOpenDialog(null);
         if (file != null) {
             selectedImageFile = file;
             ImageView iv = new ImageView(new javafx.scene.image.Image(file.toURI().toString()));
@@ -143,6 +165,7 @@ public class ModifierCours {
             imageLabel.setGraphic(iv);
             errorImage.setText("");
         } else {
+            // Restaure preview d'origine
             if (currentCours.getImageCours() != null && !currentCours.getImageCours().isEmpty()) {
                 imageLabel.setText("");
                 imageLabel.setGraphic(currentCours.getImageView());
@@ -154,30 +177,31 @@ public class ModifierCours {
 
     @FXML
     private void handleVideoBrowse() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir une vidéo");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Vidéos", "*.mp4", "*.mov", "*.avi", "*.mkv")
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Choisir une vidéo");
+        fc.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Vidéos", "*.mp4","*.mov","*.avi","*.mkv")
         );
-        File file = fileChooser.showOpenDialog(null);
+        File file = fc.showOpenDialog(null);
         if (file != null) {
             selectedVideoFile = file;
             try {
-                Media media = new Media(file.toURI().toString());
-                MediaPlayer mediaPlayer = new MediaPlayer(media);
-                mediaPlayer.setMute(true);
-                mediaPlayer.setAutoPlay(true);
-                MediaView mv = new MediaView(mediaPlayer);
+                javafx.scene.media.Media media = new javafx.scene.media.Media(file.toURI().toString());
+                javafx.scene.media.MediaPlayer player = new javafx.scene.media.MediaPlayer(media);
+                player.setMute(true);
+                player.setAutoPlay(true);
+                MediaView mv = new MediaView(player);
                 mv.setFitWidth(100);
                 mv.setPreserveRatio(true);
                 videoLabel.setText("");
                 videoLabel.setGraphic(mv);
-            } catch (MediaException e) {
-                System.out.println("Erreur lors de la création du MediaView: " + e.getMessage());
+                errorVideo.setText("");
+            } catch (MediaException ex) {
+                System.out.println("Erreur création MediaView: " + ex.getMessage());
                 videoLabel.setText("Erreur vidéo");
             }
-            errorVideo.setText("");
         } else {
+            // Restaure preview d'origine
             if (currentCours.getVideo() != null && !currentCours.getVideo().isEmpty()) {
                 videoLabel.setText("");
                 videoLabel.setGraphic(currentCours.getVideoView());
@@ -189,12 +213,25 @@ public class ModifierCours {
 
     @FXML
     private void updateCours() {
+        // Réinitialisation des erreurs
         errorCategorie.setText("");
         errorTitre.setText("");
         errorDescription.setText("");
-        errorVideo.setText("");
         errorImage.setText("");
+        errorVideo.setText("");
 
+        // --- Si rien n’a changé, on stoppe ---
+        boolean sameTitre = titreField.getText().trim().equals(origTitre);
+        boolean sameDesc  = descriptionField.getText().trim().equals(origDescription);
+        boolean sameCat   = categorieCombo.getValue() == origCategorie;
+        boolean sameImg   = selectedImageFile == null;
+        boolean sameVid   = selectedVideoFile == null;
+        if (sameTitre && sameDesc && sameCat && sameImg && sameVid) {
+            new Alert(Alert.AlertType.INFORMATION, "Vous n'avez modifié aucun champ.").showAndWait();
+            return;
+        }
+
+        // Validation minimale
         boolean valid = true;
         if (categorieCombo.getValue() == null) {
             errorCategorie.setText("Veuillez choisir une catégorie.");
@@ -211,30 +248,33 @@ public class ModifierCours {
         if (!valid) return;
 
         try {
+            // Mise à jour de l'objet
             currentCours.setTitreCours(titreField.getText().trim());
             currentCours.setDescriptionCours(descriptionField.getText().trim());
             currentCours.setCategorieCours(categorieCombo.getValue());
+
+            // Gestion du nouveau fichier image
             if (selectedImageFile != null) {
-                File uploadDir = new File("uploadsworkshop");
-                if (!uploadDir.exists()) uploadDir.mkdirs();
                 Path dest = Paths.get("uploadsworkshop", selectedImageFile.getName());
+                Files.createDirectories(dest.getParent());
                 Files.copy(selectedImageFile.toPath(), dest, StandardCopyOption.REPLACE_EXISTING);
                 currentCours.setImageCours(selectedImageFile.getName());
             }
+            // Gestion du nouveau fichier vidéo
             if (selectedVideoFile != null) {
-                File uploadDir = new File("uploadsworkshop");
-                if (!uploadDir.exists()) uploadDir.mkdirs();
                 Path dest = Paths.get("uploadsworkshop", selectedVideoFile.getName());
+                Files.createDirectories(dest.getParent());
                 Files.copy(selectedVideoFile.toPath(), dest, StandardCopyOption.REPLACE_EXISTING);
                 currentCours.setVideo(selectedVideoFile.getName());
             }
+
+            // Appel du service
             coursService.update(currentCours);
-            showAlert("Succès", "Workshop modifié avec succès !", Alert.AlertType.INFORMATION);
+
+            new Alert(Alert.AlertType.INFORMATION, "Workshop modifié avec succès !").showAndWait();
             retourAfficherListe();
-        } catch (IOException e) {
-            showAlert("Erreur Fichier", "Impossible de copier un fichier : " + e.getMessage(), Alert.AlertType.ERROR);
-        } catch (SQLException e) {
-            showAlert("Erreur BD", "Impossible de modifier le cours : " + e.getMessage(), Alert.AlertType.ERROR);
+        } catch (IOException | SQLException ex) {
+            new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
         }
     }
 
@@ -245,7 +285,9 @@ public class ModifierCours {
 
     private void retourAfficherListe() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/AfficherCours.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/workshop/AfficherCours.fxml")
+            );
             Parent root = loader.load();
             Stage stage = (Stage) btnAnnuler.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -253,13 +295,5 @@ public class ModifierCours {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void showAlert(String title, String message, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }
