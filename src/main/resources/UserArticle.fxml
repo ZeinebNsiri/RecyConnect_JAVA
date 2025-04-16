@@ -7,33 +7,30 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.AffichageArticleController">
+            fx:id="rootBorderPane"
+            fx:controller="controllers.UserArticle">
 
     <center>
         <ScrollPane fitToWidth="true" pannable="true" style="-fx-background-color: transparent;">
             <VBox spacing="30" style="-fx-padding: 0; -fx-background-color: white;">
 
                 <!-- BANNIÈRE -->
-                <StackPane prefHeight="300">
-                    <ImageView fitHeight="300" preserveRatio="true">
-                        <Image url="@carousel-1.jpg" />
-                    </ImageView>
-                    <Region style="-fx-background-color: rgba(15,66,41,0.6);" StackPane.alignment="CENTER" />
-                    <VBox alignment="CENTER" spacing="10">
+                <StackPane prefHeight="300" style="-fx-background-color: white; -fx-padding: 40;">
+                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: white; -fx-padding: 20;">
                         <Label text="CHEZ RECYCONNECT"
-                               style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
-                        <Label text="Vous trouverez une grande variété d’articles à recycler"
+                               style="-fx-text-fill: #28a745; -fx-font-size: 30px; -fx-font-weight: bold;" />
+
+                        <!-- Text wrapping into 3 lines, larger size, dark green color -->
+                        <Label text="Vous trouverez l’historique de tous vos articles déjà proposés"
                                wrapText="true"
                                textAlignment="CENTER"
-                               style="-fx-text-fill: white; -fx-font-size: 30px; -fx-font-weight: bold;" />
+                               style="-fx-text-fill: #004d00; -fx-font-size: 26px; -fx-font-weight: bold; -fx-pref-width: 500;" />
                     </VBox>
                 </StackPane>
 
                 <!-- BOUTONS -->
                 <HBox spacing="30" alignment="CENTER">
                     <Button fx:id="proposerArticleBtn" text="Proposez un article" prefWidth="220"
-                            style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12 0;" />
-                    <Button fx:id="mesArticleBtn" text="Mes articles" prefWidth="220"
                             style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12 0;" />
                 </HBox>
 

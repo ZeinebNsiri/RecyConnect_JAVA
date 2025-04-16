@@ -7,7 +7,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,8 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
-public class AffichageArticleController {
+public class UserArticle {
 
     @FXML
     private FlowPane categoryBar;
@@ -32,10 +35,7 @@ public class AffichageArticleController {
     private final CateArtService cateArtService = new CateArtService();
 
     @FXML
-    private Button proposerArticleBtn; // ajoute fx:id dans FXML
-
-    @FXML
-    private Button mesArticleBtn;
+    private Button proposerArticleBtn; // Add fx:id in FXML
 
     @FXML
     public void initialize() {
@@ -46,24 +46,12 @@ public class AffichageArticleController {
             e.printStackTrace();
         }
 
-        //  Redirection vers le formulaire
+        //  Redirect to the form
         proposerArticleBtn.setOnAction(e -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/formAjoutArticle.fxml"));
                 Parent formView = loader.load();
                 BorderPane root = (BorderPane) proposerArticleBtn.getScene().lookup("#rootBorderPane");
-                root.setCenter(formView);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
-
-        //  Redirection vers le formulaire
-        mesArticleBtn.setOnAction(e -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserArticle.fxml"));
-                Parent formView = loader.load();
-                BorderPane root = (BorderPane) mesArticleBtn.getScene().lookup("#rootBorderPane");
                 root.setCenter(formView);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -166,8 +154,7 @@ public class AffichageArticleController {
             imageView.setImage(new Image(getClass().getResource("/carousel-1.jpg").toExternalForm()));
         }
 
-
-        // Nom + bouton
+        // Name + buttons
         HBox topLine = new HBox();
         topLine.setAlignment(Pos.CENTER_LEFT);
         topLine.setPadding(new Insets(10, 15, 0, 15));
@@ -178,14 +165,21 @@ public class AffichageArticleController {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button detailsBtn = new Button("Details");
-        detailsBtn.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 15px;");
-        detailsBtn.setPrefWidth(100);
-        detailsBtn.setPrefHeight(35);
+        // Modify button
+        Button modifyBtn = new Button("Modifier");
+        modifyBtn.setStyle("-fx-background-color: #ffc107; -fx-text-fill: white; -fx-font-size: 15px;");
+        modifyBtn.setPrefWidth(100);
+        modifyBtn.setPrefHeight(35);
 
-        topLine.getChildren().addAll(name, spacer, detailsBtn);
+        // Delete button
+        Button deleteBtn = new Button("Supprimer");
+        deleteBtn.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-size: 15px;");
+        deleteBtn.setPrefWidth(100);
+        deleteBtn.setPrefHeight(35);
 
-        // Infos
+        topLine.getChildren().addAll(name, spacer, modifyBtn, deleteBtn);
+
+        // Info
         Label info = new Label("PU: " + article.getPrix() + " TN/Kg | " + article.getQuantite_article() + " Kg");
         info.setStyle("-fx-font-size: 15px;");
         info.setPadding(new Insets(0, 15, 15, 15));
@@ -193,6 +187,32 @@ public class AffichageArticleController {
         content.getChildren().addAll(imageView, topLine, info);
         card.getChildren().add(content);
 
+        // Event handlers for the buttons
+        modifyBtn.setOnAction(e -> {
+            // Handle modification action
+            System.out.println("Modifier clicked for: " + article.getNom_article());
+        });
+
+        deleteBtn.setOnAction(e -> {
+            // Demander confirmation avant la suppression
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation de suppression");
+            alert.setHeaderText(null);
+            alert.setContentText("Êtes-vous sûr de vouloir supprimer cet article ?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                try {
+                    articleService.delete(article); // Supprimer l'article de la base de données
+                    articleGrid.getChildren().remove(card); // Retirer la carte de l'affichage
+                    System.out.println("Article supprimé: " + article.getNom_article());
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         return card;
     }
+
 }
