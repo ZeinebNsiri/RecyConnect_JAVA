@@ -121,6 +121,25 @@ public class AfficherCours {
                 btnSupprimer.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white;");
 
 
+                btnModifier.setOnAction(event -> {
+                    Cours selected = getTableView().getItems().get(getIndex());
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/ModifierCours.fxml"));
+                        Parent root = loader.load();
+
+                        // Récupérer le contrôleur de ModifierCours
+                        ModifierCours controller = loader.getController();
+                        controller.setCours(selected);
+
+                        Stage stage = (Stage) getTableView().getScene().getWindow();
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+
                 btnSupprimer.setOnAction(event -> {
                     Cours selected = getTableView().getItems().get(getIndex());
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
