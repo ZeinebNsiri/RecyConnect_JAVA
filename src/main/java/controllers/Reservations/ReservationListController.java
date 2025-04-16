@@ -1,6 +1,8 @@
 package controllers.Reservations;
 
 import entities.Reservation;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -34,14 +36,14 @@ public class ReservationListController {
 
     @FXML
     public void initialize() {
-        idColumn.setCellValueFactory(cell -> new javafx.beans.property.SimpleIntegerProperty(cell.getValue().getId()).asObject());
-        eventNameColumn.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty("MockEvent")); // replace with actual lookup
-        userColumn.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getName()));
-        emailColumn.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getEmail()));
-        phoneColumn.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getPhone()));
-        specialRequestsColumn.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty("Non")); // example placeholder
-        placesColumn.setCellValueFactory(cell -> new javafx.beans.property.SimpleIntegerProperty(cell.getValue().getPlaces()).asObject());
+        idColumn.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getId()).asObject());
+        eventNameColumn.setCellValueFactory(cell -> new SimpleStringProperty("Event ID: " + cell.getValue().getEventId())); // peut être remplacé par lookup du nom de l'événement
+        userColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getNom()));
+        emailColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getEmail()));
+        phoneColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getNumTel()));
+        specialRequestsColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getdemandes_speciales()));
 
+        statusColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatus()));
         statusColumn.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String status, boolean empty) {
@@ -58,7 +60,7 @@ public class ReservationListController {
             }
         });
 
-        statusColumn.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getStatus()));
+        placesColumn.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getNbPlaces()).asObject());
 
         addActionsToTable();
         loadReservations();
@@ -92,36 +94,24 @@ public class ReservationListController {
         }
     }
 
-    @FXML
-    private void handleAddReservation() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReservationViews/ReservationAdd.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Ajouter une réservation");
-            stage.showAndWait();
-            loadReservations();
-        } catch (IOException e) {
-            showAlert("Erreur", "Chargement du formulaire échoué : " + e.getMessage());
-        }
-    }
-
     private void openDelete(Reservation reservation) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReservationViews/ReservationDelete.fxml"));
             Parent root = loader.load();
             ReservationDeleteController controller = loader.getController();
             controller.setReservation(reservation);
+
             Stage stage = new Stage();
-            stage.setScene(new Scene(root));
             stage.setTitle("Supprimer la réservation");
+            stage.setScene(new Scene(root));
             stage.showAndWait();
+
             loadReservations();
         } catch (IOException e) {
             showAlert("Erreur", "Chargement du formulaire échoué : " + e.getMessage());
         }
     }
+
 
     private void showAlert(String title, String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

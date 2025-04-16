@@ -2,6 +2,7 @@ package services;
 
 import entities.Reservation;
 import utils.MyDataBase;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +26,11 @@ public class ReservationService implements IService<Reservation> {
             reservations.add(new Reservation(
                     rs.getInt("id"),
                     rs.getInt("event_id"),
-                    rs.getString("name"),
+                    rs.getString("nom"),
                     rs.getString("email"),
-                    rs.getString("phone"),
-                    rs.getInt("places"),
+                    rs.getString("num_tel"),
+                    rs.getInt("nb_places"),
+                    rs.getString("demandes_speciales"),
                     rs.getString("status")
             ));
         }
@@ -37,14 +39,15 @@ public class ReservationService implements IService<Reservation> {
 
     @Override
     public void add(Reservation res) throws SQLException {
-        String sql = "INSERT INTO reservation (event_id, name, email, phone, places, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO reservation (event_id, nom, email, num_tel, nb_places, demandes_specailes, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = cnx.prepareStatement(sql);
         stmt.setInt(1, res.getEventId());
-        stmt.setString(2, res.getName());
+        stmt.setString(2, res.getNom());
         stmt.setString(3, res.getEmail());
-        stmt.setString(4, res.getPhone());
-        stmt.setInt(5, res.getPlaces());
-        stmt.setString(6, res.getStatus());
+        stmt.setString(4, res.getNumTel());
+        stmt.setInt(5, res.getNbPlaces());
+        stmt.setString(6, res.getdemandes_speciales());
+        stmt.setString(7, res.getStatus());
         stmt.executeUpdate();
     }
 
@@ -58,15 +61,16 @@ public class ReservationService implements IService<Reservation> {
 
     @Override
     public void update(Reservation res) throws SQLException {
-        String sql = "UPDATE reservation SET event_id=?, name=?, email=?, phone=?, places=?, status=? WHERE id=?";
+        String sql = "UPDATE reservation SET event_id=?, nom=?, email=?, num_tel=?, nb_places=?, demandes_specailes=?, status=? WHERE id=?";
         PreparedStatement stmt = cnx.prepareStatement(sql);
         stmt.setInt(1, res.getEventId());
-        stmt.setString(2, res.getName());
+        stmt.setString(2, res.getNom());
         stmt.setString(3, res.getEmail());
-        stmt.setString(4, res.getPhone());
-        stmt.setInt(5, res.getPlaces());
-        stmt.setString(6, res.getStatus());
-        stmt.setInt(7, res.getId());
+        stmt.setString(4, res.getNumTel());
+        stmt.setInt(5, res.getNbPlaces());
+        stmt.setString(6, res.getdemandes_speciales());
+        stmt.setString(7, res.getStatus());
+        stmt.setInt(8, res.getId());
         stmt.executeUpdate();
     }
 }

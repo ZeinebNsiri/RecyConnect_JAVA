@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import services.ReservationService;
 
 public class ReservationEditController {
-
+/*
     @FXML private TextField nameField;
     @FXML private TextField emailField;
     @FXML private TextField phoneField;
@@ -26,7 +26,7 @@ public class ReservationEditController {
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
         if (reservation != null) {
-            nameField.setText(reservation.getName());
+            nameField.setText(reservation.getNom());
             emailField.setText(reservation.getEmail());
             phoneField.setText(reservation.getPhone());
             placesSpinner.getValueFactory().setValue(reservation.getPlaces());
@@ -65,5 +65,5 @@ public class ReservationEditController {
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
-    }
+    }*/
 }

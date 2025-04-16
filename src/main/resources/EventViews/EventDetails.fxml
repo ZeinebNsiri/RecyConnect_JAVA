@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Events.EventDetailsController">
+    <center>
+        <HBox spacing="40">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Left: Image and description -->
+            <VBox spacing="15">
+                <ImageView fx:id="eventImageView" fitWidth="400" fitHeight="250" preserveRatio="true" />
+                <Label fx:id="eventTitle" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+                <Label fx:id="eventDateTime" />
+                <Label fx:id="eventDescription" wrapText="true" maxWidth="400"/>
+                <Label fx:id="eventPlaces" style="-fx-font-weight: bold; -fx-text-fill: green;" />
+                <Button text="📝 S'inscrire" style="-fx-background-color: #198754; -fx-text-fill: white;" />
+                <Button text="⬅ Retour à la liste" onAction="#handleBack" />
+            </VBox>
+
+            <!-- Right: Details -->
+            <VBox spacing="10">
+                <Label text="Détails de l’événement" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #043c1c;" />
+                <Label fx:id="eventDate" />
+                <Label fx:id="eventTime" />
+                <Label fx:id="eventLocation" />
+                <Label text="📍 Localisation :" style="-fx-font-weight: bold;" />
+                <ImageView fx:id="mapImageView" fitWidth="300" fitHeight="200" />
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

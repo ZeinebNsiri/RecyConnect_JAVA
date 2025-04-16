@@ -18,7 +18,7 @@ public class ReservationDeleteController {
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
         if (reservation != null) {
-            nameLabel.setText("Supprimer la réservation de : " + reservation.getName());
+            nameLabel.setText("Supprimer la réservation de : " + reservation.getNom());
         } else {
             nameLabel.setText("Réservation inconnue.");
         }

@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import services.ReservationService;
 
 public class ReservationAddController {
-
+/*
     @FXML private TextField nameField;
     @FXML private TextField emailField;
     @FXML private TextField phoneField;
@@ -55,5 +55,5 @@ public class ReservationAddController {
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
-    }
+    }*/
 }

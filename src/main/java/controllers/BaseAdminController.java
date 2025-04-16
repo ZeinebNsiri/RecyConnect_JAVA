@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 
 
 import java.io.IOException;
@@ -55,17 +56,22 @@ public class BaseAdminController {
         commandesLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         rootBorderPane.setCenter(commandesLabel);
     }
-
     @FXML
     private void showEvenementView() {
+
         loadView("/EventViews/EventList.fxml");
     }
 
+    @FXML private StackPane contentPane;
+
     @FXML
     private void showReservationsView() {
-        Label reservationsLabel = new Label("📋 Gestion des réservations");
-        reservationsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        rootBorderPane.setCenter(reservationsLabel);
+        try {
+            Parent view = FXMLLoader.load(getClass().getResource("/ReservationViews/ReservationList.fxml"));
+            contentPane.getChildren().setAll(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
