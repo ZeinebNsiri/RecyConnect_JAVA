@@ -153,4 +153,26 @@ public class PostService implements IService<Post>{
 
 
 
+    public void approuverPost(Post post) throws SQLException {
+        String sql = "UPDATE post SET status_post = ? WHERE id = ?";
+        try (PreparedStatement ps = conx.prepareStatement(sql)) {
+            ps.setBoolean(1, true);
+            ps.setInt(2, post.getId());
+            ps.executeUpdate();
+            System.out.println("Post approuvé !");
+        }
+    }
+
+    public void rejeterPost(Post post) throws SQLException {
+        String sql = "UPDATE post SET status_post = ? WHERE id = ?";
+        try (PreparedStatement ps = conx.prepareStatement(sql)) {
+            ps.setBoolean(1, false);
+            ps.setInt(2, post.getId());
+            ps.executeUpdate();
+            System.out.println("Post rejeté !");
+        }
+    }
+
+
+
 }

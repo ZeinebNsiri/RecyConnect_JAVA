@@ -1,28 +1,23 @@
 package test;
 
-import entities.Post;
-import services.PostService;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.Parent;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+public class TestPost extends Application {
 
-public class TestPost {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("/AdminPostsView.fxml"));
+        Scene scene = new Scene(root);
+        primaryStage.setTitle("Gestion des Posts - Admin");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
     public static void main(String[] args) {
-        try {
-            PostService postService = new PostService();
-
-
-
-            int idPostASupprimer = 16; // remplace par l'ID réel
-            Post postASupprimer = new Post();
-            postASupprimer.setId(idPostASupprimer);
-
-            postService.delete(postASupprimer);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        launch(args);
     }
 }

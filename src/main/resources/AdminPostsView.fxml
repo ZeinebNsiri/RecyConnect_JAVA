@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<?import java.net.URL?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.AdminPostsController" stylesheets="@styles/adminPost.css" >
+    <left>
+        <VBox spacing="10" styleClass="sidebar">
+
+            <Label text="Dashboard"/>
+            <Label text="Utilisateurs"/>
+            <Label text="Ventes"/>
+            <Label text="Événement"/>
+            <Label text="Workshops"/>
+            <Label text="Posts"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Gestion des Posts" styleClass="header"/>
+
+            <TableView fx:id="postsTable" prefHeight="500">
+                <columns>
+                    <TableColumn text="ID" prefWidth="40"/>
+                    <TableColumn text="Auteur" prefWidth="150"/>
+                    <TableColumn text="Contenu" prefWidth="400"/>
+                    <TableColumn text="Créé le" prefWidth="150"/>
+                    <TableColumn text="Statut" prefWidth="100"/>
+                    <TableColumn text="Actions" prefWidth="200"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+</BorderPane>
