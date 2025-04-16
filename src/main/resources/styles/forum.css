@@ -1,0 +1,54 @@
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #f0f4ec;
+}
+
+.header {
+    -fx-background-image: url("@images/team-2.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+
+.header-title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 40px 0;
+}
+
+.toggle-button, .button {
+    -fx-background-radius: 20px;
+}
+
+.button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-padding: 8px 16px;
+}
+
+.post-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.tag-label {
+    -fx-background-color: #388e3c;
+    -fx-text-fill: white;
+    -fx-padding: 3 6;
+    -fx-background-radius: 5;
+}
+
+.stat-label {
+    -fx-text-fill: #666;
+}
+
+.timestamp {
+    -fx-font-size: 12px;
+    -fx-text-fill: #555;
+}
+
+.username {
+    -fx-font-size: 12px;
+}
