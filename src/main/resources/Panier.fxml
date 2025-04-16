@@ -67,7 +67,7 @@
                     <!-- Boutons -->
                     <HBox alignment="CENTER_RIGHT" spacing="15">
                         <Button fx:id="btnvider" onAction="#viderPanier" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 16;" text="❌ Vider" />
-                        <Button fx:id="btnsave" onAction="#commander" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 16;" text="✅ Finaliser commande" />
+                        <Button fx:id="finaliserBtn" onAction="#finaliserCommande" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 16;" text="✅ Finaliser commande" />
                     </HBox>
                 </VBox>
 

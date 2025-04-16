@@ -127,7 +127,7 @@ public class ArticlePanier implements Initializable {
                 e.printStackTrace();
             }
 
-    });
+        });
 
 
         // Ajouter un espace flexible pour espacer le bouton
@@ -138,5 +138,4 @@ public class ArticlePanier implements Initializable {
         box.getChildren().addAll(detailsBox, spacer, commanderButton);
         return box;
     }}
-
 

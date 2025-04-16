@@ -71,6 +71,45 @@ public class LigneCommandeService {
             System.out.println("Ligne de commande supprimée de la base avec ID: " + id);
         }
     }
+    public List<LigneCommande> getLignesEnAttenteParUtilisateur(int userId) throws SQLException {
+        List<LigneCommande> lignes = new ArrayList<>();
+
+        String sql = "SELECT * FROM ligne_commande WHERE user_c_id = ? AND etat_c = 'En attente'";
+        PreparedStatement ps = conx.prepareStatement(sql);
+        ps.setInt(1, userId);
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            LigneCommande ligne = new LigneCommande();
+
+            ligne.setId(rs.getInt("id"));
+            ligne.setQuantite(rs.getInt("quantite_c"));
+            ligne.setPrix(rs.getDouble("prix_c"));
+            ligne.setEtat(rs.getString("etat_c"));
+
+
+
+            lignes.add(ligne);
+        }
+
+        return lignes;
+    }
+
+    public void updateEtat(LigneCommande ligne) throws SQLException {
+        String sql = "UPDATE ligne_commande SET etat_c = ? WHERE id = ?";
+        PreparedStatement ps = conx.prepareStatement(sql);
+        ps.setString(1, ligne.getEtat());
+        ps.setInt(2, ligne.getId());
+
+        int rowsUpdated = ps.executeUpdate();
+        if (rowsUpdated > 0) {
+            System.out.println("État de la ligne de commande mis à jour avec succès !");
+        } else {
+            System.out.println("Aucune ligne mise à jour. ID introuvable ?");
+        }
+    }
+
+
 
 
 }
