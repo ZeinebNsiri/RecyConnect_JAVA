@@ -65,6 +65,7 @@ public class AjouterCours {
     private void initialize() {
         loadCategories();
 
+        // Configuration du ComboBox pour afficher uniquement le nom de la catégorie.
         categorieCombo.setConverter(new StringConverter<CategorieCours>() {
             @Override
             public String toString(CategorieCours object) {
@@ -75,7 +76,6 @@ public class AjouterCours {
                 return null;
             }
         });
-
         categorieCombo.setButtonCell(new ListCell<CategorieCours>() {
             @Override
             protected void updateItem(CategorieCours item, boolean empty) {
@@ -88,7 +88,6 @@ public class AjouterCours {
             }
         });
     }
-
 
     private void loadCategories() {
         try {
@@ -156,13 +155,15 @@ public class AjouterCours {
             errorImage.setText("Veuillez choisir une image.");
             valid = false;
         }
-        if (!valid) return;
+        if (!valid)
+            return;
 
         try {
             String imageCours = "default.png";
             if (selectedImageFile != null) {
                 File uploadDir = new File("uploadsworkshop");
-                if (!uploadDir.exists()) uploadDir.mkdirs();
+                if (!uploadDir.exists())
+                    uploadDir.mkdirs();
                 Path destImg = Paths.get("uploadsworkshop", selectedImageFile.getName());
                 Files.copy(selectedImageFile.toPath(), destImg, StandardCopyOption.REPLACE_EXISTING);
                 imageCours = selectedImageFile.getName();
@@ -175,13 +176,15 @@ public class AjouterCours {
             String video = "";
             if (selectedVideoFile != null) {
                 File uploadDir = new File("uploadsworkshop");
-                if (!uploadDir.exists()) uploadDir.mkdirs();
+                if (!uploadDir.exists())
+                    uploadDir.mkdirs();
                 Path destVideo = Paths.get("uploadsworkshop", selectedVideoFile.getName());
                 Files.copy(selectedVideoFile.toPath(), destVideo, StandardCopyOption.REPLACE_EXISTING);
                 video = selectedVideoFile.getName();
             }
 
-
+            // Utilisation du constructeur : public Cours(int id, String imageCours, String titreCours,
+            //                                               CategorieCours categorieCours, String descriptionCours, String video)
             Cours cours = new Cours(
                     0,
                     imageCours,
@@ -194,7 +197,7 @@ public class AjouterCours {
             coursService.add(cours);
 
             showAlert("Succès", "Cours ajouté avec succès !", Alert.AlertType.CONFIRMATION);
-            //retourAfficherListe();
+            retourAfficherListe();
 
         } catch (IOException e) {
             showAlert("Erreur Fichier", "Impossible de copier un fichier : " + e.getMessage(), Alert.AlertType.ERROR);
@@ -205,20 +208,20 @@ public class AjouterCours {
 
     @FXML
     private void annulerCours() {
-//        retourAfficherListe();
+        retourAfficherListe();
     }
 
-//    private void retourAfficherListe() {
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/"));
-//            Parent root = loader.load();
-//            Stage stage = (Stage) btnAnnuler.getScene().getWindow();
-//            stage.setScene(new Scene(root));
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void retourAfficherListe() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/AfficherCours.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) btnAnnuler.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
