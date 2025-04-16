@@ -32,7 +32,7 @@ public class AffichageArticleController {
     private final CateArtService cateArtService = new CateArtService();
 
     @FXML
-    private Button proposerArticleBtn; // ajoute fx:id dans FXML
+    private Button proposerArticleBtn;
 
     @FXML
     private Button mesArticleBtn;
@@ -182,6 +182,22 @@ public class AffichageArticleController {
         detailsBtn.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 15px;");
         detailsBtn.setPrefWidth(100);
         detailsBtn.setPrefHeight(35);
+
+        // Pass article ID to the detail page
+        detailsBtn.setOnAction(e -> {
+            System.out.println("Article ID: " + article.getId());  // Debugging line to check the ID
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/ArticleDetailPage.fxml"));
+                Parent formView = loader.load();
+                ArticleDetailController controller = loader.getController();
+                controller.loadArticleData(article.getId());  // Pass article ID
+                BorderPane root = (BorderPane) detailsBtn.getScene().lookup("#rootBorderPane");
+                root.setCenter(formView);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
 
         topLine.getChildren().addAll(name, spacer, detailsBtn);
 

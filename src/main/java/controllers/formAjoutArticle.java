@@ -61,6 +61,7 @@ public class formAjoutArticle {
     private List<CategorieArticle> categoriesList;
     private static final String article_IMAGE_DIR = "C:/Users/Admin/Desktop/PI_RecyConnect_TechSquad/public/uploads/photo_dir";
 
+    private Article articleToModify = null;
 
     @FXML
     public void initialize() {
@@ -101,10 +102,7 @@ public class formAjoutArticle {
             showAlert(Alert.AlertType.ERROR, "Champs vides", "Veuillez remplir tous les champs.");
             return;
         }
-        if (selectedFile == null || imageArticleField.getText().equals("Aucune image sélectionnée")) {
-            showAlert(Alert.AlertType.ERROR, "Image manquante", "Veuillez sélectionner une image pour l'article.");
-            return;
-        }
+
 
         int quantite;
         double prix;
@@ -140,28 +138,27 @@ public class formAjoutArticle {
             return;
         }
 
-        int utilisateurId = 1; // hatekchi zwari yqued el user
+        int utilisateurId = 1; // Simulateur de l'utilisateur actuel
 
         Article article = new Article(categorieId, utilisateurId, nom, description, quantite, prix, image, localisation);
-        articleService.add(article);
 
-        if (selectedFile != null) {
-            try {
-                File destDir = new File(article_IMAGE_DIR);
-                if (!destDir.exists()) destDir.mkdirs();
-
-                File destFile = new File(destDir, selectedFile.getName());
-                Files.copy(selectedFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                article.setImage_article(selectedFile.getName());
-            } catch (IOException e) {
-                e.printStackTrace();
+        // Si l'article à modifier existe (articleToModify n'est pas nul), on effectue une mise à jour
+        if (articleToModify != null) {
+            article.setId(articleToModify.getId()); // Conserver l'ID de l'article à modifier
+            articleService.update(article);  // Mettre à jour l'article dans la base de données
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Article modifié avec succès !");
+        } else {
+            if (selectedFile == null || imageArticleField.getText().equals("Aucune image sélectionnée")) {
+                showAlert(Alert.AlertType.ERROR, "Image manquante", "Veuillez sélectionner une image pour l'article.");
+                return;
             }
+            articleService.add(article);  // Si l'article à modifier n'existe pas, on l'ajoute
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Article ajouté avec succès !");
         }
 
-        showAlert(Alert.AlertType.INFORMATION, "Succès", "Article ajouté avec succès !");
         retourListeArticles();
     }
+
 
     private void resetForm() {
         nomArticleField.clear();
@@ -206,5 +203,33 @@ public class formAjoutArticle {
             imageArticleField.setText(file.getName()); // affichage du nom
         }
     }
+
+    public void setArticleToModify(Article article) {
+        this.articleToModify = article;  // Conserver l'article à modifier
+        nomArticleField.setText(article.getNom_article());
+        localisationField.setText(article.getLocalisation_article());
+        quantiteField.setText(String.valueOf(article.getQuantite_article()));
+        prixField.setText(String.valueOf(article.getPrix()));
+        descriptionArticleArea.setText(article.getDescription_article());
+
+        // Mettre à jour la catégorie
+        for (CategorieArticle c : categoriesList) {
+            if (c.getId() == article.getCategorie_id()) {
+                categorieComboBox.setValue(c.getNom_categorie());
+                break;
+            }
+        }
+
+        // Mettre à jour l'image
+        String imagePath = "C:/Users/Admin/Desktop/PI_RecyConnect_TechSquad/public/uploads/photo_dir/" + article.getImage_article();
+        File imageFile = new File(imagePath);
+
+        if (imageFile.exists()) {
+            imageArticleField.setText(article.getImage_article());  // Affiche le nom de l'image dans le label
+        } else {
+            imageArticleField.setText("Aucune image sélectionnée");  // Si pas d'image
+        }
+    }
+
 
 }

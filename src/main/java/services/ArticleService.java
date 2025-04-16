@@ -77,31 +77,6 @@ public class ArticleService implements IService<Article>{
     }
 
 
-
-    public utilisateur getUtilisateurById(int id) throws SQLException {
-        String query = "SELECT * FROM utilisateur WHERE id = ?";
-        PreparedStatement ps = con.prepareStatement(query);
-        ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return new utilisateur(
-                    rs.getInt("id"),
-                    rs.getString("email"),
-                    rs.getString("nom_user"),
-                    rs.getString("prenom"),
-                    rs.getString("roles"),
-                    rs.getString("num_tel"),
-                    rs.getString("adresse"),
-                    rs.getString("password"),
-                    rs.getBoolean("status"),
-                    rs.getString("matricule_fiscale"),
-                    rs.getString("photo_profil")
-            );
-        }
-        return null;
-    }
-
-
     public CategorieArticle getCategorieById(int id) throws SQLException {
         String query = "SELECT * FROM categorie_article WHERE id = ?";
         PreparedStatement ps = con.prepareStatement(query);
@@ -118,32 +93,30 @@ public class ArticleService implements IService<Article>{
         return null;
     }
 
-    public List<Article> displayUserArticles(int userId) throws SQLException {
-        List<Article> userArticles = new ArrayList<>();
-        String query = "SELECT * FROM article WHERE utilisateur_id = ?";
 
-        try (PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setInt(1, userId);  // Remplace 'userId' par l'ID de l'utilisateur
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Article article = new Article(
-                        rs.getInt("id"),
-                        rs.getInt("categorie_id"),
-                        rs.getInt("utilisateur_id"),
-                        rs.getString("nom_article"),
-                        rs.getString("description_article"),
-                        rs.getInt("quantite_article"),
-                        rs.getDouble("prix"),
-                        rs.getString("image_article"),
-                        rs.getString("localisation_article")
-                );
-                userArticles.add(article);
-            }
+    public Article getArticleById(int articleId) throws SQLException {
+        String query = "SELECT * FROM article WHERE id = ?";
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, articleId);  // Set the article ID parameter
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            // Construct and return the Article object from the result set
+            return new Article(
+                    rs.getInt("id"),
+                    rs.getInt("categorie_id"),
+                    rs.getInt("utilisateur_id"),
+                    rs.getString("nom_article"),
+                    rs.getString("description_article"),
+                    rs.getInt("quantite_article"),
+                    rs.getDouble("prix"),
+                    rs.getString("image_article"),
+                    rs.getString("localisation_article")
+            );
         }
-
-        return userArticles;
+        return null;  // Return null if no article found
     }
+
+
 
 
 }

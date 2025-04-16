@@ -35,7 +35,7 @@ public class UserArticle {
     private final CateArtService cateArtService = new CateArtService();
 
     @FXML
-    private Button proposerArticleBtn; // Add fx:id in FXML
+    private Button proposerArticleBtn;
 
     @FXML
     public void initialize() {
@@ -189,12 +189,27 @@ public class UserArticle {
 
         // Event handlers for the buttons
         modifyBtn.setOnAction(e -> {
-            // Handle modification action
-            System.out.println("Modifier clicked for: " + article.getNom_article());
+            try {
+                // Charger le formulaire d'ajout avec les données de l'article
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/formAjoutArticle.fxml"));
+                Parent formView = loader.load();
+
+                // Récupérer le contrôleur du formulaire d'ajout
+                formAjoutArticle formController = loader.getController();
+
+                // Passer l'article à modifier au formulaire
+                formController.setArticleToModify(article); // Cette méthode sera ajoutée dans le contrôleur de formAjoutArticle
+
+                // Mettre à jour l'affichage
+                BorderPane root = (BorderPane) proposerArticleBtn.getScene().lookup("#rootBorderPane");
+                root.setCenter(formView);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         });
 
+
         deleteBtn.setOnAction(e -> {
-            // Demander confirmation avant la suppression
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation de suppression");
             alert.setHeaderText(null);
@@ -203,8 +218,8 @@ public class UserArticle {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 try {
-                    articleService.delete(article); // Supprimer l'article de la base de données
-                    articleGrid.getChildren().remove(card); // Retirer la carte de l'affichage
+                    articleService.delete(article); // Supprime en base
+                    loadArticles(); // Recharge toute la grille proprement
                     System.out.println("Article supprimé: " + article.getNom_article());
                 } catch (SQLException ex) {
                     ex.printStackTrace();
