@@ -157,6 +157,7 @@ public class Panier {
             totalLigneLabel.setPrefWidth(100);
 
             Button supprimerBtn = new Button("🗑");
+            supprimerBtn.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
             supprimerBtn.setOnAction(e -> {
                 // Supprimer de la base
                 try {
@@ -233,5 +234,4 @@ public class Panier {
         SessionPanier.viderPanier();
     }
 }
-
 

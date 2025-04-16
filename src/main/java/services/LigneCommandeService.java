@@ -2,11 +2,15 @@ package services;
 
 import entities.Article;
 import entities.LigneCommande;
+import entities.utilisateur;
+import entities.Commande;
 import utils.MyDataBase;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LigneCommandeService {
 
@@ -108,6 +112,61 @@ public class LigneCommandeService {
             System.out.println("Aucune ligne mise à jour. ID introuvable ?");
         }
     }
+
+
+
+
+    //pour affichage commandes admin
+
+    public List<Commande> getCommandesAvecDetails() throws SQLException {
+        List<Commande> commandes = new ArrayList<>();
+
+        // Requête pour grouper les lignes par commande
+        String sql = "SELECT lc.*, u.nom_user, a.nom_article, c.id as commande_id, c.date_commande, c.prix_total, c.statut " +
+                "FROM ligne_commande lc " +
+                "JOIN utilisateur u ON lc.user_c_id = u.id " +
+                "JOIN article a ON lc.article_c_id = a.id " +
+                "JOIN commande c ON lc.commande_id = c.id";
+
+        PreparedStatement ps = conx.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        Map<Integer, Commande> commandeMap = new HashMap<>();
+
+        while (rs.next()) {
+            int commandeId = rs.getInt("commande_id");
+
+            Commande commande = commandeMap.getOrDefault(commandeId, new Commande());
+            if (!commandeMap.containsKey(commandeId)) {
+                commande.setId(commandeId);
+                commande.setDateCommande(rs.getTimestamp("date_commande").toLocalDateTime());
+                commande.setPrixTotal(rs.getDouble("prix_total"));
+                commande.setStatut(rs.getString("statut"));
+                commande.setLigneCommandes(new ArrayList<>());
+                commandeMap.put(commandeId, commande);
+            }
+
+            utilisateur u = new utilisateur();
+            u.setNom_user(rs.getString("nom_user"));
+
+            Article a = new Article();
+            a.setNom_article(rs.getString("nom_article"));
+
+            LigneCommande ligne = new LigneCommande();
+            ligne.setId(rs.getInt("id"));
+            ligne.setQuantite(rs.getInt("quantite_c"));
+            ligne.setPrix(rs.getDouble("prix_c"));
+            ligne.setEtat(rs.getString("etat_c"));
+            ligne.setUtilisateur(u);
+            ligne.setArticle(a);
+
+            commande.addLigneCommande(ligne);
+        }
+
+        commandes.addAll(commandeMap.values());
+        return commandes;
+    }
+
 
 
 

@@ -1,5 +1,8 @@
 package entities;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class LigneCommande {
 
     private int id;
@@ -8,6 +11,7 @@ public class LigneCommande {
     private String etat;
     private utilisateur utilisateur;
     private Article article;
+    private LocalDateTime dateCommande;
 
     public LigneCommande() {}
 
@@ -69,4 +73,31 @@ public class LigneCommande {
     public void setArticle(Article article) {
         this.article = article;
     }
+    public String getNomClient() {
+        return utilisateur != null ? utilisateur.getNom_user() : "";
+    }
+
+    public String getArticles() {
+        return article != null ? article.getNom_article() : "";
+    }
+
+    public String getStatutCommande() {
+        return etat; // ou autre champ si tu veux afficher le statut de la commande
+    }
+
+    public String getDateCommande() {
+        return dateCommande != null ? dateCommande.toString() : "";
+    }
+
+    public void setDateCommande(LocalDateTime dateCommande) {
+        this.dateCommande = dateCommande;
+    }
+    // Pour affichage formaté de la date
+    public String getDateCommandeFormatted() {
+        if (dateCommande == null) return "";
+        return dateCommande.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+
+
 }

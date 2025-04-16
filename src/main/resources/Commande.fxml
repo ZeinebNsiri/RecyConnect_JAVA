@@ -10,35 +10,33 @@
 
 <StackPane xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="controllers.CommandeController"
-           style="-fx-background-color: #f5f5f5;">
+           style="-fx-background-color: linear-gradient(to bottom, #e0f7fa, #ffffff);">
 
-    <VBox alignment="CENTER" spacing="20" maxWidth="400"
-          style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 4);">
+    <VBox alignment="CENTER" spacing="30" maxWidth="600"
+          style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0.1, 0, 6);">
         <padding>
-            <Insets top="30" bottom="30" left="20" right="20"/>
+            <Insets top="40" bottom="40" left="40" right="40"/>
         </padding>
 
         <!-- Titre -->
-        <Label text="Choisir le mode de paiement"
-               style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+        <Label text="Choisissez votre mode de paiement"
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #004d40;" />
 
         <!-- Boutons radio -->
-        <VBox spacing="15" alignment="CENTER_LEFT">
-            <RadioButton fx:id="livraisonRadio" text="Payer à la livraison" style="-fx-text-fill: #2e7d32;">
+        <VBox spacing="20" alignment="CENTER_LEFT">
+            <RadioButton fx:id="livraisonRadio" text="Payer à la livraison" style="-fx-font-size: 16px; -fx-text-fill: #00695c;">
                 <toggleGroup>
                     <ToggleGroup fx:id="paiementGroup"/>
                 </toggleGroup>
             </RadioButton>
 
             <RadioButton fx:id="visaRadio" text="Payer par VISA"
-                         toggleGroup="$paiementGroup" style="-fx-text-fill: #2e7d32;" />
+                         toggleGroup="$paiementGroup" style="-fx-font-size: 16px; -fx-text-fill: #00695c;" />
         </VBox>
 
         <!-- Bouton valider -->
-        <Button fx:id="validerBtn" text="Valider le paiement">
-        <!--  onAction="#validerPaiement" -->
-                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 30; -fx-background-radius: 5;" </Button>
-
+        <Button fx:id="validerBtn" text="Valider le paiement"
+                style="-fx-background-color: #00796b; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12 40; -fx-background-radius: 8;"/>
     </VBox>
 
 </StackPane>
