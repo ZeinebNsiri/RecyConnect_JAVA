@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx"
@@ -9,32 +10,19 @@
       alignment="TOP_CENTER"
       spacing="20"
       stylesheets="@styles/addPost.css"
-      padding="40">
+      style="-fx-background-color: #ffffff;"
+      >
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
 
     <Label text="Créer un Post" styleClass="subtitle" />
     <Label text="Publier un Nouveau Post" styleClass="title" />
 
-    <VBox spacing="15" alignment="TOP_CENTER">
-        <padding>
-            <Insets top="30" right="30" bottom="30" left="30"/>
-        </padding>
+    <VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #e8f5e9; -fx-padding: 30; -fx-background-radius: 10;">
 
         <TextArea promptText="Contenu du post" prefRowCount="4" prefWidth="400"/>
 
-        <Label text="Tags" style="-fx-font-weight: bold; -fx-text-fill: #1b5e20; -fx-font-size: 14;" />
-
-        <FlowPane hgap="10" vgap="10" prefWrapLength="400">
-            <ToggleButton text="#Durabilité" />
-            <ToggleButton text="#Réutilisation" />
-            <ToggleButton text="#RecyclagePlastique" />
-            <ToggleButton text="#RecyclagePapier" />
-            <ToggleButton text="#RecyclageMétal" />
-            <ToggleButton text="#RecyclageVerre" />
-            <ToggleButton text="#DIYRecyclage" />
-            <ToggleButton text="#Question" />
-            <ToggleButton text="#Réclamation" />
-            <ToggleButton text="#Initiative" />
-        </FlowPane>
 
         <HBox spacing="10" alignment="CENTER_LEFT">
             <Label text="Média (images)" style="-fx-text-fill: gray;" />
