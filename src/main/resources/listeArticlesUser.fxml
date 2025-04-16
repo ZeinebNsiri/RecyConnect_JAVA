@@ -33,7 +33,7 @@
                 <HBox spacing="30" alignment="CENTER">
                     <Button fx:id="proposerArticleBtn" text="Proposez un article" prefWidth="220"
                             style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12 0;" />
-                    <Button text="Mes articles" prefWidth="220"
+                    <Button fx:id="mesArticlesButton" text="Mes articles" prefWidth="220"
                             style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12 0;" />
                 </HBox>
 

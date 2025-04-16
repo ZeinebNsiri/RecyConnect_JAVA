@@ -15,6 +15,7 @@ import javafx.scene.layout.*;
 import services.ArticleService;
 import services.CateArtService;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -135,7 +136,21 @@ public class AffichageArticleController {
         imageView.setFitHeight(180);
         imageView.setFitWidth(400);
         imageView.setPreserveRatio(false);
-        imageView.setImage(new Image(getClass().getResource("/carousel-1.jpg").toExternalForm()));
+        // Charger l'image de l'article depuis le dossier public/uploads/photo_dir
+        try {
+            String imageName = article.getImage_article();
+            File imageFile = new File("C:/Users/Admin/Desktop/PI_RecyConnect_TechSquad/public/uploads/photo_dir/" + imageName);
+            if (imageFile.exists()) {
+                imageView.setImage(new Image(imageFile.toURI().toString()));
+            } else {
+                // image manquante → image par défaut
+                imageView.setImage(new Image(getClass().getResource("/carousel-1.jpg").toExternalForm()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            imageView.setImage(new Image(getClass().getResource("/carousel-1.jpg").toExternalForm()));
+        }
+
 
         // Nom + bouton
         HBox topLine = new HBox();

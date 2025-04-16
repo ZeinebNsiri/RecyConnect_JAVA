@@ -39,7 +39,17 @@
                             <Label style="-fx-text-fill: #093f2e; -fx-font-size: 30px; -fx-font-weight: bold;" text="Proposez un article" />
 
                             <TextField fx:id="nomArticleField" promptText="Nom de l'article" styleClass="clean-field" />
-                            <TextField fx:id="imageArticleField" promptText="Nom de l'image (temporaire)" styleClass="clean-field" />
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Button fx:id="uploadImageButton"
+                                        text="Choisir une image"
+                                        prefWidth="220"
+                                        prefHeight="45"
+                                        onAction="#handleImageUpload"
+                                        style="-fx-font-size: 16px;" />
+                                <Label fx:id="imageArticleField"
+                                       text="Aucune image sélectionnée"
+                                       style="-fx-text-fill: #666; -fx-font-size: 18px;" />
+                            </HBox>
                             <ComboBox fx:id="categorieComboBox"
                                       promptText="Catégorie"
                                       prefWidth="550"

@@ -118,4 +118,32 @@ public class ArticleService implements IService<Article>{
         return null;
     }
 
+    public List<Article> displayUserArticles(int userId) throws SQLException {
+        List<Article> userArticles = new ArrayList<>();
+        String query = "SELECT * FROM article WHERE utilisateur_id = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, userId);  // Remplace 'userId' par l'ID de l'utilisateur
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Article article = new Article(
+                        rs.getInt("id"),
+                        rs.getInt("categorie_id"),
+                        rs.getInt("utilisateur_id"),
+                        rs.getString("nom_article"),
+                        rs.getString("description_article"),
+                        rs.getInt("quantite_article"),
+                        rs.getDouble("prix"),
+                        rs.getString("image_article"),
+                        rs.getString("localisation_article")
+                );
+                userArticles.add(article);
+            }
+        }
+
+        return userArticles;
+    }
+
+
 }
