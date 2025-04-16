@@ -6,9 +6,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
+import javafx.stage.FileChooser;
 import services.CateArtService;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +32,9 @@ public class ajoutCategorieArticle {
     private TextField nomCategorieField;
 
     @FXML
-    private TextField nomImagecatField;
+    private Label nomImagecatField; // même fx:id que dans FXML
+
+    private File selectedFile;
 
     @FXML
     private TextField idCategorieField;
@@ -36,6 +42,7 @@ public class ajoutCategorieArticle {
     private boolean isEditMode = false;
 
     private CateArtService service = new CateArtService();
+    private static final String categorie_IMAGE_DIR = "C:/Users/Admin/Desktop/PI_RecyConnect_TechSquad/public/uploads/photo_dir";
 
     @FXML
     void ajouterCategorieArticleAction(ActionEvent event) throws SQLException, IOException {
@@ -57,6 +64,19 @@ public class ajoutCategorieArticle {
                     nomImagecatField.getText()
             );
             service.add(newCat);
+            if (selectedFile != null) {
+                try {
+                    File destDir = new File(categorie_IMAGE_DIR);
+                    if (!destDir.exists()) destDir.mkdirs();
+
+                    File destFile = new File(destDir, selectedFile.getName());
+                    Files.copy(selectedFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                    newCat.setImage_categorie(selectedFile.getName());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         //  Confirmation
@@ -107,10 +127,23 @@ public class ajoutCategorieArticle {
         String desc = descriptionCategorieField.getText().trim();
         String image = nomImagecatField.getText().trim();
 
+
         if (nom.isEmpty() || desc.isEmpty() || image.isEmpty()) {
             showAlert("Tous les champs doivent être remplis !");
             return false;
         }
+
+        //  Vérification image obligatoire
+        if (!isEditMode && selectedFile == null) {
+            showAlert("Veuillez sélectionner une image pour la catégorie.");
+            return false;
+        }
+
+        if (isEditMode && image.isEmpty()) {
+            showAlert("L'image de la catégorie ne doit pas être vide.");
+            return false;
+        }
+
 
         List<CategorieArticle> existantes = service.displayList();
 
@@ -133,5 +166,20 @@ public class ajoutCategorieArticle {
         alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.show();
+    }
+
+    @FXML
+    private void choisirImageCategorie(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir une image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            selectedFile = file;
+            nomImagecatField.setText(file.getName()); // Afficher le nom du fichier sélectionné
+        }
     }
 }

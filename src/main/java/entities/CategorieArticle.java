@@ -9,17 +9,19 @@ public class CategorieArticle {
     private String image_categorie;
     private String description_categorie;
 
-    public CategorieArticle(int id, String nom_categorie, String image_categorie, String description_categorie) {
+    public CategorieArticle(int id, String nom_categorie, String description_categorie, String image_categorie) {
         this.id = id;
         this.nom_categorie = nom_categorie;
-        this.image_categorie = image_categorie;
         this.description_categorie = description_categorie;
+        this.image_categorie = image_categorie;
+
     }
 
-    public CategorieArticle(String nom_categorie, String image_categorie, String description_categorie) {
+    public CategorieArticle(String nom_categorie, String description_categorie, String image_categorie) {
         this.nom_categorie = nom_categorie;
-        this.image_categorie = image_categorie;
         this.description_categorie = description_categorie;
+        this.image_categorie = image_categorie;
+
     }
 
     public CategorieArticle() {};

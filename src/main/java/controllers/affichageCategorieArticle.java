@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+
 public class affichageCategorieArticle {
 
     @FXML
@@ -43,6 +47,37 @@ public class affichageCategorieArticle {
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("image_categorie"));
+
+        imageColumn.setCellFactory(param -> new TableCell<>() {
+            private final ImageView imageView = new ImageView();
+
+            {
+                imageView.setFitWidth(80);
+                imageView.setFitHeight(60);
+                imageView.setPreserveRatio(false);
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                setStyle("-fx-alignment: CENTER;");
+            }
+
+            @Override
+            protected void updateItem(String imagePath, boolean empty) {
+                super.updateItem(imagePath, empty);
+
+                if (empty || imagePath == null || imagePath.trim().isEmpty()) {
+                    setGraphic(null);
+                } else {
+                    try {
+                        String imageUrl = "file:/C:/Users/Admin/Desktop/PI_RecyConnect_TechSquad/public/uploads/photo_dir/" + imagePath;
+                        imageView.setImage(new javafx.scene.image.Image(imageUrl));
+                        setGraphic(imageView);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        setGraphic(null);
+                    }
+                }
+            }
+        });
+
         nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom_categorie"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description_categorie"));
 
