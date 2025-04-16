@@ -6,23 +6,40 @@
 <VBox xmlns:fx="http://javafx.com/fxml/1"
       xmlns="http://javafx.com/javafx/17"
       fx:controller="controllers.Reservations.ReservationAddController"
-      spacing="15" alignment="CENTER" prefWidth="400" prefHeight="400"
-      style="-fx-background-color: white;">
+      spacing="12" alignment="CENTER" prefWidth="400" prefHeight="450"
+      style="-fx-background-color: #ffffff; -fx-padding: 20;">
 
-    <padding><Insets top="20" left="20" right="20" bottom="20"/></padding>
+    <Label text="Nouvelle Réservation" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
 
-    <Label text="Nouvelle Réservation" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+    <VBox spacing="4" alignment="CENTER_LEFT">
+        <TextField fx:id="nameField" promptText="Nom" />
+        <Label fx:id="nameError" textFill="red" visible="false" />
+    </VBox>
 
-    <TextField fx:id="nameField" promptText="Nom"/>
-    <TextField fx:id="emailField" promptText="Email"/>
-    <TextField fx:id="phoneField" promptText="Téléphone"/>
-    <Spinner fx:id="placesSpinner"/>
-    <ComboBox fx:id="statusCombo" promptText="Statut"/>
+    <VBox spacing="4" alignment="CENTER_LEFT">
+        <TextField fx:id="emailField" promptText="Email" />
+        <Label fx:id="emailError" textFill="red" visible="false" />
+    </VBox>
 
-    <HBox spacing="10">
+    <VBox spacing="4" alignment="CENTER_LEFT">
+        <TextField fx:id="phoneField" promptText="Téléphone" />
+        <Label fx:id="phoneError" textFill="red" visible="false" />
+    </VBox>
+
+    <VBox spacing="4" alignment="CENTER_LEFT">
+        <Spinner fx:id="placesSpinner" />
+        <Label fx:id="placesError" textFill="red" visible="false" />
+    </VBox>
+
+    <VBox spacing="4" alignment="CENTER_LEFT">
+        <ComboBox fx:id="statusCombo" promptText="Statut" />
+        <Label fx:id="statusError" textFill="red" visible="false" />
+    </VBox>
+
+    <HBox spacing="15" alignment="CENTER">
         <Button text="Enregistrer" onAction="#handleSave"
-                style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+                style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;" />
         <Button text="Annuler" onAction="#handleCancel"
-                style="-fx-background-color: #6c757d; -fx-text-fill: white;"/>
+                style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-font-weight: bold;" />
     </HBox>
 </VBox>

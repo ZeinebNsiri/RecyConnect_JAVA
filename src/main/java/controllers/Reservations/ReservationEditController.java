@@ -1,3 +1,4 @@
+// ReservationEditController.java
 package controllers.Reservations;
 
 import entities.Reservation;
@@ -7,12 +8,18 @@ import javafx.stage.Stage;
 import services.ReservationService;
 
 public class ReservationEditController {
-/*
+
     @FXML private TextField nameField;
     @FXML private TextField emailField;
     @FXML private TextField phoneField;
     @FXML private Spinner<Integer> placesSpinner;
     @FXML private ComboBox<String> statusCombo;
+
+    @FXML private Label nameError;
+    @FXML private Label emailError;
+    @FXML private Label phoneError;
+    @FXML private Label placesError;
+    @FXML private Label statusError;
 
     private Reservation reservation;
     private final ReservationService reservationService = new ReservationService();
@@ -20,7 +27,7 @@ public class ReservationEditController {
     @FXML
     public void initialize() {
         placesSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1));
-        statusCombo.getItems().addAll("Pending", "Confirmed", "Cancelled");
+        statusCombo.getItems().addAll("active", "confirmée", "annulée");
     }
 
     public void setReservation(Reservation reservation) {
@@ -28,26 +35,76 @@ public class ReservationEditController {
         if (reservation != null) {
             nameField.setText(reservation.getNom());
             emailField.setText(reservation.getEmail());
-            phoneField.setText(reservation.getPhone());
-            placesSpinner.getValueFactory().setValue(reservation.getPlaces());
+            phoneField.setText(reservation.getNumTel());
+            placesSpinner.getValueFactory().setValue(reservation.getNbPlaces());
             statusCombo.setValue(reservation.getStatus());
         }
     }
 
     @FXML
     private void handleSave() {
-        try {
-            reservation.setName(nameField.getText());
-            reservation.setEmail(emailField.getText());
-            reservation.setPhone(phoneField.getText());
-            reservation.setPlaces(placesSpinner.getValue());
-            reservation.setStatus(statusCombo.getValue());
+        clearErrors();
+        boolean isValid = validateFields();
 
-            reservationService.update(reservation);
-            closeWindow();
-        } catch (Exception e) {
-            showAlert("Erreur", "Mise à jour échouée : " + e.getMessage());
+        if (isValid && reservation != null) {
+            try {
+                reservation.setNom(nameField.getText().trim());
+                reservation.setEmail(emailField.getText().trim());
+                reservation.setNumTel(phoneField.getText().trim());
+                reservation.setNbPlaces(placesSpinner.getValue());
+                reservation.setStatus(statusCombo.getValue());
+
+                reservationService.update(reservation);
+                showSuccess("Réservation mise à jour avec succès!");
+                closeWindow();
+            } catch (Exception e) {
+                showError("Erreur : " + e.getMessage());
+            }
         }
+    }
+
+    private boolean validateFields() {
+        boolean valid = true;
+
+        if (nameField.getText().trim().isEmpty()) {
+            nameError.setText("Nom requis");
+            nameError.setVisible(true);
+            valid = false;
+        }
+
+        if (emailField.getText().trim().isEmpty() || !emailField.getText().contains("@")) {
+            emailError.setText("Email invalide");
+            emailError.setVisible(true);
+            valid = false;
+        }
+
+        if (!phoneField.getText().matches("\\d{8,15}")) {
+            phoneError.setText("Téléphone invalide");
+            phoneError.setVisible(true);
+            valid = false;
+        }
+
+        if (placesSpinner.getValue() <= 0) {
+            placesError.setText("Places > 0");
+            placesError.setVisible(true);
+            valid = false;
+        }
+
+        if (statusCombo.getValue() == null) {
+            statusError.setText("Statut requis");
+            statusError.setVisible(true);
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    private void clearErrors() {
+        nameError.setVisible(false);
+        emailError.setVisible(false);
+        phoneError.setVisible(false);
+        placesError.setVisible(false);
+        statusError.setVisible(false);
     }
 
     @FXML
@@ -60,10 +117,17 @@ public class ReservationEditController {
         stage.close();
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setContentText(message);
+    private void showSuccess(String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Succès");
+        alert.setContentText(msg);
         alert.showAndWait();
-    }*/
+    }
+
+    private void showError(String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
 }

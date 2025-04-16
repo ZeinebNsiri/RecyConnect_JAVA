@@ -9,7 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
+import controllers.Reservations.EventReservationController;
 import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -50,6 +50,23 @@ public class EventDetailsController {
         // Static map image from OpenStreetMap (can be replaced by browser if interactive map is needed)
        mapImageView.setImage(new Image("https://static-maps.yandex.ru/1.x/?ll=10.16579,36.8065&z=15&l=map&size=300,200&pt=10.16579,36.8065,pm2rdl")); // Replace coordinates dynamically if needed
     }
+    @FXML
+    private void handleInscription() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReservationViews/EventReservationForm.fxml"));
+            Parent root = loader.load();
+
+            // On passe l’événement courant au contrôleur de la réservation
+            EventReservationController controller = loader.getController();
+            controller.setEvent(event);
+
+            Stage stage = (Stage) eventTitle.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     private void handleBack() {

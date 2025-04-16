@@ -4,8 +4,6 @@ import entities.Event;
 import utils.MyDataBase;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +33,16 @@ public class EventService implements IService<Event> {
             stmt.setString(10, event.getCoordinates());
             stmt.setTime(11, Time.valueOf(event.getEndTime()));
 
+            stmt.executeUpdate();
+        }
+    }
+
+    // ✅ Décrémente le nombre de places restantes pour un événement
+    public void decrementRemainingPlaces(int eventId, int nbPlacesReserved) throws SQLException {
+        String sql = "UPDATE evenement SET nb_restant = nb_restant - ? WHERE id = ?";
+        try (PreparedStatement stmt = cnx.prepareStatement(sql)) {
+            stmt.setInt(1, nbPlacesReserved);
+            stmt.setInt(2, eventId);
             stmt.executeUpdate();
         }
     }
@@ -100,7 +108,6 @@ public class EventService implements IService<Event> {
         }
     }
 
-    // Optional: convenience method if needed
     public List<Event> getAllEvents() throws SQLException {
         return displayList();
     }
@@ -110,5 +117,31 @@ public class EventService implements IService<Event> {
         e.setId(id);
         delete(e);
         return true;
+    }
+
+    public Event getEventById(int id) throws SQLException {
+        String query = "SELECT * FROM evenement WHERE id = ?";
+        try (PreparedStatement stmt = cnx.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Event(
+                        rs.getInt("id"),
+                        rs.getString("nom_event"),
+                        rs.getString("description_event"),
+                        rs.getString("lieu_event"),
+                        rs.getDate("date_event").toLocalDate(),
+                        rs.getTime("heure_event").toLocalTime(),
+                        rs.getString("image_event"),
+                        rs.getInt("capacite"),
+                        rs.getInt("nb_restant"),
+                        rs.getString("google_meet_link"),
+                        rs.getString("map_coordinates"),
+                        rs.getTime("end_time").toLocalTime()
+                );
+            }
+        }
+        return null;
     }
 }

@@ -18,7 +18,7 @@
                 <Label fx:id="eventDateTime" />
                 <Label fx:id="eventDescription" wrapText="true" maxWidth="400"/>
                 <Label fx:id="eventPlaces" style="-fx-font-weight: bold; -fx-text-fill: green;" />
-                <Button text="📝 S'inscrire" style="-fx-background-color: #198754; -fx-text-fill: white;" />
+                <Button text="📝 S'inscrire" style="-fx-background-color: #198754; -fx-text-fill: white;" onAction="#handleInscription"/>
                 <Button text="⬅ Retour à la liste" onAction="#handleBack" />
             </VBox>
 

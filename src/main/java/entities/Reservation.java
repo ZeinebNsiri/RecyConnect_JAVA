@@ -12,6 +12,18 @@ public class Reservation {
 
     public Reservation() {}
 
+    // Constructeur utilisé pour l'insertion (sans ID et avec statut par défaut)
+    public Reservation(String nom, String email, String numTel, int nbPlaces, String demandes_speciales, int eventId) {
+        this.nom = nom;
+        this.email = email;
+        this.numTel = numTel;
+        this.nbPlaces = nbPlaces;
+        this.demandes_speciales = demandes_speciales;
+        this.eventId = eventId;
+        this.status = "active";
+    }
+
+    // Constructeur complet (par exemple pour displayList)
     public Reservation(int id, int eventId, String nom, String email, String numTel, int nbPlaces, String demandes_speciales, String status) {
         this.id = id;
         this.eventId = eventId;
@@ -23,6 +35,7 @@ public class Reservation {
         this.status = status;
     }
 
+    // Getters & Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

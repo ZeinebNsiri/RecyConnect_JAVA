@@ -69,12 +69,11 @@ public class Event {
     public String getMeetingLink() { return meetingLink.get(); }
     public String getCoordinates() { return coordinates.get(); }
     public ImageView getImageView() {
-        String filename = getImage(); // like "67c038565a819.png"
+        String filename = getImage();
         if (filename == null || filename.isEmpty()) {
-            return new ImageView(); // or optionally show nothing
+            return new ImageView();
         }
 
-        // Full path to /uploads/ directory (you can adjust this if needed)
         String path = "file:uploads/" + filename;
 
         Image img = new Image(path, 50, 50, true, true);
