@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:controller="controllers.ProfileController"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="900" prefHeight="600"
+            stylesheets="@profile.css"
+            styleClass="root">
+
+    <center>
+        <VBox spacing="20" alignment="TOP_CENTER" styleClass="vbox">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+
+            <Label text="Profile" styleClass="page-title"/>
+
+            <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" styleClass="tab-pane">
+                <!-- Mon Profil -->
+                <Tab text="Mon Profile">
+                    <VBox spacing="20" alignment="CENTER" styleClass="vbox">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                        <ImageView fx:id="profileImage" fitHeight="160" fitWidth="160"/>
+                        <Label fx:id="fullNameLabel" styleClass="profile-name"/>
+                        <Label fx:id="roleLabel" styleClass="profile-role"/>
+
+                        <VBox alignment="CENTER" styleClass="info-card">
+                            <GridPane hgap="20" vgap="15" styleClass="grid-pane">
+                                <columnConstraints>
+                                    <ColumnConstraints halignment="RIGHT"/>
+                                    <ColumnConstraints/>
+                                </columnConstraints>
+                                <children>
+                                    <Label text="Nom:" styleClass="bold-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                    <Label fx:id="nomLabel" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                                    <Label text="Prénom:" styleClass="bold-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                    <Label fx:id="prenomLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                                    <Label text="Email:" styleClass="bold-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                    <Label fx:id="emailLabel" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                                    <Label text="Téléphone:" styleClass="bold-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                                    <Label fx:id="telLabel" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                                    <Label text="Adresse:" styleClass="bold-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                                    <Label fx:id="adresseLabel" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                                </children>
+                            </GridPane>
+
+                        </VBox>
+                    </VBox>
+                </Tab>
+
+                <!-- Modifier le Profile -->
+                <Tab text="Modifier le Profile">
+                    <VBox spacing="15" alignment="CENTER" styleClass="vbox">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                        <Label text="Modifier votre profil" styleClass="form-title"/>
+
+                        <!-- Ce bouton NE DOIT PAS AVOIR DE STYLE -->
+                        <Button text="Choisir une photo" onAction="#handleChooseFile" />
+                        <Label fx:id="fileNameLabel"/>
+
+                        <VBox styleClass="card" alignment="CENTER">
+                            <GridPane hgap="10" vgap="10" styleClass="grid-pane">
+                                <columnConstraints>
+                                    <ColumnConstraints halignment="RIGHT"/>
+                                    <ColumnConstraints/>
+                                </columnConstraints>
+                                <children>
+                                    <Label text="Nom:" styleClass="bold-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                    <TextField fx:id="nomField" promptText="Nom" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                                    <Label text="Prénom:" styleClass="bold-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                    <TextField fx:id="prenomField" promptText="Prénom" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                                    <Label text="Email:" styleClass="bold-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                    <TextField fx:id="emailField" promptText="Email" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                                    <Label text="Téléphone:" styleClass="bold-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                                    <TextField fx:id="telField" promptText="Téléphone" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                                    <Label text="Adresse:" styleClass="bold-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                                    <TextField fx:id="adresseField" promptText="Adresse" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                                </children>
+                            </GridPane>
+                        </VBox>
+
+                        <!-- Centré avec taille ajustée -->
+                        <Button text="Enregistrer" onAction="#handleSave" styleClass="save-button"/>
+                    </VBox>
+                </Tab>
+            </TabPane>
+        </VBox>
+    </center>
+</BorderPane>

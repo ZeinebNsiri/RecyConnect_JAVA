@@ -29,7 +29,7 @@
                 <Button text="🔔" style="-fx-font-size: 16px;" />
                 <MenuButton fx:id="userMenuButton">
                     <items>
-                        <MenuItem text="Profil"/>
+                        <MenuItem fx:id="profilMenuItem" text="Profil"/>
                         <MenuItem text="Déconnexion"/>
                     </items>
                 </MenuButton>

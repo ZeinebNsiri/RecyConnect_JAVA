@@ -17,6 +17,8 @@ public class BaseAdminController {
     private BorderPane rootBorderPane;
     @FXML
     private MenuButton userMenuButton;
+    @FXML
+    private MenuItem profilMenuItem;
 
 
     @FXML
@@ -26,78 +28,89 @@ public class BaseAdminController {
             String fullName = user.getPrenom() + " " + user.getNom_user();
             userMenuButton.setText(fullName);
         }
+        profilMenuItem.setOnAction(e -> showProfileView());
     }
 
     @FXML
-    private void showCategorieView() {
+    public void showCategorieView() {
         loadView("/categorie.fxml");
     }
 
     @FXML
-    private void showDashboardView() {
+    public void showDashboardView() {
         Label dashboardLabel = new Label("📊 Tableau de bord");
         dashboardLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         rootBorderPane.setCenter(dashboardLabel);
     }
 
     @FXML
-    private void showUsersView() {
+    public void showUsersView() {
         loadView("/AffichageUtilisateur.fxml");
     }
 
     @FXML
-    private void showArticlesView() {
+    public void showArticlesView() {
         Label articlesLabel = new Label("🛒 Gestion des articles");
         articlesLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         rootBorderPane.setCenter(articlesLabel);
     }
 
     @FXML
-    private void showCommandesView() {
+    public void showCommandesView() {
         Label commandesLabel = new Label("📦 Gestion des commandes");
         commandesLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         rootBorderPane.setCenter(commandesLabel);
     }
 
     @FXML
-    private void showEvenementView() {
+    public void showEvenementView() {
         Label evenementLabel = new Label("🗓️ Gestion des événements");
         evenementLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         rootBorderPane.setCenter(evenementLabel);
     }
 
     @FXML
-    private void showReservationsView() {
+    public void showReservationsView() {
         Label reservationsLabel = new Label("📋 Gestion des réservations");
         reservationsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         rootBorderPane.setCenter(reservationsLabel);
     }
 
     @FXML
-    private void showCategorieWorkshopView() {
+    public void showCategorieWorkshopView() {
         Label categorieWorkshopLabel = new Label("📈 Catégories des workshops");
         categorieWorkshopLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         rootBorderPane.setCenter(categorieWorkshopLabel);
     }
 
     @FXML
-    private void showWorkshopsView() {
+    public void showWorkshopsView() {
         Label workshopsLabel = new Label("📊 Liste des workshops");
         workshopsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         rootBorderPane.setCenter(workshopsLabel);
     }
 
     @FXML
-    private void showPostsView() {
+    public void showPostsView() {
         Label postsLabel = new Label("📝 Gestion des posts");
         postsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         rootBorderPane.setCenter(postsLabel);
     }
 
-    private void loadView(String fxmlPath) {
+    public void loadView(String fxmlPath) {
         try {
             Parent view = FXMLLoader.load(getClass().getResource(fxmlPath));
             rootBorderPane.setCenter(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showProfileView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/profile.fxml"));
+            Parent profileRoot = loader.load();
+            rootBorderPane.setCenter(profileRoot);
         } catch (IOException e) {
             e.printStackTrace();
         }

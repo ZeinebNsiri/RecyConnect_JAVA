@@ -1,0 +1,119 @@
+/* ===== GLOBAL ===== */
+.root, .tab-pane, .vbox {
+    -fx-background-color: #edf7ef;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* ===== TAB HEADER ===== */
+.tab-pane .tab-header-area {
+    -fx-background-color: #ffffff;
+    -fx-padding: 5 0 5 0;
+    -fx-border-color: transparent transparent #c8e6c9 transparent;
+    -fx-border-width: 0 0 2px 0;
+}
+.tab-pane .tab {
+    -fx-padding: 8 20;
+    -fx-background-color: transparent;
+    -fx-text-fill: #2e7d32;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+.tab-pane .tab:selected {
+    -fx-border-color: #2e7d32;
+    -fx-border-width: 0 0 2px 0;
+    -fx-background-color: #ffffff;
+}
+
+/* ===== IMAGE CIRCULAIRE ===== */
+#profileImage {
+    -fx-border-radius: 100;
+    -fx-background-radius: 100;
+    -fx-border-color: #66bb6a;
+    -fx-border-width: 4px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.2, 0, 2);
+    -fx-clip: new javafx.scene.shape.Circle(80, 80, 80);
+}
+
+/* ===== PAGE TITLES ===== */
+.page-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+}
+.form-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+}
+
+/* ===== PROFILE TEXT ===== */
+#fullNameLabel {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1b5e20;
+}
+#roleLabel {
+    -fx-font-size: 16px;
+    -fx-text-fill: #555;
+}
+
+/* ===== CARD CONTAINERS ===== */
+.card, .info-card {
+    -fx-background-color: white;
+    -fx-padding: 30;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 12, 0.2, 0, 3);
+    -fx-spacing: 20;
+    -fx-min-width: 650;
+    -fx-max-width: 750;
+    -fx-alignment: center;
+}
+
+/* ===== FORM LABELS & INPUTS ===== */
+.grid-pane  {
+    -fx-font-size: 17px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #1b5e20;
+}
+.text-field {
+    -fx-font-size: 15px;
+    -fx-pref-width: 320;
+    -fx-padding: 10;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #c8e6c9;
+}
+
+/* ===== FILE NAME LABEL ===== */
+#fileNameLabel {
+    -fx-text-fill: #888;
+    -fx-font-size: 13px;
+}
+
+
+
+/* ===== ALIGN CENTER FOR VBOX INSIDE TABS ===== */
+.vbox {
+    -fx-alignment: CENTER;
+}
+.bold-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #1b5e20;
+    -fx-font-size: 16px;
+}
+
+.save-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 35;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-min-width: 180;
+}
+
+.save-button:hover {
+    -fx-opacity: 0.9;
+}
