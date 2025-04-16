@@ -29,45 +29,50 @@
                     <!-- FORMULAIRE + IMAGE -->
                     <HBox alignment="TOP_CENTER" spacing="30" style="-fx-padding: 20;">
                         <!-- FORM -->
-                        <VBox alignment="TOP_CENTER" spacing="15" prefWidth="750" maxWidth="750">
-                            <Label style="-fx-text-fill: green; -fx-font-size: 18px; -fx-font-weight: bold;" text="Veuillez remplir les détails de votre article convenablement" />
-                            <Label style="-fx-text-fill: #093f2e; -fx-font-size: 36px; -fx-font-weight: bold;" text="Proposez un article" />
+                        <VBox alignment="TOP_CENTER"
+                              spacing="15"
+                              maxWidth="550"
+                              prefWidth="550"
+                              stylesheets="@formStyle.css">
 
-                            <TextField fx:id="nomArticleField" promptText="Nom de l'article" prefWidth="750" />
-                            <TextField fx:id="imageArticleField" promptText="Nom de l'image (temporaire)" prefWidth="750" />
-                            <ComboBox fx:id="categorieComboBox" promptText="Catégorie" prefWidth="750" />
-                            <TextField fx:id="localisationField" promptText="Localisation" prefWidth="750" />
+                            <Label style="-fx-text-fill: green; -fx-font-size: 18px; -fx-font-weight: bold;" text="Veuillez remplir les détails de votre article convenablement" />
+                            <Label style="-fx-text-fill: #093f2e; -fx-font-size: 30px; -fx-font-weight: bold;" text="Proposez un article" />
+
+                            <TextField fx:id="nomArticleField" promptText="Nom de l'article" styleClass="clean-field" />
+                            <TextField fx:id="imageArticleField" promptText="Nom de l'image (temporaire)" styleClass="clean-field" />
+                            <ComboBox fx:id="categorieComboBox"
+                                      promptText="Catégorie"
+                                      prefWidth="550"
+                                      maxWidth="Infinity"
+                                      styleClass="clean-combo" />
+                            <TextField fx:id="localisationField" promptText="Localisation" styleClass="clean-field" />
 
                             <HBox spacing="10">
-                                <TextField fx:id="quantiteField" promptText="Quantité de l'article en Kg" HBox.hgrow="ALWAYS" />
-                                <TextField fx:id="prixField" promptText="Prix unitaire en dinar" HBox.hgrow="ALWAYS" />
+                                <TextField fx:id="quantiteField" promptText="Quantité de l'article en Kg" HBox.hgrow="ALWAYS" styleClass="clean-field" />
+                                <TextField fx:id="prixField" promptText="Prix unitaire en dinar" HBox.hgrow="ALWAYS" styleClass="clean-field" />
                             </HBox>
 
-                            <!-- Zone de description bien dimensionnée -->
                             <TextArea fx:id="descriptionArticleArea"
                                       promptText="Description"
-                                      prefRowCount="6"
-                                      prefHeight="150"
-                                      prefWidth="750"
-                                      maxWidth="750"
                                       wrapText="true"
-                                      VBox.vgrow="NEVER"
-                                      style="-fx-font-size: 14px;" />
+                                      prefHeight="100"
+                                      styleClass="clean-field" />
 
-                            <!-- Boutons -->
                             <HBox spacing="15">
                                 <Button fx:id="confirmerArticleButton"
                                         text="Confirmer"
-                                        style="-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 14px;"
+                                        id="confirmerArticleButton"
                                         prefWidth="140"
-                                        prefHeight="45" />
+                                        prefHeight="40" />
                                 <Button fx:id="annulerArticleButton"
                                         text="Annuler"
-                                        style="-fx-background-color: #3a3b4a; -fx-text-fill: white; -fx-font-size: 14px;"
+                                        id="annulerArticleButton"
                                         prefWidth="140"
-                                        prefHeight="45" />
+                                        prefHeight="40" />
                             </HBox>
                         </VBox>
+
+
 
                         <!-- IMAGE À DROITE -->
                         <ImageView fitHeight="450" preserveRatio="true">
