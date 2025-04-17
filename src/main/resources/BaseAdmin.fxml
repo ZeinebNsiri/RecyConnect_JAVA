@@ -72,8 +72,7 @@
         </VBox>
     </left>
 
-    <!-- ✅ Zone de contenu dynamique -->
     <center>
-        <StackPane fx:id="contentPane"/>
+        <StackPane fx:id="contentPane" />
     </center>
 </BorderPane>
