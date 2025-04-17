@@ -51,7 +51,7 @@
                 <ToggleButton text="Les Posts Les Plus Likés" fx:id="likedToggle" />
                 <ToggleButton text="Mes Posts" fx:id="myPostsToggle" />
                 <ToggleButton text="Enregistrés" fx:id="savedToggle" />
-                <Button text="Créer Une Publication" />
+                <Button fx:id="btnCreerPublication" text="Créer Une Publication" onAction="#handleCreerPublication"/>
             </HBox>
 
             <!-- Post List -->
