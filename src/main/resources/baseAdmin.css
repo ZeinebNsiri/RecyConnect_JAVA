@@ -43,3 +43,8 @@
     -fx-faint-focus-color: transparent;
 }
 
+.titled-pane > .header:hover {
+    -fx-background-color: #ecf0f1;
+    -fx-text-fill: #16a085;
+    -fx-cursor: hand;
+}

@@ -2,11 +2,15 @@
 package controllers;
 
 import entities.utilisateur;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import utils.Session;
 
 import java.io.IOException;
@@ -19,6 +23,11 @@ public class BaseAdminController {
     private MenuButton userMenuButton;
     @FXML
     private MenuItem profilMenuItem;
+    @FXML
+    private MenuItem logoutItem;
+    @FXML
+    private Label sceneReference;
+
 
 
     @FXML
@@ -29,6 +38,14 @@ public class BaseAdminController {
             userMenuButton.setText(fullName);
         }
         profilMenuItem.setOnAction(e -> showProfileView());
+        logoutItem.setOnAction(e -> {
+            try {
+                logout();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
     }
 
     @FXML
@@ -115,4 +132,19 @@ public class BaseAdminController {
             e.printStackTrace();
         }
     }
+    private void logout() throws IOException {
+        // Déconnexion
+        Session.getInstance().logout();
+
+        // Charger la nouvelle page Login.fxml
+        Parent loginRoot = FXMLLoader.load(getClass().getResource("/Login.fxml"));
+        Scene loginScene = new Scene(loginRoot);
+
+        // Récupérer le stage via un vrai Node
+        Stage currentStage = (Stage) sceneReference.getScene().getWindow();
+        currentStage.setScene(loginScene);
+        currentStage.setTitle("Connexion");
+        currentStage.show();
+    }
+
 }

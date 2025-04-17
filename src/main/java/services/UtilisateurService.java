@@ -74,7 +74,7 @@ public class UtilisateurService implements IService<utilisateur> {
 
     @Override
     public void update(utilisateur utilisateur) throws SQLException {
-        String query = "UPDATE `utilisateur` SET `email`=?, `roles`=?, `nom_user`=?, `prenom`=?, `num_tel`=?, `password`=?, `matricule_fiscale`=?, `status`=? , `photo_profil`=? WHERE `id`=?";
+        String query = "UPDATE `utilisateur` SET `email`=?, `roles`=?, `nom_user`=?, `prenom`=?, `num_tel`=?, `password`=?, `matricule_fiscale`=?, `status`=? , `photo_profil`=?,`adresse`=? WHERE `id`=?";
         PreparedStatement ps = conx.prepareStatement(query);
 
         ps.setString(1, utilisateur.getEmail());
@@ -86,7 +86,8 @@ public class UtilisateurService implements IService<utilisateur> {
         ps.setString(7, utilisateur.getMatricule_fiscale());
         ps.setBoolean(8, utilisateur.isStatus());
         ps.setString(9, utilisateur.getPhoto_profil());
-        ps.setInt(10, utilisateur.getId());
+        ps.setString(10, utilisateur.getAdresse());
+        ps.setInt(11, utilisateur.getId());
 
         ps.executeUpdate();
         System.out.println("Utilisateur updated successfully!");

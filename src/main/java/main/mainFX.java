@@ -9,11 +9,11 @@ import javafx.stage.Stage;
 public class mainFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Signup.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Login.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("ajouter personne");
+        stage.setTitle("Recyconnect");
         stage.show();
     }
 }

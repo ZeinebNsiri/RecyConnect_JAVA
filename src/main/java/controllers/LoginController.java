@@ -69,76 +69,76 @@ public class LoginController {
         String password = passwordField.getText();
         Connection connection = MyDataBase.getInstance().getConx();
         if(!email.isEmpty() && !password.isEmpty()) {
-        try {
-            // Étape 1 : Vérifier si l'email existe
-            String emailQuery = "SELECT * FROM utilisateur WHERE email = ?";
-            PreparedStatement emailStmt = connection.prepareStatement(emailQuery);
-            emailStmt.setString(1, email);
-            ResultSet emailResult = emailStmt.executeQuery();
+            try {
+                // email existe
+                String emailQuery = "SELECT * FROM utilisateur WHERE email = ?";
+                PreparedStatement emailStmt = connection.prepareStatement(emailQuery);
+                emailStmt.setString(1, email);
+                ResultSet emailResult = emailStmt.executeQuery();
 
-            if (!emailResult.next()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur de connexion");
-                alert.setContentText("Email inexistant.");
-                alert.show();
-                return;
-            }
-
-            // Étape 2 : Vérifier le mot de passe
-            String storedPassword = emailResult.getString("password");
-            storedPassword = storedPassword.replaceFirst("^\\$2y\\$", "\\$2a\\$");
-            if (!BCrypt.checkpw(password,storedPassword)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur de connexion");
-                alert.setContentText("Mot de passe incorrect.");
-                alert.show();
-                return;
-            }else {
-
-                // Étape 3 : Vérifier le statut
-                boolean status = emailResult.getBoolean("status");
-                if (!status) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Compte banni");
-                    alert.setContentText("Votre compte est banni.");
+                if (!emailResult.next()) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur de connexion");
+                    alert.setContentText("Email inexistant.");
                     alert.show();
                     return;
                 }
 
-                // Étape 4 : Vérifier le rôle
-                String role = emailResult.getString("roles");
-                int id = emailResult.getInt("id");
-
-
-                utilisateur user = new utilisateur(id,emailResult.getString(2),emailResult.getString(4),emailResult.getString(5),emailResult.getString("roles"),emailResult.getString(6),emailResult.getString(7),emailResult.getString(8),emailResult.getBoolean(10),emailResult.getString(9),emailResult.getString(11));
-               Session.getInstance().setCurrentUser(user);
-
-                // Redirection
-                Parent page;
-                if (role.contains("ROLE_ADMIN")) {
-                    page = FXMLLoader.load(getClass().getResource("/BaseAdmin.fxml"));
-                    Scene scene = new Scene(page);
-                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    stage.setScene(scene);
-                    stage.show();
-                } else {
-//                page = FXMLLoader.load(getClass().getResource("/Home.fxml"));
+                // Étape 2 :  mot de passe
+                String storedPassword = emailResult.getString("password");
+                storedPassword = storedPassword.replaceFirst("^\\$2y\\$", "\\$2a\\$");
+                if (!BCrypt.checkpw(password,storedPassword)) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("roles");
-                    alert.setContentText("user");
+                    alert.setTitle("Erreur de connexion");
+                    alert.setContentText("Mot de passe incorrect.");
                     alert.show();
+                    return;
+                }else {
+
+                    // Étape 3 :  statut
+                    boolean status = emailResult.getBoolean("status");
+                    if (!status) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Compte banni");
+                        alert.setContentText("Votre compte est banni.");
+                        alert.show();
+                        return;
+                    }
+
+                    // Étape 4 :  rôle
+                    String role = emailResult.getString("roles");
+                    int id = emailResult.getInt("id");
+
+
+                    utilisateur user = new utilisateur(id,emailResult.getString(2),emailResult.getString(4),emailResult.getString(5),emailResult.getString("roles"),emailResult.getString(6),emailResult.getString(7),emailResult.getString(8),emailResult.getBoolean(10),emailResult.getString(9),emailResult.getString(11));
+                   Session.getInstance().setCurrentUser(user);
+
+                    // Redirection
+                    Parent page;
+                    if (role.contains("ROLE_ADMIN")) {
+                        page = FXMLLoader.load(getClass().getResource("/BaseAdmin.fxml"));
+                        Scene scene = new Scene(page);
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        stage.setScene(scene);
+                        stage.show();
+                    } else {
+                        page = FXMLLoader.load(getClass().getResource("/BaseUser.fxml"));
+                        Scene scene = new Scene(page);
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        stage.setScene(scene);
+                        stage.show();
+                    }
+
+
+
                 }
-
-
-
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur base de données");
+                alert.setContentText("Une erreur est survenue lors de la connexion.");
+                alert.show();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur base de données");
-            alert.setContentText("Une erreur est survenue lors de la connexion.");
-            alert.show();
-        }
         }else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur de connexion");

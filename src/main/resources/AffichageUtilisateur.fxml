@@ -12,10 +12,15 @@
           style="-fx-background-color: white; -fx-padding: 25; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10,0,0,2);"
           AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
 
-        <!-- TITLE -->
+
         <Label text="Liste des utilisateurs" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
 
-        <!-- TABLE -->
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <ComboBox fx:id="globalFilter" promptText="Tous les utilisateurs" prefWidth="200"/>
+        </HBox>
+
+
         <TableView fx:id="tableUtilisateur" prefHeight="600" style="-fx-background-color: white;">
             <columns>
                 <TableColumn fx:id="idColumn" text="#" prefWidth="40"/>

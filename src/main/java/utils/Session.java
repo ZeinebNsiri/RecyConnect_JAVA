@@ -26,5 +26,6 @@ public class Session {
     public void logout() {
         currentUser = null;
         instance = null;
+
     }
 }

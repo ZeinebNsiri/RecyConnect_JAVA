@@ -2,7 +2,12 @@ package controllers;
 
 
 import entities.utilisateur;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import services.UtilisateurService;
 import utils.Session;
 import javafx.fxml.FXML;
@@ -39,6 +44,7 @@ public class ProfileController {
     public void initialize() {
         currentUser = Session.getInstance().getCurrentUser();
         showProfileInfo();
+
 
         // 👇 Cercle de clipping pour rendre l'image circulaire
         Circle clip = new Circle(80, 80, 80); // x, y, radius
@@ -124,13 +130,60 @@ public class ProfileController {
                 e.printStackTrace();
             }
         }
-        UtilisateurService utilisateurService = new UtilisateurService();
-        try {
-            utilisateurService.update(currentUser);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (!ControleVide()) {
+            UtilisateurService utilisateurService = new UtilisateurService();
+            if (!utilisateurService.isValidEmail(emailField.getText())) {
+                showAlertControle("Email invalide !");
+            } else if (!utilisateurService.isValidPhoneNumber(telField.getText())) {
+                showAlertControle("Le numéro de téléphone doit contenir exactement 8 chiffres.");
+            } else {
+                try {
+                    utilisateurService.update(currentUser);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+                showProfileInfo(); // Refresh
+                tabPane.getSelectionModel().select(0);
+            }
         }
-        showProfileInfo(); // Refresh
-        tabPane.getSelectionModel().select(0);
     }
+
+    public boolean ControleVide() {
+
+            if (nomField.getText().isEmpty()) {
+                showAlert("Nom");
+                return true;
+            }
+            if (prenomField.getText().isEmpty()) {
+                showAlert("Prénom");
+                return true;
+            }
+            if (telField.getText().isEmpty()) {
+                showAlert("Numéro de téléphone");
+                return true;
+            }
+            if (emailField.getText().isEmpty()) {
+                showAlert("Email");
+                return true;
+            }
+
+
+
+        return false;
+    }
+    private void showAlert(String champ) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Champ obligatoire");
+        alert.setHeaderText(null);
+        alert.setContentText("Le champ \"" + champ + "\" est vide.");
+        alert.showAndWait();
+    }
+    private void showAlertControle(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur de validation");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }

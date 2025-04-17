@@ -64,7 +64,7 @@
 
                         <Label text="Modifier votre profil" styleClass="form-title"/>
 
-                        <!-- Ce bouton NE DOIT PAS AVOIR DE STYLE -->
+
                         <Button text="Choisir une photo" onAction="#handleChooseFile" />
                         <Label fx:id="fileNameLabel"/>
 
@@ -94,7 +94,7 @@
                             </GridPane>
                         </VBox>
 
-                        <!-- Centré avec taille ajustée -->
+
                         <Button text="Enregistrer" onAction="#handleSave" styleClass="save-button"/>
                     </VBox>
                 </Tab>

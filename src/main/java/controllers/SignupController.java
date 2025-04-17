@@ -18,6 +18,7 @@ import services.UtilisateurService;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 public class SignupController {
 
@@ -132,13 +133,27 @@ public class SignupController {
                     try {
                         utilisateurService.add(new utilisateur(email, nom, prenom, "ROLE_USER", tel, motDePasse, true));
                         clearAll();
+                    } catch (SQLIntegrityConstraintViolationException e) {
+
+                        Alert error = new Alert(Alert.AlertType.ERROR);
+                        error.setTitle("Erreur d'inscription");
+                        error.setHeaderText(null);
+                        if (e.getMessage().contains("UNIQ_IDENTIFIER_EMAIL")) {
+                            error.setContentText("Cette adresse email est déjà utilisée. Veuillez en utiliser une autre.");
+                        } else {
+                            error.setContentText("Une contrainte de base de données a été violée: " + e.getMessage());
+                        }
+                        error.showAndWait();
+
                     } catch (SQLException e) {
+
                         Alert error = new Alert(Alert.AlertType.ERROR);
                         error.setTitle("Erreur");
                         error.setHeaderText(null);
                         error.setContentText(e.getMessage());
                         error.showAndWait();
                         throw e;
+
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -168,13 +183,27 @@ public class SignupController {
                     try {
                         utilisateurService.add(new utilisateur(email, nom, "ROLE_PROFESSIONNEL", tel, motDePassePro, true, matricule));
                         clearAll();
+                    }catch (SQLIntegrityConstraintViolationException e) {
+
+                        Alert error = new Alert(Alert.AlertType.ERROR);
+                        error.setTitle("Erreur d'inscription");
+                        error.setHeaderText(null);
+                        if (e.getMessage().contains("UNIQ_IDENTIFIER_EMAIL")) {
+                            error.setContentText("Cette adresse email est déjà utilisée. Veuillez en utiliser une autre.");
+                        } else {
+                            error.setContentText("Une contrainte de base de données a été violée: " + e.getMessage());
+                        }
+                        error.showAndWait();
+
                     } catch (SQLException e) {
+
                         Alert error = new Alert(Alert.AlertType.ERROR);
                         error.setTitle("Erreur");
                         error.setHeaderText(null);
                         error.setContentText(e.getMessage());
                         error.showAndWait();
                         throw e;
+
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
