@@ -92,5 +92,10 @@ public class ListEventsFrontController {
         card.getChildren().addAll(imageView, name, location, date, time, available, reserveBtn);
         return card;
     }
+    @FXML
+    private void handleShowMyReservations() {
+        BaseUserController.instance.loadMyReservationsView();
+    }
+
 
 }

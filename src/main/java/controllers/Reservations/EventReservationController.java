@@ -1,5 +1,6 @@
 package controllers.Reservations;
 
+import controllers.BaseUserController;
 import entities.Event;
 import entities.Reservation;
 import javafx.fxml.FXML;
@@ -147,7 +148,8 @@ public class EventReservationController {
             new EventService().decrementRemainingPlaces(event.getId(), reservation.getNbPlaces());
 
             showSuccessAlert("\u2705 Réservation enregistrée avec succès!");
-            navigateToReservationsListFront();
+            BaseUserController.instance.loadMyReservationsView();
+
 
         } catch (Exception e) {
             showErrorAlert("\u274c Erreur: " + e.getMessage());

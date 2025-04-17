@@ -6,34 +6,35 @@
 <VBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controllers.Reservations.ReservationListController"
-      spacing="20" alignment="TOP_LEFT"
-      style="-fx-background-color: #f7fdf9;"
+      spacing="25" alignment="TOP_CENTER"
+      style="-fx-background-color: linear-gradient(to bottom, #e8f5ec, #ffffff);"
       prefWidth="1200" prefHeight="800">
 
-    <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
 
+    <!-- Title -->
     <Label text="Gestion des Réservations"
-           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #042c18;" />
+           style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1e3932;
+              -fx-font-family: 'Segoe UI Semibold';"/>
+    <!-- Table Section -->
+    <TableView fx:id="reservationTable"
+               style="-fx-background-color: white; -fx-border-color: #ced4da; -fx-border-radius: 12;
+                      -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 2);"
+               prefHeight="550" maxWidth="1100">
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <TextField fx:id="eventSearchField" promptText="Nom de l'événement" />
-        <TextField fx:id="userSearchField" promptText="Nom d'utilisateur" />
-        <ComboBox fx:id="statusFilterCombo" promptText="Tous les statuts" />
-        <Button text="🔍 Rechercher"
-                style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;" />
-    </HBox>
-
-    <TableView fx:id="reservationTable" style="-fx-background-color: white;">
         <columns>
             <TableColumn fx:id="idColumn" text="#" prefWidth="40"/>
-            <TableColumn fx:id="eventNameColumn" text="Événement" prefWidth="200"/>
-            <TableColumn fx:id="userColumn" text="Utilisateur" prefWidth="150"/>
-            <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
-            <TableColumn fx:id="phoneColumn" text="Numéro de téléphone" prefWidth="150"/>
-            <TableColumn fx:id="specialRequestsColumn" text="Demandes spéciales" prefWidth="130"/>
-            <TableColumn fx:id="statusColumn" text="Statut" prefWidth="100"/>
-            <TableColumn fx:id="placesColumn" text="Places" prefWidth="80"/>
-            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="130"/>
+            <TableColumn fx:id="eventNameColumn" text="🎉 Événement" prefWidth="200"/>
+            <TableColumn fx:id="userColumn" text="👤 Utilisateur" prefWidth="150"/>
+            <TableColumn fx:id="emailColumn" text="📧 Email" prefWidth="200"/>
+            <TableColumn fx:id="phoneColumn" text="📞 Téléphone" prefWidth="140"/>
+            <TableColumn fx:id="specialRequestsColumn" text="📝 Demandes spéciales" prefWidth="150"/>
+            <TableColumn fx:id="statusColumn" text="📌 Statut" prefWidth="100"/>
+            <TableColumn fx:id="placesColumn" text="🎟 Places" prefWidth="80"/>
+            <TableColumn fx:id="actionsColumn" text="⚙️ Actions" prefWidth="130"/>
         </columns>
     </TableView>
+
 </VBox>

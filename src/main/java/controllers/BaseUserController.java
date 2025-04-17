@@ -32,6 +32,15 @@ public class BaseUserController {
             e.printStackTrace();
         }
     }
+    public void loadMyReservationsView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReservationViews/ReservationsListFront.fxml"));
+            Parent view = loader.load();
+            rootBorderPane.setCenter(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void showEventDetails(Event event) {
         try {
@@ -46,6 +55,8 @@ public class BaseUserController {
             e.printStackTrace();
         }
     }
+
+
 
     @FXML
     public void showArticleView() {
