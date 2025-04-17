@@ -1,6 +1,7 @@
 package services;
 
 import entities.Post;
+import entities.utilisateur;
 import utils.MyDataBase;
 
 import java.io.File;
@@ -38,6 +39,24 @@ public class PostService implements IService<Post>{
         return mediaUrls;
     }
 
+    public utilisateur getUserPById(int userId) {
+        utilisateur user = new utilisateur();
+        String sql = "SELECT * FROM utilisateur WHERE id = ?";
+        try (PreparedStatement ps = conx.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                user.setId(rs.getInt("id"));
+                user.setPrenom(rs.getString("prenom"));
+                user.setPhoto_profil(rs.getString("photo_profil"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+
 
     @Override
     public List<Post> displayList() throws SQLException {
@@ -56,7 +75,6 @@ public class PostService implements IService<Post>{
                 p.setDate_publication(rs.getTimestamp("date_publication").toLocalDateTime());
                 p.setNbr_jaime(rs.getInt("nbr_jaime"));
                 p.setStatus_post(rs.getBoolean("status_post"));
-
 
 
                 posts.add(p);

@@ -1,6 +1,9 @@
 package controllers;
 
 import entities.Post;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import services.PostService;
 
 import javafx.fxml.FXML;
@@ -9,6 +12,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +41,27 @@ public class AddPostController {
     public void initialize() {
         chooseFileButton.setOnAction(e -> handleChooseFile());
         publishButton.setOnAction(e -> handlePublish());
+        backButton.setOnAction(e -> handleBack());
+    }
+
+    private void handleBack() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Forum.fxml")); // ajuste le chemin si besoin
+            Parent root = loader.load();
+
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Forum");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Impossible de revenir au forum.");
+            alert.showAndWait();
+        }
     }
 
     private void handleChooseFile() {
