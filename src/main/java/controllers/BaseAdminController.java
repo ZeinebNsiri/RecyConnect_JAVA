@@ -57,10 +57,10 @@ public class BaseAdminController {
         rootBorderPane.setCenter(commandesLabel);
     }
     @FXML
-    private void showEvenementView() {
-
-        loadView("/EventViews/EventList.fxml");
+    public void showEventsView() {
+        loadView("/EventViews/ListEventsFront.fxml");
     }
+
 
     @FXML private StackPane contentPane;
 

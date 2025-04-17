@@ -1,5 +1,6 @@
 package controllers.Events;
 
+import controllers.BaseUserController;
 import entities.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -71,11 +72,17 @@ public class EventDetailsController {
     @FXML
     private void handleBack() {
         try {
-            Parent view = FXMLLoader.load(getClass().getResource("/EventViews/ListEventsFront.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseUser.fxml"));
+            Parent root = loader.load();
+
+            BaseUserController baseUserController = loader.getController();
+            baseUserController.showEventsView(); // 👈 Back to event list
+
             Stage stage = (Stage) eventTitle.getScene().getWindow();
-            stage.setScene(new Scene(view));
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }

@@ -1,0 +1,75 @@
+/* ==== HEADER : Bande contact ==== */
+.top-bar {
+    -fx-background-color: #014421; /* vert foncé */
+    -fx-padding: 8;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+.top-bar Label {
+    -fx-text-fill: white;
+}
+
+/* ==== MENU PRINCIPAL ==== */
+.menu-bar {
+    -fx-background-color: white;
+    -fx-padding: 15;
+}
+.menu-bar Label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #014421;
+    -fx-font-weight: bold;
+}
+.nav-link:hover {
+    -fx-underline: true;
+    -fx-text-fill: #28a745;
+}
+
+/* ==== ICONES HEADER ==== */
+.icon {
+    -fx-font-size: 18px;
+    -fx-text-fill: #014421;
+}
+
+/* ==== BOUTON UTILISATEUR ==== */
+.user-menu {
+    -fx-font-size: 14px;
+    -fx-background-color: transparent;
+    -fx-text-fill: #014421;
+}
+.user-menu .label {
+    -fx-text-fill: #014421;
+}
+
+/* ==== CONTENU CENTRAL ==== */
+#rootBorderPane .center Label {
+    -fx-font-size: 22px;
+    -fx-text-fill: #333;
+}
+
+/* ==== FOOTER HAUT ==== */
+.footer-top {
+    -fx-background-color: #014421; /* vert foncé */
+    -fx-padding: 30;
+}
+.footer-top Label {
+    -fx-text-fill: white;
+}
+.footer-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* ==== FOOTER BAS ==== */
+.footer-bottom {
+    -fx-background-color: #012d1a;
+    -fx-padding: 10;
+}
+.footer-bottom Label {
+    -fx-text-fill: white;
+}
+
+/* ==== FONT GLOBAL ==== */
+.root {
+    -fx-font-family: 'Segoe UI', sans-serif;
+}

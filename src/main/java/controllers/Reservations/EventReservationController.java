@@ -46,8 +46,6 @@ public class EventReservationController {
 
     private void updateUI() {
         titleLabel.setText("Inscription à l'événement : " + event.getName());
-        eventInfoLabel.setText(String.format("\ud83d\uddd3\ufe0f Date : %s à %s\n\ud83d\udccd Lieu : %s",
-                event.getDate(), event.getTime(), event.getLocation()));
         remainingPlacesLabel.setText("\ud83d\udce6 Places restantes : " + event.getRemaining());
     }
 

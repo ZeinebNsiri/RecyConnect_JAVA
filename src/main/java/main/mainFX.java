@@ -16,15 +16,15 @@ public class mainFX extends Application {
         stage.setTitle("RecyConnect Admin Dashboard");
 */
         // === Interface Front Utilisateur (événements) ===
-         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/EventViews/ListEventsFront.fxml"));
-         Parent root = fxmlLoader.load();
-         stage.setTitle("RecyConnect - Événements");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseUser.fxml"));
+        Parent root = loader.load(); // this creates a *new* layout instance
 
-        Scene scene = new Scene(root, 1000, 800);
+        Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setResizable(false);
+        stage.setTitle("RecyConnect - Utilisateur");
         stage.show();
     }
+
 
     public static void main(String[] args) {
         launch(args);
