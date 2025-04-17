@@ -55,10 +55,18 @@ public class CateArtService implements IService<CategorieArticle> {
 
     @Override
     public void delete(CategorieArticle categorieArticle)throws SQLException{
+        // Suppression des articles liés à la catégorie
+        String deleteArticlesQuery = "DELETE FROM `article` WHERE `categorie_id` = ?";
+        PreparedStatement psArticles = con.prepareStatement(deleteArticlesQuery);
+        psArticles.setInt(1, categorieArticle.getId());
+        psArticles.executeUpdate();
+        System.out.println("Articles supprimés pour la catégorie " + categorieArticle.getId());
+
+        // Suppression de la catégorie
         String query = "DELETE FROM `categorie_article` WHERE `id` = ?";
         PreparedStatement ps = con.prepareStatement(query);
         ps.setInt(1, categorieArticle.getId());
         ps.executeUpdate();
-        System.out.println("categorie article supprimée");
+        System.out.println("Catégorie article supprimée");
     }
 }
