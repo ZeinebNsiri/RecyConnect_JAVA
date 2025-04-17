@@ -10,11 +10,12 @@ public class TestPost extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/AdminPostsView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/addPost.fxml"));
+        Parent root = loader.load();
         Scene scene = new Scene(root);
-        primaryStage.setTitle("Gestion des Posts - Admin");
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
 
     public static void main(String[] args) {

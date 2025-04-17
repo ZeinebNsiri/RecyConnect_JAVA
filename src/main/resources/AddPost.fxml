@@ -11,6 +11,7 @@
       spacing="20"
       stylesheets="@styles/addPost.css"
       style="-fx-background-color: #ffffff;"
+      fx:controller="controllers.AddPostController"
       >
     <padding>
         <Insets top="40" right="40" bottom="40" left="40"/>
@@ -21,18 +22,18 @@
 
     <VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #e8f5e9; -fx-padding: 30; -fx-background-radius: 10;">
 
-        <TextArea promptText="Contenu du post" prefRowCount="4" prefWidth="400"/>
+        <TextArea fx:id="postContent" promptText="Contenu du post" prefRowCount="4" prefWidth="400"/>
 
 
         <HBox spacing="10" alignment="CENTER_LEFT">
             <Label text="Média (images)" style="-fx-text-fill: gray;" />
-            <Button text="Choose Files" />
-            <Label text="No file chosen" />
+            <Button fx:id="chooseFileButton" text="Choisir des fichiers" />
+            <Label fx:id="fileChosenLabel" text="Aucun fichier sélectionné" />
         </HBox>
 
         <HBox spacing="20" alignment="CENTER">
-            <Button text="Publier" styleClass="green-button"/>
-            <Button text="Retour" styleClass="gray-button"/>
+            <Button fx:id="publishButton" text="Publier" styleClass="green-button"/>
+            <Button fx:id="backButton" text="Retour" styleClass="gray-button"/>
         </HBox>
     </VBox>
 </VBox>

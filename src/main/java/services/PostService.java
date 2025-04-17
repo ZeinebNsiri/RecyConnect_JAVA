@@ -3,9 +3,14 @@ package services;
 import entities.Post;
 import utils.MyDataBase;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class PostService implements IService<Post>{
     Connection conx;
@@ -22,7 +27,9 @@ public class PostService implements IService<Post>{
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                mediaUrls.add(rs.getString("chemin"));
+                String fileName = rs.getString("chemin");
+                String fullPath = "src/main/resources/uploads/" + fileName;
+                mediaUrls.add(fullPath);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,10 +70,10 @@ public class PostService implements IService<Post>{
 
     @Override
     public void add(Post post) throws SQLException {
-        addWithMedia(post, null);
+
     }
 
-    public void addWithMedia(Post post, List<String> mediaPaths) throws SQLException {
+    public void addWithMedia(Post post, List<String> mediaFilePaths) throws SQLException, IOException {
         String query = "INSERT INTO post(user_p_id, contenu, date_publication, nbr_jaime, status_post) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement ps = conx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, post.getUser_p_id());
@@ -84,17 +91,41 @@ public class PostService implements IService<Post>{
             postId = rs.getInt(1);
         }
 
-        if (postId != -1 && mediaPaths != null) {
-            for (String path : mediaPaths) {
-                String mediaQuery = "INSERT INTO media_post(post_id, chemin) VALUES (?, ?)";
-                PreparedStatement mediaStm = conx.prepareStatement(mediaQuery);
-                mediaStm.setInt(1, postId);
-                mediaStm.setString(2, path);
-                mediaStm.executeUpdate();
+        String uploadDir = "src/main/resources/uploads";
+        File uploadFolder = new File(uploadDir);
+        if (!uploadFolder.exists()) {
+            uploadFolder.mkdirs();
+        }
+
+        if (postId != -1 && mediaFilePaths != null) {
+            for (String path : mediaFilePaths) {
+                File sourceFile = new File(path);
+                if (!sourceFile.exists()) continue;
+
+                String extension = getFileExtension(sourceFile);
+                String uniqueFileName = UUID.randomUUID() + "." + extension;
+                File destFile = new File(uploadFolder, uniqueFileName);
+
+                Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                // Insertion en base
+                String mediaInsertSQL = "INSERT INTO media_post(post_id, chemin) VALUES (?, ?)";
+                PreparedStatement mediaPs = conx.prepareStatement(mediaInsertSQL);
+                mediaPs.setInt(1, postId);
+                mediaPs.setString(2, uniqueFileName);
+                mediaPs.executeUpdate();
             }
             System.out.println("Images ajoutées avec succès");
         }
     }
+
+    private String getFileExtension(File file) {
+        String name = file.getName();
+        int lastIndex = name.lastIndexOf(".");
+        if (lastIndex == -1) return ""; // pas d'extension
+        return name.substring(lastIndex + 1);
+    }
+
 
 
     @Override
