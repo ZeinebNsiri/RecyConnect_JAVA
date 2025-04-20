@@ -14,6 +14,8 @@
             style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;"
             onAction="#ajouterCategorieAction" />
 
+    <ComboBox fx:id="categorieFilterCombo" promptText="Filtrer par catégorie" />
+
     <Label text="Toutes les catégories" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
 
     <TableView fx:id="categorieTable" prefWidth="900" style="-fx-background-radius: 10;">
@@ -22,6 +24,7 @@
             <TableColumn fx:id="imageColumn" text="Logo" prefWidth="120"/>
             <TableColumn fx:id="nomColumn" text="Catégorie" prefWidth="200"/>
             <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="180"/>
+            <TableColumn fx:id="nombreArticlesColumn" text="Nombre d'articles" prefWidth="150"/>
             <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="350"/>
         </columns>
     </TableView>

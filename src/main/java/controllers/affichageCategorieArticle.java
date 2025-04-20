@@ -2,6 +2,9 @@ package controllers;
 
 import entities.CategorieArticle;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -39,7 +42,18 @@ public class affichageCategorieArticle {
     private TableColumn<CategorieArticle, Void> actionsColumn;
 
     @FXML
+    private TableColumn<CategorieArticle, Integer> nombreArticlesColumn;
+
+    @FXML
     private Button addCategorieBtn;
+
+    @FXML
+    private ComboBox<String> categorieFilterCombo;
+
+    private ObservableList<CategorieArticle> allCategories;
+
+    private FilteredList<CategorieArticle> filteredCategories;
+    private SortedList<CategorieArticle> sortedCategories;
 
     @FXML
     public void initialize() {
@@ -80,6 +94,15 @@ public class affichageCategorieArticle {
 
         nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom_categorie"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description_categorie"));
+        nombreArticlesColumn.setCellValueFactory(param -> {
+            try {
+                int count = new CateArtService().countArticlesByCategorie(param.getValue().getId());
+                return new javafx.beans.property.SimpleIntegerProperty(count).asObject();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return new javafx.beans.property.SimpleIntegerProperty(0).asObject();
+            }
+        });
 
         actionsColumn.setCellFactory(param -> new TableCell<>() {
             private final Button editButton = new Button("✏ Modifier");
@@ -96,7 +119,14 @@ public class affichageCategorieArticle {
                     try {
                         CateArtService service = new CateArtService();
                         service.delete(cat);
-                        categorieTable.setItems(FXCollections.observableArrayList(service.displayList()));
+
+                        // Recharger la liste depuis la base
+                        List<CategorieArticle> updatedList = service.displayList();
+                        allCategories.setAll(updatedList); // ✅ met à jour sans casser la liaison
+
+                        // Mettre à jour le ComboBox si nécessaire
+                        updateComboBox(updatedList);
+
                     } catch (SQLException e) {
                         e.printStackTrace();
                         showAlert("Erreur lors de la suppression !");
@@ -138,12 +168,32 @@ public class affichageCategorieArticle {
         try {
             CateArtService service = new CateArtService();
             List<CategorieArticle> categories = service.displayList();
-            categorieTable.setItems(FXCollections.observableArrayList(categories));
+            allCategories = FXCollections.observableArrayList(categories);
+
+            // Lier les listes
+            filteredCategories = new FilteredList<>(allCategories, p -> true);
+            sortedCategories = new SortedList<>(filteredCategories);
+            sortedCategories.comparatorProperty().bind(categorieTable.comparatorProperty());
+            categorieTable.setItems(sortedCategories);
+
+            // Remplir ComboBox
+            categorieFilterCombo.getItems().clear();
+            categorieFilterCombo.getItems().add("Toutes les catégories");
+            for (CategorieArticle cat : categories) {
+                categorieFilterCombo.getItems().add(cat.getNom_categorie());
+            }
+            categorieFilterCombo.getSelectionModel().selectFirst();
+
+            // Listener
+            categorieFilterCombo.setOnAction(e -> applyFilter());
+
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Erreur lors du chargement des catégories !");
         }
     }
+
+
 
     @FXML
     private void ajouterCategorieAction() {
@@ -166,4 +216,37 @@ public class affichageCategorieArticle {
         alert.setContentText(msg);
         alert.show();
     }
+
+    private void applyFilter() {
+        String selectedNom = categorieFilterCombo.getValue();
+
+        if (selectedNom == null || selectedNom.equals("Toutes les catégories")) {
+            filteredCategories.setPredicate(cat -> true);
+        } else {
+            filteredCategories.setPredicate(cat ->
+                    cat.getNom_categorie().equalsIgnoreCase(selectedNom)
+            );
+        }
+    }
+
+    private void updateComboBox(List<CategorieArticle> categories) {
+        String previousSelection = categorieFilterCombo.getValue();
+
+        categorieFilterCombo.getItems().clear();
+        categorieFilterCombo.getItems().add("Toutes les catégories");
+        for (CategorieArticle cat : categories) {
+            categorieFilterCombo.getItems().add(cat.getNom_categorie());
+        }
+
+        // Réappliquer la sélection
+        if (previousSelection != null && categorieFilterCombo.getItems().contains(previousSelection)) {
+            categorieFilterCombo.setValue(previousSelection);
+        } else {
+            categorieFilterCombo.getSelectionModel().selectFirst();
+        }
+
+        applyFilter(); // ✅ réapplique le filtre après suppression
+    }
+
+
 }

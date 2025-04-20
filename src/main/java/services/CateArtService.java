@@ -69,4 +69,16 @@ public class CateArtService implements IService<CategorieArticle> {
         ps.executeUpdate();
         System.out.println("Catégorie article supprimée");
     }
+
+    public int countArticlesByCategorie(int categorieId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM article WHERE categorie_id = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, categorieId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
 }
