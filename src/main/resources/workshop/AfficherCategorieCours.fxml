@@ -1,113 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
+
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #edf7ef;"
-            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.workshop.AfficherCategorieCours">
+<?import javafx.scene.layout.Region?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.workshop.AfficherCategorieCours"
+      alignment="TOP_LEFT" spacing="15">
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
 
-    <!-- ======= HEADER ======= -->
-    <top>
-        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: white;">
-            <padding>
-                <Insets bottom="10" left="20" right="20" top="10" />
-            </padding>
-            <children>
-                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="RecyConnect" />
-                <TextField prefWidth="200" promptText="recherche" />
-                <Region HBox.hgrow="ALWAYS" />
-                <Button style="-fx-font-size: 16px;" text="🔔" />
-                <MenuButton text="user">
-                    <items>
-                        <MenuItem text="Profil" />
-                        <MenuItem text="Déconnexion" />
-                    </items>
-                </MenuButton>
-            </children>
-        </HBox>
-    </top>
+    <!-- TITRE -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Liste des catégories"
+               style="-fx-font-size:18px; -fx-font-weight:bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
 
-    <!-- ======= SIDEBAR ======= -->
-    <left>
-        <VBox alignment="TOP_LEFT" prefWidth="230" spacing="10" style="-fx-background-color: white;">
-            <padding>
-                <Insets bottom="10" left="20" right="10" top="20" />
-            </padding>
-            <children>
-                <Label text="📊 Dashboard" />
-                <Label text="👤 Utilisateurs" />
-                <TitledPane expanded="false" text="🏬 Ventes">
-                    <content>
-                        <VBox spacing="5">
-                            <Label text="• Catégories articles" />
-                            <Label text="• Articles" />
-                            <Label text="• Commandes" />
-                        </VBox>
-                    </content>
-                </TitledPane>
-                <TitledPane expanded="false" text="🗓️ Événement">
-                    <content>
-                        <VBox spacing="5">
-                            <Label text="• Gestion Événement" />
-                            <Label text="• Gestion Réservations" />
-                        </VBox>
-                    </content>
-                </TitledPane>
-                <TitledPane expanded="true" text="📈 Workshops">
-                    <content>
-                        <VBox spacing="5">
-                            <Label text="• Catégories workshops" style="-fx-font-weight: bold;" />
-                            <Label text="• Workshops" />
-                        </VBox>
-                    </content>
-                </TitledPane>
-                <Label text="📝 Posts" />
-            </children>
-        </VBox>
-    </left>
+    <!-- BOUTON SOUS LE TITRE -->
+    <Button fx:id="btnAjouter"
+            text="+ Ajouter catégorie"
+            style="-fx-background-color:#28a745; -fx-text-fill:white;"/>
 
-    <!-- ======= TABLEAU DES CATÉGORIES ======= -->
-    <center>
-        <VBox alignment="TOP_LEFT" spacing="20">
-            <padding>
-                <Insets top="30" right="30" bottom="30" left="30" />
-            </padding>
-            <children>
-                <VBox prefWidth="700" spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4);">
-                    <children>
-
-                        <HBox alignment="CENTER_LEFT" spacing="10">
-                            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Liste des catégories" />
-                            <Region HBox.hgrow="ALWAYS" />
-                        </HBox>
-
-                        <Button fx:id="btnAjouter" style="-fx-background-color: #28a745; -fx-text-fill: white;" text="+ Ajouter catégorie" />
-
-                        <TableView fx:id="categorieTableView">
-                            <columns>
-                                <TableColumn fx:id="colId" text="ID" />
-
-                                <TableColumn fx:id="colNom" text="Nom de la catégorie" />
-
-                                <TableColumn fx:id="colDescription" text="Description" />
-                                <TableColumn fx:id="colDetails" text="Détails" />
-                            </columns>
-                        </TableView>
-                    </children>
-                </VBox>
-            </children>
-        </VBox>
-    </center>
-</BorderPane>
+    <!-- TABLEAU -->
+    <TableView fx:id="categorieTableView"
+               prefWidth="700" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="colId"
+                         text="ID" prefWidth="50"/>
+            <TableColumn fx:id="colNom"
+                         text="Nom de la catégorie" prefWidth="200"/>
+            <TableColumn fx:id="colDescription"
+                         text="Description" prefWidth="300"/>
+            <TableColumn fx:id="colDetails"
+                         text="Actions" prefWidth="150"/>
+        </columns>
+    </TableView>
+</VBox>

@@ -1,5 +1,6 @@
 package controllers.workshop;
 
+import controllers.BaseAdminController;
 import entities.CategorieCours;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -111,12 +112,19 @@ public class ModifierCategorieCours {
 
     private void retourAfficherCategorie() {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/workshop/AfficherCategorieCours.fxml")
+            FXMLLoader shellLoader = new FXMLLoader(
+                    getClass().getResource("/BaseAdmin.fxml")
             );
-            Parent root = loader.load();
+            Parent shellRoot = shellLoader.load();
+
+            BaseAdminController shell = shellLoader.getController();
+            // back to the categories list
+            shell.showCategorieWorkshopView();
+
             Stage stage = (Stage) btnAnnuler.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(shellRoot, 1000, 600));
+            stage.setTitle("Liste des catégories");
+            stage.setResizable(false);
             stage.show();
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -1,5 +1,6 @@
 package controllers.workshop;
 
+import controllers.BaseAdminController;
 import entities.CategorieCours;
 import entities.Cours;
 import javafx.fxml.FXML;
@@ -65,7 +66,7 @@ public class AjouterCours {
     private void initialize() {
         loadCategories();
 
-        // Configuration du ComboBox pour afficher uniquement le nom de la catégorie.
+
         categorieCombo.setConverter(new StringConverter<CategorieCours>() {
             @Override
             public String toString(CategorieCours object) {
@@ -183,8 +184,7 @@ public class AjouterCours {
                 video = selectedVideoFile.getName();
             }
 
-            // Utilisation du constructeur : public Cours(int id, String imageCours, String titreCours,
-            //                                               CategorieCours categorieCours, String descriptionCours, String video)
+
             Cours cours = new Cours(
                     0,
                     imageCours,
@@ -213,8 +213,13 @@ public class AjouterCours {
 
     private void retourAfficherListe() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/AfficherCours.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
             Parent root = loader.load();
+
+            // Utiliser une méthode spécifique dans BaseAdminController pour charger la vue Afficher
+            controllers.BaseAdminController controller = loader.getController();
+            controller.showWorkshopsView();
+
             Stage stage = (Stage) btnAnnuler.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -222,6 +227,8 @@ public class AjouterCours {
             e.printStackTrace();
         }
     }
+
+
 
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);

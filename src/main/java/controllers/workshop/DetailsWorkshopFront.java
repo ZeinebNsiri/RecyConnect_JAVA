@@ -1,5 +1,6 @@
 package controllers.workshop;
 
+import controllers.BaseUserController;
 import entities.Cours;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,15 +55,7 @@ public class DetailsWorkshopFront {
 
     @FXML
     private void handleBack(javafx.event.ActionEvent ev) {
-        try {
-            Parent root = FXMLLoader.load(
-                    getClass().getResource("/workshop/AfficherWorkshopsFront.fxml")
-            );
-            Stage stage = (Stage) ((Node) ev.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // on recharge juste la vue liste dans le même BorderPane
+        BaseUserController.instance.showWorkshopsView();
     }
 }

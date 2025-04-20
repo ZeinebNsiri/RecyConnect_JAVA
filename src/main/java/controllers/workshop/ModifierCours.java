@@ -1,5 +1,6 @@
 package controllers.workshop;
 
+import controllers.BaseAdminController;
 import entities.CategorieCours;
 import entities.Cours;
 import javafx.fxml.FXML;
@@ -285,15 +286,27 @@ public class ModifierCours {
 
     private void retourAfficherListe() {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/workshop/AfficherCours.fxml")
+            // 1) Charger le shell
+            FXMLLoader shellLoader = new FXMLLoader(
+                    getClass().getResource("/BaseAdmin.fxml")
             );
-            Parent root = loader.load();
+            Parent shellRoot = shellLoader.load();
+            BaseAdminController shell = shellLoader.getController();
+
+            // 2) Afficher la liste des cours (la même méthode que pour ton bouton “Afficher”)
+            shell.showWorkshopsView();
+
+            // 3) Réafficher
             Stage stage = (Stage) btnAnnuler.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(shellRoot, 1000, 600));
+            stage.setTitle("Liste des Workshops");
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+
 }

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<BorderPane fx:id="rootBorderPane" fx:controller="controllers.BaseAdminController"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="1000.0" prefHeight="600.0"
+            styleClass="root">
+
+    <stylesheets>
+        <URL value="@baseAdmin.css" />
+    </stylesheets>
+
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="header">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+            <children>
+                <Label text="RecyConnect" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                <TextField promptText="recherche" prefWidth="200" />
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🔔" style="-fx-font-size: 16px;" />
+                <MenuButton fx:id="userMenuButton">
+                    <items>
+                        <MenuItem text="Profil"/>
+                        <MenuItem text="Déconnexion"/>
+                    </items>
+                </MenuButton>
+            </children>
+        </HBox>
+    </top>
+
+    <left>
+        <VBox spacing="10" styleClass="sidebar" alignment="TOP_LEFT" prefWidth="230">
+            <children>
+                <Hyperlink text="📊 Dashboard" onAction="#showDashboardView" styleClass="sidebar-link"/>
+                <Hyperlink text="👤 Utilisateurs" onAction="#showUsersView" styleClass="sidebar-link"/>
+
+                <TitledPane text="🏬 Ventes" expanded="false" collapsible="true" animated="true" styleClass="menu-toggle">
+                    <content>
+                        <VBox spacing="5">
+                            <Hyperlink text="• Catégories articles" onAction="#showCategorieView" styleClass="sidebar-link"/>
+                            <Hyperlink text="• Articles" onAction="#showArticlesView" styleClass="sidebar-link"/>
+                            <Hyperlink text="• Commandes" onAction="#showCommandesView" styleClass="sidebar-link"/>
+                        </VBox>
+                    </content>
+                </TitledPane>
+
+                <TitledPane text="🗓️ Événement" expanded="false" collapsible="true" animated="true" styleClass="menu-toggle">
+                    <content>
+                        <VBox spacing="5">
+                            <Hyperlink text="• Gestion Événement" onAction="#showEvenementView" styleClass="sidebar-link"/>
+                            <Hyperlink text="• Gestion Réservations" onAction="#showReservationsView" styleClass="sidebar-link"/>
+                        </VBox>
+                    </content>
+                </TitledPane>
+
+                <TitledPane text="📈 Workshops" expanded="false" collapsible="true" animated="true" styleClass="menu-toggle">
+                    <content>
+                        <VBox spacing="5">
+                            <Hyperlink text="• Catégories workshops" onAction="#showCategorieWorkshopView" styleClass="sidebar-link"/>
+                            <Hyperlink text="• Workshops" onAction="#showWorkshopsView" styleClass="sidebar-link"/>
+                        </VBox>
+                    </content>
+                </TitledPane>
+
+                <Hyperlink text="📝 Posts" onAction="#showPostsView" styleClass="sidebar-link"/>
+            </children>
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane fx:id="contentPane" />
+    </center>
+</BorderPane>

@@ -90,7 +90,7 @@ public class Cours {
     // Retourne un aperçu de la vidéo sous forme de MediaView
     public MediaView getVideoView() {
         if (video == null || video.trim().isEmpty()) {
-            return new MediaView(); // Aucun fichier vidéo défini
+            return new MediaView();
         }
         String path = "uploadsworkshop/" + video;
         File file = new File(path);

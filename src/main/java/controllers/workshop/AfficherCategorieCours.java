@@ -1,5 +1,6 @@
 package controllers.workshop;
 
+import controllers.BaseAdminController;
 import entities.CategorieCours;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -83,17 +84,28 @@ public class AfficherCategorieCours {
                 btnModifier.setOnAction(event -> {
                     CategorieCours selected = getTableView().getItems().get(getIndex());
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/ModifierCategorieCours.fxml"));
-                        Parent root = loader.load();
-                        ModifierCategorieCours controller = loader.getController();
-                        controller.setCategorieCours(selected);
+                        // 1) Recharger le shell (header + sidebar)
+                        FXMLLoader shellLoader = new FXMLLoader(
+                                getClass().getResource("/BaseAdmin.fxml")
+                        );
+                        Parent shellRoot = shellLoader.load();
+                        BaseAdminController base = shellLoader.getController();
+
+                        // 2) Appeler la méthode de pré‑remplissage
+                        base.showModifierCategorieViewWithData(selected);
+
+                        // 3) Remplacer la racine de la scène courante
                         Stage stage = (Stage) getTableView().getScene().getWindow();
-                        stage.setScene(new Scene(root));
+                        stage.setScene(new Scene(shellRoot, 1000, 600));
+                        stage.setTitle("Modifier Catégorie");
+                        stage.setResizable(false);
                         stage.show();
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 });
+
 
 
                 btnSupprimer.setOnAction(event -> {
@@ -147,14 +159,25 @@ public class AfficherCategorieCours {
         }
     }
 
- 
+
     @FXML
     private void handleAjouterCategorie() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/AjoutCategorieCours.fxml"));
+            // 1) Load the shell (BaseAdmin.fxml)
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/BaseAdmin.fxml")
+            );
             Parent root = loader.load();
+
+            // 2) Tell its controller to show the "Ajouter" form in the contentPane
+            BaseAdminController shell = loader.getController();
+            shell.showAjoutCategorieView();   // this does loadView("/workshop/AjoutCategorieCours.fxml")
+
+            // 3) Swap the entire scene on the existing stage
             Stage stage = (Stage) btnAjouter.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(root, 1000, 600));
+            stage.setTitle("Gestion des Catégories de Cours");
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

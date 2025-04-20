@@ -1,5 +1,6 @@
 package controllers.workshop;
 
+import controllers.BaseAdminController;
 import entities.CategorieCours;
 import entities.Cours;
 import javafx.fxml.FXML;
@@ -124,20 +125,27 @@ public class AfficherCours {
                 btnModifier.setOnAction(event -> {
                     Cours selected = getTableView().getItems().get(getIndex());
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/ModifierCours.fxml"));
-                        Parent root = loader.load();
+                        // 1) Charger le shell avec header+sidebar
+                        FXMLLoader shellLoader = new FXMLLoader(
+                                getClass().getResource("/BaseAdmin.fxml")
+                        );
+                        Parent shellRoot = shellLoader.load();
+                        BaseAdminController shell = shellLoader.getController();
 
-                        // Récupérer le contrôleur de ModifierCours
-                        ModifierCours controller = loader.getController();
-                        controller.setCours(selected);
+                        // 2) Injecter la vue de modification pré‑remplie
+                        shell.showModifierCoursViewWithData(selected);
 
+                        // 3) Réafficher sur la même fenêtre
                         Stage stage = (Stage) getTableView().getScene().getWindow();
-                        stage.setScene(new Scene(root));
+                        stage.setScene(new Scene(shellRoot, 1200, 1000));
+                        stage.setTitle("Modifier Cours");
+                        stage.setResizable(false);
                         stage.show();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 });
+
 
 
                 btnSupprimer.setOnAction(event -> {
@@ -185,15 +193,28 @@ public class AfficherCours {
         }
     }
 
+    @FXML
     private void handleAjouterCours() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/AjouterCours.fxml"));
-            Parent root = loader.load();
+            // 1) charger le shell (header + sidebar)
+            FXMLLoader shellLoader = new FXMLLoader(
+                    getClass().getResource("/BaseAdmin.fxml")
+            );
+            Parent shellRoot = shellLoader.load();
+            BaseAdminController shell = shellLoader.getController();
+
+            // 2) dire au shell d’afficher la vue d’ajout de cours
+            shell.showAjouterCoursView();
+
+            // 3) remplacer la scène courante
             Stage stage = (Stage) btnAjouter.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(shellRoot, 1000, 600));
+            stage.setTitle("Ajouter Cours");
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }

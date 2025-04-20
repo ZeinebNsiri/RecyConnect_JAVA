@@ -3,140 +3,56 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane
-        xmlns="http://javafx.com/javafx"
-        xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="controllers.workshop.AjoutCategorieCours"
-        prefHeight="600.0"
-        prefWidth="1000.0"
-        style="-fx-background-color: #edf7ef;">
+<VBox alignment="TOP_LEFT" spacing="15" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.workshop.AjoutCategorieCours">
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
 
-    <!-- ========== HEADER ========== -->
-    <top>
-        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: white;">
-            <padding>
-                <Insets top="10" right="20" bottom="10" left="20"/>
-            </padding>
-            <children>
-                <Label text="RecyConnect" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-                <TextField promptText="recherche" prefWidth="200"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button text="🔔" style="-fx-font-size: 16px;"/>
-                <MenuButton text="user">
-                    <items>
-                        <MenuItem text="Profil"/>
-                        <MenuItem text="Déconnexion"/>
-                    </items>
-                </MenuButton>
-            </children>
-        </HBox>
-    </top>
+    <VBox prefWidth="700" spacing="10"
+          style="-fx-background-color: white; -fx-padding: 20;
+                 -fx-background-radius: 10;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4);">
+        <children>
+            <Label text="Ajouter catégorie"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
-    <!-- ========== SIDEBAR ========== -->
-    <left>
-        <VBox alignment="TOP_LEFT" spacing="10" prefWidth="230" style="-fx-background-color: white;">
-            <padding>
-                <Insets top="20" right="10" bottom="10" left="20"/>
-            </padding>
-            <children>
-                <Label text="📊 Dashboard"/>
-                <Label text="👤 Utilisateurs"/>
+            <VBox spacing="2">
+                <Label text="Nom de la catégorie :"/>
+                <TextField fx:id="nomCategorieID"
+                           promptText="Entrez le nom de la catégorie"/>
 
-                <TitledPane text="🏬 Ventes" expanded="false">
-                    <content>
-                        <VBox spacing="5">
-                            <Label text="• Catégories articles"/>
-                            <Label text="• Articles"/>
-                            <Label text="• Commandes"/>
-                        </VBox>
-                    </content>
-                </TitledPane>
+                <Label fx:id="errorNom"
+                       style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+            </VBox>
 
-                <TitledPane text="🗓️ Événement" expanded="false">
-                    <content>
-                        <VBox spacing="5">
-                            <Label text="• Gestion Événement"/>
-                            <Label text="• Gestion Réservations"/>
-                        </VBox>
-                    </content>
-                </TitledPane>
+            <VBox spacing="2">
+                <Label text="Description :"/>
+                <TextArea fx:id="descriptionCategorieID"
+                          promptText="Entrez la description de la catégorie"
+                          prefRowCount="4"
+                          wrapText="true"/>
 
-                <TitledPane text="📈 Workshops" expanded="true">
-                    <content>
-                        <VBox spacing="5">
-                            <Label text="• Catégories workshops" style="-fx-font-weight: bold;"/>
-                            <Label text="• Workshops"/>
-                        </VBox>
-                    </content>
-                </TitledPane>
+                <Label fx:id="errorDescription"
+                       style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+            </VBox>
 
-                <Label text="📝 Posts"/>
-            </children>
-        </VBox>
-    </left>
-
-    <!-- ========== FORMULAIRE D'AJOUT ========== -->
-    <center>
-        <VBox alignment="TOP_LEFT" spacing="15">
-            <padding>
-                <Insets top="30" right="30" bottom="30" left="30"/>
-            </padding>
-            <children>
-
-                <VBox prefWidth="700" spacing="10"
-                      style="-fx-background-color: white; -fx-padding: 20;
-                             -fx-background-radius: 10;
-                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4);">
-                    <children>
-                        <Label text="Ajouter catégorie"
-                               style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-
-
-                        <VBox spacing="2">
-                            <Label text="Nom de la catégorie :"/>
-                            <TextField fx:id="nomCategorieID"
-                                       promptText="Entrez le nom de la catégorie"/>
-
-                            <Label fx:id="errorNom"
-                                   style="-fx-text-fill: red; -fx-font-size: 12px;"/>
-                        </VBox>
-
-
-                        <VBox spacing="2">
-                            <Label text="Description :"/>
-                            <TextArea fx:id="descriptionCategorieID"
-                                      promptText="Entrez la description de la catégorie"
-                                      prefRowCount="4"
-                                      wrapText="true"/>
-
-                            <Label fx:id="errorDescription"
-                                   style="-fx-text-fill: red; -fx-font-size: 12px;"/>
-                        </VBox>
-
-
-                        <HBox alignment="CENTER" spacing="10">
-                            <Button fx:id="btnSubmitID"
-                                    text="Ajouter"
-                                    style="-fx-background-color: #28a745; -fx-text-fill: white;"
-                                    onAction="#ajoutercategorie"/>
-                            <Button fx:id="btnCancelID"
-                                    text="Annuler"
-                                    style="-fx-background-color: #6c757d; -fx-text-fill: white;"
-                                    onAction="#cancel"/>
-                        </HBox>
-                    </children>
-                </VBox>
-            </children>
-        </VBox>
-    </center>
-</BorderPane>
+            <HBox alignment="CENTER" spacing="10">
+                <Button fx:id="btnSubmitID"
+                        text="Ajouter"
+                        style="-fx-background-color: #28a745; -fx-text-fill: white;"
+                        onAction="#ajoutercategorie"/>
+                <Button fx:id="btnCancelID"
+                        text="Annuler"
+                        style="-fx-background-color: #6c757d; -fx-text-fill: white;"
+                        onAction="#cancel"/>
+            </HBox>
+        </children>
+    </VBox>
+</VBox>

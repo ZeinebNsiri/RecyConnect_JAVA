@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane fx:id="rootBorderPane"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.BaseUserController"
+            stylesheets="baseUser.css"
+            prefWidth="1200" prefHeight="800">
+
+    <!-- HEADER -->
+    <top>
+        <VBox spacing="0">
+            <!-- Bande contact -->
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="top-bar">
+                <Label text="📞 +216 95 123 742" />
+                <Label text="|" />
+                <Label text="📧 RecyConnect@gmail.com" />
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label text="Suivez-nous :   " />
+            </HBox>
+
+            <!-- Menu -->
+            <HBox spacing="20" alignment="CENTER_LEFT" styleClass="menu-bar">
+                <ImageView fitHeight="40" fitWidth="40">
+                    <Image url="mainlogo.png"/>
+                </ImageView>
+                <Label text="Accueil" styleClass="nav-link"/>
+                <Label text="Nos produits"  styleClass="nav-link"/>
+                <Label text="Évènements"  styleClass="nav-link"/>
+                <Label text="Workshops" onMouseClicked="#showWorkshopsView" styleClass="nav-link"/>
+                <Label text="Forum" styleClass="nav-link"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label text="🔔" styleClass="icon"/>
+                <Label text="🛒" styleClass="icon"/>
+                <MenuButton text="mohamedazizzouari" styleClass="user-menu">
+                    <graphic>
+                        <ImageView fitHeight="24" fitWidth="24">
+                            <Image url="mainlogo.png" />
+                        </ImageView>
+                    </graphic>
+                    <items>
+                        <MenuItem text="👤 Mon Profil" />
+                        <MenuItem text="📑 Mes commandes" />
+                        <MenuItem text="🚪 Se Déconnecter" />
+                    </items>
+                </MenuButton>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- BODY DYNAMIQUE -->
+    <center>
+        <Label text="Bienvenue sur RecyConnect" style="-fx-font-size: 24px; -fx-text-fill: #444;" />
+    </center>
+
+
+
+</BorderPane>

@@ -1,5 +1,6 @@
 package controllers.workshop;
 
+import controllers.BaseUserController;
 import entities.Cours;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -69,22 +70,8 @@ public class AfficherWorkshopsFront {
                 Button btnVoirPlus = new Button("Voir plus");
                 btnVoirPlus.setStyle("-fx-background-color: #28a745; -fx-text-fill: white;");
                 btnVoirPlus.setOnAction(ev -> {
-                    try {
-                        FXMLLoader loader = new FXMLLoader(
-                                getClass().getResource("/workshop/DetailsWorkshopFront.fxml")
-                        );
-                        Parent root = loader.load();
-
-
-                        DetailsWorkshopFront ctrl = loader.getController();
-                        ctrl.setCours(cours);
-
-                        Stage stage = (Stage) ((Node) ev.getSource()).getScene().getWindow();
-                        stage.setScene(new Scene(root));
-                        stage.show();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+                    // on passe direct au BaseUserController pour injecter le détail
+                    BaseUserController.instance.showWorkshopDetails(cours);
                 });
 
 

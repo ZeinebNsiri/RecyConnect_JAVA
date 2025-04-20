@@ -70,7 +70,8 @@ public class AjoutCategorieCours {
 
             showAlert("Succès", "Catégorie ajoutée avec succès", Alert.AlertType.CONFIRMATION);
 
-            retourAfficherCategorie();
+            // Naviguer vers la liste des catégories
+            navigateToBaseAdminView();
 
         } catch (SQLIntegrityConstraintViolationException ex) {
             errorNom.setText("Ce nom de catégorie existe déjà");
@@ -83,13 +84,18 @@ public class AjoutCategorieCours {
 
     @FXML
     void cancel(ActionEvent event) {
-        retourAfficherCategorie();
+        navigateToBaseAdminView();
     }
 
-    private void retourAfficherCategorie() {
+    private void navigateToBaseAdminView() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/AfficherCategorieCours.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
             Parent root = loader.load();
+
+            // Utiliser une méthode spécifique dans BaseAdminController pour charger la vue Afficher
+            controllers.BaseAdminController controller = loader.getController();
+            controller.showCategorieWorkshopView();
+
             Stage stage = (Stage) btnCancelID.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
