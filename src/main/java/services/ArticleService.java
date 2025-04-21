@@ -116,6 +116,22 @@ public class ArticleService implements IService<Article>{
         return null;  // Return null if no article found
     }
 
+    public String getNomUtilisateurById2(int utilisateurId) throws SQLException {
+        String query = "SELECT nom FROM utilisateur WHERE id = ?";
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, utilisateurId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getString("nom");
+        }
+        return "";
+    }
+
+    public String getNomUtilisateurById(int utilisateurId) {
+        // Comme l'utilisateur est statique (id = 1)
+        return "zeineb nsiri";
+    }
+
 
 
 

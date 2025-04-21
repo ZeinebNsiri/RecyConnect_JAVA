@@ -42,11 +42,10 @@ public class BaseAdminController {
         loadView("/AffichageUtilisateur.fxml");
     }
 
+
     @FXML
     private void showArticlesView() {
-        Label articlesLabel = new Label("🛒 Gestion des articles");
-        articlesLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        rootBorderPane.setCenter(articlesLabel);
+        loadView("/ListeArticleAdmin.fxml");
     }
 
     @FXML
