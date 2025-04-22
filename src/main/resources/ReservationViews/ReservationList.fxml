@@ -3,6 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <VBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controllers.Reservations.ReservationListController"
@@ -18,6 +20,27 @@
     <Label text="Gestion des Réservations"
            style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1e3932;
               -fx-font-family: 'Segoe UI Semibold';"/>
+
+    <!-- Search Bar -->
+    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+        <TextField fx:id="eventSearchField" promptText="Nom de l'événement"
+                   style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-padding: 8; -fx-font-size: 13px;"/>
+        <TextField fx:id="userSearchField" promptText="Nom d'utilisateur"
+                   style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-padding: 8; -fx-font-size: 13px;"/>
+        <ComboBox fx:id="statusFilterCombo" promptText="Tous les statuts"
+                  style="-fx-background-radius: 8; -fx-font-size: 13px;">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Tous les statuts" />
+                    <String fx:value="Active" />
+                    <String fx:value="Annulée" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <Button text="🔍 Rechercher" onAction="#handleSearch"
+                style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 8;" />
+    </HBox>
+
     <!-- Table Section -->
     <TableView fx:id="reservationTable"
                style="-fx-background-color: white; -fx-border-color: #ced4da; -fx-border-radius: 12;

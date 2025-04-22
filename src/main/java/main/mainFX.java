@@ -7,14 +7,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class mainFX extends Application {
+
+
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseUser.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("RecyConnect - Interface Utilisateur");
+        stage.setTitle("RecyConnect - Admin");
         stage.show();
     }
 

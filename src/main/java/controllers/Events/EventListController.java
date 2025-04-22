@@ -31,6 +31,10 @@ public class EventListController {
     @FXML private TableColumn<Event, Integer> idColumn;
     @FXML private TableColumn<Event, ImageView> imageColumn;
     @FXML private TableColumn<Event, String> timeColumn;
+    @FXML private TextField searchNameField;
+    @FXML private TextField searchLocationField;
+    @FXML private DatePicker searchDatePicker;
+    @FXML private ComboBox<String> searchTypeCombo;
 
     private final EventService eventService = new EventService();
     private final ObservableList<Event> events = FXCollections.observableArrayList();
@@ -41,6 +45,8 @@ public class EventListController {
         locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        searchTypeCombo.setItems(FXCollections.observableArrayList("en ligne", "sur site"));
+
 
         imageColumn.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -175,4 +181,30 @@ public class EventListController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    @FXML
+    private void handleSearch() {
+        String nameFilter = searchNameField.getText().toLowerCase();
+        String locationFilter = searchLocationField.getText().toLowerCase();
+        String typeFilter = searchTypeCombo.getValue(); // "en ligne" ou "sur site"
+        String dateFilter = searchDatePicker.getValue() != null
+                ? searchDatePicker.getValue().toString()
+                : "";
+
+        ObservableList<Event> filtered = events.filtered(event -> {
+            boolean matchName = nameFilter.isEmpty() || event.getName().toLowerCase().contains(nameFilter);
+            boolean matchLocation = locationFilter.isEmpty() || event.getLocation().toLowerCase().contains(locationFilter);
+
+            // ⚠️ ici on "devine" le type
+            String type = event.getLocation().toLowerCase().contains("en ligne") ? "en ligne" : "sur site";
+            boolean matchType = typeFilter == null || typeFilter.isEmpty() || type.equals(typeFilter);
+
+            boolean matchDate = dateFilter.isEmpty() || event.getDate().toString().equals(dateFilter);
+
+            return matchName && matchLocation && matchType && matchDate;
+        });
+
+        eventTable.setItems(filtered);
+    }
+
 }

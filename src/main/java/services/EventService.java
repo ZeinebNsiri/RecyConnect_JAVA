@@ -15,29 +15,28 @@ public class EventService implements IService<Event> {
     }
 
     @Override
-    public void add(Event event) throws SQLException {
-        String query = "INSERT INTO evenement (nom_event, description_event, lieu_event, date_event, " +
-                "heure_event, image_event, capacite, nb_restant, google_meet_link, " +
-                "map_coordinates, end_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        public void add(Event event) throws SQLException {
+            String query = "INSERT INTO evenement (nom_event, description_event, lieu_event, date_event, " +
+                    "heure_event, image_event, capacite, nb_restant, google_meet_link, " +
+                    "map_coordinates, end_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement stmt = cnx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, event.getName());
-            stmt.setString(2, event.getDescription());
-            stmt.setString(3, event.getLocation());
-            stmt.setDate(4, Date.valueOf(event.getDate()));
-            stmt.setTime(5, Time.valueOf(event.getTime()));
-            stmt.setString(6, event.getImage());
-            stmt.setInt(7, event.getCapacity());
-            stmt.setInt(8, event.getRemaining());
-            stmt.setString(9, event.getMeetingLink());
-            stmt.setString(10, event.getCoordinates());
-            stmt.setTime(11, Time.valueOf(event.getEndTime()));
+            try (PreparedStatement stmt = cnx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                stmt.setString(1, event.getName());
+                stmt.setString(2, event.getDescription());
+                stmt.setString(3, event.getLocation());
+                stmt.setDate(4, Date.valueOf(event.getDate()));
+                stmt.setTime(5, Time.valueOf(event.getTime()));
+                stmt.setString(6, event.getImage());
+                stmt.setInt(7, event.getCapacity());
+                stmt.setInt(8, event.getRemaining());
+                stmt.setString(9, event.getMeetingLink());
+                stmt.setString(10, event.getCoordinates());
+                stmt.setTime(11, Time.valueOf(event.getEndTime()));
 
-            stmt.executeUpdate();
+                stmt.executeUpdate();
+            }
         }
-    }
 
-    // ✅ Décrémente le nombre de places restantes pour un événement
     public void decrementRemainingPlaces(int eventId, int nbPlacesReserved) throws SQLException {
         String sql = "UPDATE evenement SET nb_restant = nb_restant - ? WHERE id = ?";
         try (PreparedStatement stmt = cnx.prepareStatement(sql)) {

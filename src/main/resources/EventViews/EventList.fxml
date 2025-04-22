@@ -4,6 +4,8 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <VBox xmlns:fx="http://javafx.com/fxml/1"
       xmlns="http://javafx.com/javafx/17"
       fx:controller="controllers.Events.EventListController"
@@ -15,15 +17,24 @@
            style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <TextField promptText="Rechercher un événement" />
-        <TextField promptText="Lieu" />
-        <DatePicker promptText="jj/mm/aaaa" />
-        <ComboBox promptText="Tous les types" />
-        <Button text="🔍 Rechercher"
+        <TextField fx:id="searchNameField" promptText="Rechercher un événement" />
+        <TextField fx:id="searchLocationField" promptText="Lieu" />
+        <DatePicker fx:id="searchDatePicker" promptText="jj/mm/aaaa" />
+        <ComboBox fx:id="searchTypeCombo" promptText="Tous les types">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="en ligne"/>
+                    <String fx:value="sur site"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <Button text="🔍 Rechercher" onAction="#handleSearch"
                 style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;" />
+
         <Button text="Ajouter un événement" onAction="#handleAddEvent"
                 style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;" />
     </HBox>
+
 
     <TableView fx:id="eventTable" prefWidth="1140"
                style="-fx-background-color: white; -fx-border-color: lightgray;">

@@ -49,7 +49,7 @@ public class EventDetailsController {
         }
 
         // Static map image from OpenStreetMap (can be replaced by browser if interactive map is needed)
-       mapImageView.setImage(new Image("https://static-maps.yandex.ru/1.x/?ll=10.16579,36.8065&z=15&l=map&size=300,200&pt=10.16579,36.8065,pm2rdl")); // Replace coordinates dynamically if needed
+        // mapImageView.setImage(new Image("https://static-maps.yandex.ru/1.x/?ll=10.16579,36.8065&z=15&l=map&size=300,200&pt=10.16579,36.8065,pm2rdl")); // Replace coordinates dynamically if needed
     }
     @FXML
     private void handleInscription() {
@@ -76,7 +76,7 @@ public class EventDetailsController {
             Parent root = loader.load();
 
             BaseUserController baseUserController = loader.getController();
-            baseUserController.showEventsView(); // 👈 Back to event list
+            baseUserController.showEventsView();
 
             Stage stage = (Stage) eventTitle.getScene().getWindow();
             stage.setScene(new Scene(root));
