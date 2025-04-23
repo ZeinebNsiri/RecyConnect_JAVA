@@ -10,22 +10,20 @@
       prefWidth="1000" prefHeight="700"
       style="-fx-background-color: #f8f9fa;">
 
-    <!-- Header with solid green background -->
+    <!-- Header -->
     <StackPane prefHeight="180" style="-fx-background-color: #014421;">
         <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20;">
-            <Label text="Workshops"
-                   style="-fx-font-size: 32px; -fx-text-fill: white; -fx-font-weight: bold;" />
-            <Label text="Accueil  /  Workshops"
-                   style="-fx-text-fill: white; -fx-font-size: 14px;" />
+            <Label text="Workshops" style="-fx-font-size: 32px; -fx-text-fill: white; -fx-font-weight: bold;" />
+            <Label text="Accueil  /  Workshops" style="-fx-text-fill: white; -fx-font-size: 14px;" />
         </VBox>
     </StackPane>
 
-    <!-- Scrollable Content Area from headings downward -->
+    <!-- Scrollable Content -->
     <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color:transparent;">
         <content>
             <VBox spacing="30" alignment="TOP_CENTER" style="-fx-padding: 40;">
 
-                <!-- Headings -->
+                <!-- Title -->
                 <VBox alignment="CENTER" spacing="6">
                     <Label text="Nos workshops proposent"
                            style="-fx-font-size: 14px; -fx-text-fill: #28a745;" />
@@ -33,7 +31,21 @@
                            style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #014421;" />
                 </VBox>
 
-                <!-- 🔍 Filter Buttons -->
+                <!-- 🔍 Search -->
+                <HBox spacing="10" alignment="CENTER"
+                      style="-fx-padding: 15; -fx-background-radius: 10;">
+                    <Label text="Rechercher par Titre:" style="-fx-font-weight: bold; -fx-text-fill: #343a40;"/>
+                    <TextField fx:id="searchField"
+                               promptText="Titre du cours..."
+                               style="-fx-background-radius: 10; -fx-border-color: #cce3de; -fx-border-radius: 10; -fx-padding: 6;" />
+                    <Label text="Vidéo:" style="-fx-font-weight: bold; -fx-text-fill: #343a40;" />
+                    <ComboBox fx:id="videoComboBox" prefWidth="120"
+                              style="-fx-background-radius: 10;" />
+                    <Button text="Chercher" onAction="#applyFilters"
+                            style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" />
+                </HBox>
+
+                <!-- 🔘 Category Filters -->
                 <HBox alignment="CENTER">
                     <ScrollPane hbarPolicy="AS_NEEDED" vbarPolicy="NEVER"
                                 fitToHeight="true" prefHeight="60" maxHeight="60"
@@ -43,10 +55,7 @@
                     </ScrollPane>
                 </HBox>
 
-
-
-
-                <!-- Cards Grid -->
+                <!-- 📦 Workshops Grid -->
                 <FlowPane fx:id="workshopsContainer"
                           hgap="30" vgap="30"
                           alignment="CENTER"

@@ -4,8 +4,7 @@ import controllers.BaseUserController;
 import entities.Cours;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -19,9 +18,13 @@ public class AfficherWorkshopsFront {
 
     @FXML private FlowPane workshopsContainer;
     @FXML private HBox filterButtonsContainer;
+    @FXML private TextField searchField;
+    @FXML private ComboBox<String> videoComboBox;
 
     private final CoursService coursService = new CoursService();
     private List<Cours> allCourses;
+    private Button selectedButton = null;
+    private String selectedCategory = null;
 
     @FXML
     private void initialize() {
@@ -29,6 +32,10 @@ public class AfficherWorkshopsFront {
             allCourses = coursService.displayList();
             buildCategoryFilters();
             displayCourses(allCourses);
+
+            videoComboBox.getItems().addAll("-- Tous --", "Avec vidéo", "Sans vidéo");
+            videoComboBox.setValue("-- Tous --");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -49,100 +56,80 @@ public class AfficherWorkshopsFront {
                 });
     }
 
-    private Button selectedButton = null;
-
     private Button createFilterButton(String label, String category) {
         Button btn = new Button(label);
+        btn.setStyle(defaultStyle());
 
-        // Default: flat text button
-        btn.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-text-fill: #2e7d32;" +
-                        "-fx-font-size: 13px;" +
-                        "-fx-font-weight: normal;" +
-                        "-fx-padding: 5 10 8 10;" +
-                        "-fx-border-width: 0 0 2 0;" +
-                        "-fx-border-color: transparent;" +
-                        "-fx-cursor: hand;"
-        );
-
-        // Hover: underline
         btn.setOnMouseEntered(e -> {
-            if (btn != selectedButton) {
-                btn.setStyle(
-                        "-fx-background-color: transparent;" +
-                                "-fx-text-fill: #2e7d32;" +
-                                "-fx-font-size: 13px;" +
-                                "-fx-font-weight: normal;" +
-                                "-fx-padding: 5 10 8 10;" +
-                                "-fx-border-width: 0 0 2 0;" +
-                                "-fx-border-color: #d3eedd;" +
-                                "-fx-cursor: hand;"
-                );
-            }
+            if (btn != selectedButton) btn.setStyle(hoverStyle());
         });
-
-        // Unhover
         btn.setOnMouseExited(e -> {
-            if (btn != selectedButton) {
-                btn.setStyle(
-                        "-fx-background-color: transparent;" +
-                                "-fx-text-fill: #2e7d32;" +
-                                "-fx-font-size: 13px;" +
-                                "-fx-font-weight: normal;" +
-                                "-fx-padding: 5 10 8 10;" +
-                                "-fx-border-width: 0 0 2 0;" +
-                                "-fx-border-color: transparent;" +
-                                "-fx-cursor: hand;"
-                );
-            }
+            if (btn != selectedButton) btn.setStyle(defaultStyle());
         });
 
-        // On click: toggle filter + update styles
         btn.setOnAction(e -> {
-            // Update style of previously selected button
-            if (selectedButton != null) {
-                selectedButton.setStyle(
-                        "-fx-background-color: transparent;" +
-                                "-fx-text-fill: #2e7d32;" +
-                                "-fx-font-size: 13px;" +
-                                "-fx-font-weight: normal;" +
-                                "-fx-padding: 5 10 8 10;" +
-                                "-fx-border-width: 0 0 2 0;" +
-                                "-fx-border-color: transparent;" +
-                                "-fx-cursor: hand;"
-                );
-            }
-
-            // Set active style
-            btn.setStyle(
-                    "-fx-background-color: transparent;" +
-                            "-fx-text-fill: #2e7d32;" +
-                            "-fx-font-size: 13px;" +
-                            "-fx-font-weight: bold;" +
-                            "-fx-padding: 5 10 8 10;" +
-                            "-fx-border-width: 0 0 2 0;" +
-                            "-fx-border-color: #2e7d32;" +
-                            "-fx-cursor: hand;"
-            );
-
+            if (selectedButton != null) selectedButton.setStyle(defaultStyle());
+            btn.setStyle(selectedStyle());
             selectedButton = btn;
-
-            if (category == null) {
-                displayCourses(allCourses);
-            } else {
-                List<Cours> filtered = allCourses.stream()
-                        .filter(c -> c.getCategorieCours().getNomCategorie().equals(category))
-                        .toList();
-                displayCourses(filtered);
-            }
+            selectedCategory = category;
+            applyFilters();
         });
 
         return btn;
     }
 
+    private String defaultStyle() {
+        return "-fx-background-color: transparent;" +
+                "-fx-text-fill: #2e7d32;" +
+                "-fx-font-size: 13px;" +
+                "-fx-font-weight: normal;" +
+                "-fx-padding: 5 10 8 10;" +
+                "-fx-border-width: 0 0 2 0;" +
+                "-fx-border-color: transparent;" +
+                "-fx-cursor: hand;";
+    }
 
+    private String hoverStyle() {
+        return "-fx-background-color: transparent;" +
+                "-fx-text-fill: #2e7d32;" +
+                "-fx-font-size: 13px;" +
+                "-fx-font-weight: normal;" +
+                "-fx-padding: 5 10 8 10;" +
+                "-fx-border-width: 0 0 2 0;" +
+                "-fx-border-color: #d3eedd;" +
+                "-fx-cursor: hand;";
+    }
 
+    private String selectedStyle() {
+        return "-fx-background-color: transparent;" +
+                "-fx-text-fill: #2e7d32;" +
+                "-fx-font-size: 13px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-padding: 5 10 8 10;" +
+                "-fx-border-width: 0 0 2 0;" +
+                "-fx-border-color: #2e7d32;" +
+                "-fx-cursor: hand;";
+    }
+
+    @FXML
+    private void applyFilters() {
+        String title = searchField.getText().trim().toLowerCase();
+        String videoFilter = videoComboBox.getValue();
+
+        List<Cours> filtered = allCourses.stream()
+                .filter(c -> title.isEmpty() || c.getTitreCours().toLowerCase().contains(title))
+                .filter(c -> {
+                    if (videoFilter.equals("Avec vidéo"))
+                        return c.getVideo() != null && !c.getVideo().isEmpty();
+                    if (videoFilter.equals("Sans vidéo"))
+                        return c.getVideo() == null || c.getVideo().isEmpty();
+                    return true;
+                })
+                .filter(c -> selectedCategory == null || c.getCategorieCours().getNomCategorie().equals(selectedCategory))
+                .toList();
+
+        displayCourses(filtered);
+    }
 
     private void displayCourses(List<Cours> list) {
         workshopsContainer.getChildren().clear();
@@ -151,13 +138,11 @@ public class AfficherWorkshopsFront {
             VBox card = new VBox(10);
             card.setPadding(new Insets(10));
             card.setPrefWidth(250);
-            card.setStyle(
-                    "-fx-background-color: white; " +
-                            "-fx-background-radius: 12; " +
-                            "-fx-border-color: #e0e0e0; " +
-                            "-fx-border-radius: 12; " +
-                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10,0,0,2);"
-            );
+            card.setStyle("-fx-background-color: white; " +
+                    "-fx-background-radius: 12; " +
+                    "-fx-border-color: #e0e0e0; " +
+                    "-fx-border-radius: 12; " +
+                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10,0,0,2);");
 
             ImageView iv = cours.getImageView();
             iv.setFitWidth(230);
@@ -179,9 +164,7 @@ public class AfficherWorkshopsFront {
 
             Button btnVoirPlus = new Button("Voir plus");
             btnVoirPlus.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 12px;");
-            btnVoirPlus.setOnAction(ev -> {
-                BaseUserController.instance.showWorkshopDetails(cours);
-            });
+            btnVoirPlus.setOnAction(ev -> BaseUserController.instance.showWorkshopDetails(cours));
 
             card.getChildren().addAll(iv, category, title, description, btnVoirPlus);
             workshopsContainer.getChildren().add(card);

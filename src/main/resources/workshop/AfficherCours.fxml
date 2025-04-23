@@ -1,55 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
-<!-- src/main/resources/workshop/AfficherCours.fxml -->
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.Region?>
+
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controllers.workshop.AfficherCours"
-      alignment="TOP_LEFT" spacing="15">
+      spacing="15" alignment="TOP_LEFT">
 
-    <!-- Padding autour de la vue -->
     <padding>
         <Insets top="30" right="30" bottom="30" left="30"/>
     </padding>
 
-    <!-- Carte blanche avec ombre -->
-    <VBox prefWidth="700" spacing="15"
-          style="-fx-background-color: white;
-                 -fx-padding: 20;
-                 -fx-background-radius: 10;
-                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4);">
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Liste des Workshops" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Filtrer par Catégorie" />
+        <ComboBox fx:id="categorieFilterComboBox" promptText="Tous"/>
+    </HBox>
 
-        <!-- Entête + bouton Ajouter -->
-        <HBox alignment="CENTER_LEFT" spacing="10">
-            <Label text="Liste des workshops"
-                   style="-fx-font-size:18px; -fx-font-weight:bold;"/>
-            <Region HBox.hgrow="ALWAYS"/>
-        </HBox>
+    <Button fx:id="btnAjouter" text="+ Ajouter Workshop"
+            style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
 
-        <Button fx:id="btnAjouter"
-                text="+ Ajouter workshop"
-                style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
-
-        <!-- Tableau des cours -->
-        <TableView fx:id="coursTableView">
-            <columns>
-                <TableColumn fx:id="colId" text="ID" />
-                <TableColumn fx:id="colImage" text="Image" />
-                <TableColumn fx:id="colTitre" text="Titre" />
-                <TableColumn fx:id="colCategorie" text="Catégorie" />
-                <TableColumn fx:id="colDescription" text="Description" />
-                <TableColumn fx:id="colVideo" text="Vidéo" />
-                <TableColumn fx:id="colDetails" text="Détails" />
-            </columns>
-        </TableView>
-
-    </VBox>
+    <TableView fx:id="coursTableView">
+        <columns>
+            <TableColumn fx:id="colId" text="#" />
+            <TableColumn fx:id="colImage" text="Image" />
+            <TableColumn fx:id="colTitre" text="Titre du workshop" />
+            <TableColumn fx:id="colCategorie" text="Catégorie" />
+            <TableColumn fx:id="colDescription" text="Description" />
+            <TableColumn fx:id="colVideo" text="Vidéo" />
+            <TableColumn fx:id="colDetails" text="Actions" />
+        </columns>
+    </TableView>
 </VBox>
