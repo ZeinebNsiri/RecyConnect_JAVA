@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import services.CoursService;
 
@@ -30,9 +31,12 @@ public class AfficherCours {
     @FXML private TableColumn<Cours, Void> colDetails;
     @FXML private Button btnAjouter;
     @FXML private ComboBox<String> categorieFilterComboBox;
+    @FXML private HBox paginationContainer;
 
     private final CoursService coursService = new CoursService();
     private List<Cours> allCourses;
+    private int currentPage = 1;
+    private static final int ITEMS_PER_PAGE = 5;
 
     @FXML
     private void initialize() {
@@ -40,7 +44,8 @@ public class AfficherCours {
         try {
             allCourses = coursService.displayList();
             populateCategories();
-            coursTableView.getItems().setAll(allCourses);
+            updateCoursTable();
+            buildPagination();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -48,15 +53,9 @@ public class AfficherCours {
         btnAjouter.setOnAction(event -> handleAjouterCours());
 
         categorieFilterComboBox.setOnAction(e -> {
-            String selectedCat = categorieFilterComboBox.getValue();
-            if (selectedCat == null || selectedCat.equals("Tous")) {
-                coursTableView.getItems().setAll(allCourses);
-            } else {
-                coursTableView.getItems().setAll(
-                        allCourses.stream()
-                                .filter(c -> c.getCategorieCours().getNomCategorie().equals(selectedCat))
-                                .collect(Collectors.toList()));
-            }
+            currentPage = 1;
+            updateCoursTable();
+            buildPagination();
         });
     }
 
@@ -147,7 +146,8 @@ public class AfficherCours {
                             try {
                                 coursService.delete(selected);
                                 allCourses.remove(selected);
-                                coursTableView.getItems().remove(selected);
+                                updateCoursTable();
+                                buildPagination();
                                 populateCategories();
                             } catch (SQLException e) {
                                 e.printStackTrace();
@@ -164,6 +164,67 @@ public class AfficherCours {
                 else setGraphic(new HBox(10, btnModifier, btnSupprimer));
             }
         });
+    }
+
+    private void updateCoursTable() {
+        String selectedCat = categorieFilterComboBox.getValue();
+        List<Cours> filtered = (selectedCat == null || selectedCat.equals("Tous"))
+                ? allCourses
+                : allCourses.stream()
+                .filter(c -> c.getCategorieCours().getNomCategorie().equals(selectedCat))
+                .collect(Collectors.toList());
+
+        int fromIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        int toIndex = Math.min(fromIndex + ITEMS_PER_PAGE, filtered.size());
+
+        coursTableView.getItems().setAll(filtered.subList(fromIndex, toIndex));
+    }
+
+    private void buildPagination() {
+        paginationContainer.getChildren().clear();
+
+        String selectedCat = categorieFilterComboBox.getValue();
+        List<Cours> filtered = (selectedCat == null || selectedCat.equals("Tous"))
+                ? allCourses
+                : allCourses.stream()
+                .filter(c -> c.getCategorieCours().getNomCategorie().equals(selectedCat))
+                .collect(Collectors.toList());
+
+        int totalPages = (int) Math.ceil((double) filtered.size() / ITEMS_PER_PAGE);
+
+        Button prev = new Button("« Précédent");
+        prev.setDisable(currentPage == 1);
+        prev.setStyle("-fx-background-color: #198754; -fx-text-fill: white;");
+        prev.setOnAction(e -> {
+            currentPage--;
+            updateCoursTable();
+            buildPagination();
+        });
+        paginationContainer.getChildren().add(prev);
+
+        for (int i = 1; i <= totalPages; i++) {
+            Button page = new Button(String.valueOf(i));
+            page.setStyle(i == currentPage
+                    ? "-fx-background-color: #198754; -fx-text-fill: white;"
+                    : "-fx-background-color: white; -fx-border-color: #198754; -fx-text-fill: #198754;");
+            final int index = i;
+            page.setOnAction(e -> {
+                currentPage = index;
+                updateCoursTable();
+                buildPagination();
+            });
+            paginationContainer.getChildren().add(page);
+        }
+
+        Button next = new Button("Suivant »");
+        next.setDisable(currentPage == totalPages);
+        next.setStyle("-fx-background-color: #198754; -fx-text-fill: white;");
+        next.setOnAction(e -> {
+            currentPage++;
+            updateCoursTable();
+            buildPagination();
+        });
+        paginationContainer.getChildren().add(next);
     }
 
     private void handleAjouterCours() {
