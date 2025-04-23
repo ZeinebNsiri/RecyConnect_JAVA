@@ -5,11 +5,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.*;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import services.ArticleService;
 import services.CateArtService;
 
@@ -17,6 +19,7 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Pagination;
 
 public class ListeArticleAdminController {
 
@@ -34,10 +37,12 @@ public class ListeArticleAdminController {
     @FXML private TextField proprietaireField;
     @FXML private ComboBox<String> categorieFilterCombo;
     @FXML private Button rechercherBtn;
+    @FXML private Pagination pagination;
 
     private ObservableList<ArticleView> allViews;
     private FilteredList<ArticleView> filteredArticles;
     private SortedList<ArticleView> sortedArticles;
+    private static final int ROWS_PER_PAGE = 10;
 
     @FXML
     public void initialize() {
@@ -142,14 +147,15 @@ public class ListeArticleAdminController {
 
             allViews = FXCollections.observableArrayList(views);
             filteredArticles = new FilteredList<>(allViews, p -> true);
-            sortedArticles = new SortedList<>(filteredArticles);
-            sortedArticles.comparatorProperty().bind(articleTable.comparatorProperty());
-            articleTable.setItems(sortedArticles);
+
+            pagination.setPageCount((int) Math.ceil((double) allViews.size() / ROWS_PER_PAGE));
+            pagination.setPageFactory(this::createPage);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     private void loadCategories() {
         try {
@@ -178,7 +184,13 @@ public class ListeArticleAdminController {
                     || a.getNomProprietaire().toLowerCase().contains(searchProp);
             return matchCategorie && matchNom && matchProp;
         });
+
+        int pageCount = (int) Math.ceil((double) filteredArticles.size() / ROWS_PER_PAGE);
+        pagination.setPageCount(Math.max(pageCount, 1));
+        pagination.setCurrentPageIndex(0);
+        pagination.setPageFactory(this::createPage);
     }
+
 
     // DTO interne pour affichage enrichi
     public static class ArticleView {
@@ -208,4 +220,19 @@ public class ListeArticleAdminController {
         public String getNomCategorie() { return nomCategorie; }
         public String getNomProprietaire() { return nomProprietaire; }
     }
+    private Node createPage(int pageIndex) {
+        int fromIndex = pageIndex * ROWS_PER_PAGE;
+        int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, filteredArticles.size());
+
+        SortedList<ArticleView> sortedData = new SortedList<>(
+                new FilteredList<>(FXCollections.observableArrayList(
+                        filteredArticles.subList(fromIndex, toIndex)
+                ))
+        );
+        sortedData.comparatorProperty().bind(articleTable.comparatorProperty());
+        articleTable.setItems(sortedData);
+
+        return new VBox(); // required for Pagination, although we're not using this node
+    }
+
 }

@@ -35,4 +35,6 @@
             <TableColumn fx:id="actionsColumn" text="" prefWidth="100"/>
         </columns>
     </TableView>
+    <Pagination fx:id="pagination" pageCount="1" maxPageIndicatorCount="10" />
+
 </VBox>
