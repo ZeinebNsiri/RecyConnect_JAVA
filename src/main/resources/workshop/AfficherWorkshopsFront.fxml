@@ -1,40 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controllers.workshop.AfficherWorkshopsFront"
-      alignment="TOP_CENTER" spacing="20"
-      prefWidth="800" prefHeight="600">
+      spacing="0"
+      prefWidth="1000" prefHeight="700"
+      style="-fx-background-color: #f8f9fa;">
 
-    <!-- padding autour du contenu -->
-    <padding>
-        <Insets top="30" right="30" bottom="0" left="30"/>
-    </padding>
+    <!-- Header with solid green background -->
+    <StackPane prefHeight="180" style="-fx-background-color: #014421;">
+        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20;">
+            <Label text="Workshops"
+                   style="-fx-font-size: 32px; -fx-text-fill: white; -fx-font-weight: bold;" />
+            <Label text="Accueil  /  Workshops"
+                   style="-fx-text-fill: white; -fx-font-size: 14px;" />
+        </VBox>
+    </StackPane>
 
-    <!-- Titres -->
-    <Label text="Workshops"
-           style="-fx-font-size:32px; -fx-font-weight:bold; -fx-text-fill:#014421;"/>
-    <Label text="Nos workshops proposent"
-           style="-fx-font-size:14px; -fx-text-fill:#28a745;"/>
-    <Label text="Vidéos et guides pour redonner vie à vos produits"
-           wrapText="true"
-           style="-fx-font-size:24px; -fx-font-weight:bold; -fx-text-fill:#014421;"/>
-
-    <!-- Liste des workshops -->
-    <ScrollPane fitToWidth="true" prefHeight="500">
+    <!-- Scrollable Content Area from headings downward -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color:transparent;">
         <content>
-            <FlowPane fx:id="workshopsContainer"
-                      hgap="20" vgap="20"
-                      alignment="TOP_CENTER">
-                <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
-                </padding>
-            </FlowPane>
+            <VBox spacing="30" alignment="TOP_CENTER" style="-fx-padding: 40;">
+
+                <!-- Headings -->
+                <VBox alignment="CENTER" spacing="6">
+                    <Label text="Nos workshops proposent"
+                           style="-fx-font-size: 14px; -fx-text-fill: #28a745;" />
+                    <Label text="Vidéos et guides pour redonner vie à vos produits"
+                           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #014421;" />
+                </VBox>
+
+                <!-- 🔍 Filter Buttons -->
+                <HBox alignment="CENTER">
+                    <ScrollPane hbarPolicy="AS_NEEDED" vbarPolicy="NEVER"
+                                fitToHeight="true" prefHeight="60" maxHeight="60"
+                                style="-fx-background-color: transparent;">
+                        <HBox fx:id="filterButtonsContainer" spacing="20" alignment="CENTER_LEFT"
+                              style="-fx-background-color: #e8f5e9; -fx-padding: 10 20; -fx-background-radius: 10;" />
+                    </ScrollPane>
+                </HBox>
+
+
+
+
+                <!-- Cards Grid -->
+                <FlowPane fx:id="workshopsContainer"
+                          hgap="30" vgap="30"
+                          alignment="CENTER"
+                          style="-fx-padding: 20;" />
+            </VBox>
         </content>
     </ScrollPane>
-
 </VBox>
