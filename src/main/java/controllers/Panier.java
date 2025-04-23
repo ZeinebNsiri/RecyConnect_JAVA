@@ -7,8 +7,10 @@ import entities.utilisateur;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
@@ -90,7 +92,6 @@ public class Panier {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            // Gérer l'exception (par exemple afficher un message d'erreur)
         }
     }
 
@@ -233,5 +234,26 @@ public class Panier {
         // Optionnellement, vider le panier après la commande
         SessionPanier.viderPanier();
     }
+
+    @FXML
+    private void retourVersArticles(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ArticlePanier.fxml"));
+            Parent page = loader.load();
+            Scene scene = new Scene(page);
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+
+
+
+
+
 

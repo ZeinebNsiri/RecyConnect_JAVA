@@ -3,6 +3,7 @@ package controllers;
 import entities.LigneCommande;
 import entities.Commande;
 import entities.utilisateur;
+import javafx.scene.control.RadioButton;
 import services.CommandeService;
 import services.LigneCommandeService;
 import javafx.event.ActionEvent;
@@ -13,7 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import utils.SessionPanier;
-
+import javafx.scene.control.Alert;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -26,42 +27,67 @@ public class CommandeController {
 
     @FXML
     private Button finaliserBtn;
+    @FXML
+    private RadioButton livraisonRadio;
+
+    @FXML
+    private RadioButton visaRadio;
+
 
     @FXML
     public void finaliserCommande(ActionEvent event) throws SQLException {
-        utilisateur u = new utilisateur(
-                1,                          // id
-                "exemple@mail.com",         // email
-                "Mnif",                     // nom_user
-                "Sahar",                    // prenom
-                "ROLE_CLIENT",              // roles
-                "12345678",                 // num_tel
-                "Tunis, Tunisie",           // adresse
-                "motdepasse123",            // password
-                true,                       // status
-                "MF123456",                 // matricule_fiscale
-                "photo.jpg"                 // photo_profil
-        );
-
-
-        // Créer une commande (il faut instancier la classe Commande, pas CommandeController)
-        Commande commande = new Commande();
-        commande.setDateCommande(LocalDateTime.now()); // Date actuelle
-        commande.setStatut("En attente");  // Statut de la commande
-        commande.setPrixTotal(SessionPanier.getTotalPanier()); // Prix total du panier
-
-        // Ajouter la commande dans la base de données et récupérer l'ID
-        int commandeId = commandeService.addCommande(commande); // Retourne l'ID de la commande insérée
-        System.out.println("Commande ajoutée avec l'ID : " + commandeId);
-        LigneCommandeService ligneCommandeService = new LigneCommandeService();
-        List<LigneCommande> liste = ligneCommandeService.getLignesEnAttenteParUtilisateur(u.getId());
-        // Associer chaque ligne de commande à cette commande
-        for (LigneCommande ligne : liste) {
-            ligne.setEtat("confirmée");
-            ligneCommandeService.updateEtat(ligne); // Ajouter la ligne de commande à la base
+        // ✅ Vérifier si un mode de paiement est sélectionné
+        if (!livraisonRadio.isSelected() && !visaRadio.isSelected()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Mode de paiement requis");
+            alert.setHeaderText(null);
+            alert.setContentText("Veuillez sélectionner un mode de paiement avant de continuer.");
+            alert.showAndWait();
+            return;
         }
 
-        // Redirection vers la page commande.fxml
+        // ✅ Utilisateur fictif (à remplacer par session utilisateur réelle)
+        utilisateur u = new utilisateur(
+                1,
+                "exemple@mail.com",
+                "Mnif",
+                "Sahar",
+                "ROLE_CLIENT",
+                "12345678",
+                "Tunis, Tunisie",
+                "motdepasse123",
+                true,
+                "MF123456",
+                "photo.jpg"
+        );
+
+        // Création de la commande
+        Commande commande = new Commande();
+        commande.setDateCommande(LocalDateTime.now());
+
+        // Définir le statut en fonction du choix utilisateur
+        if (livraisonRadio.isSelected()) {
+            commande.setStatut("Payé par livraison");
+        } else if (visaRadio.isSelected()) {
+            commande.setStatut("Payé par VISA");
+        }
+
+        commande.setPrixTotal(SessionPanier.getTotalPanier());
+
+        // Sauvegarder la commande
+        int commandeId = commandeService.addCommande(commande);
+        System.out.println("Commande ajoutée avec l'ID : " + commandeId);
+
+        // Mise à jour des lignes de commande
+        LigneCommandeService ligneCommandeService = new LigneCommandeService();
+        List<LigneCommande> liste = ligneCommandeService.getLignesEnAttenteParUtilisateur(u.getId());
+        for (LigneCommande ligne : liste) {
+            ligne.setEtat("confirmée");
+            ligneCommandeService.updateEtat(ligne);
+        }
+
+
+        //  Redirection vers commande.fxml
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("commande.fxml"));
             Parent page = loader.load();
@@ -73,7 +99,9 @@ public class CommandeController {
             e.printStackTrace();
         }
 
-        // Optionnellement, vider le panier après la commande
+        // Vider le panier
         SessionPanier.viderPanier();
     }
+
+
 }

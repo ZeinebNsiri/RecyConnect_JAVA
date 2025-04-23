@@ -112,6 +112,19 @@ public class CommandeService {
     }
 
 
+    public void updateStatutCommande(int idCommande, String nouveauStatut) {
+        try (Connection connection = MyDataBase.getInstance().getConx()) {
+            String sql = "UPDATE commande SET statut = ? WHERE id = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, nouveauStatut);
+            ps.setInt(2, idCommande);
+            ps.executeUpdate();
+            System.out.println("Statut de la commande mis à jour !");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 

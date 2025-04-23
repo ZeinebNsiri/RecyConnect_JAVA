@@ -20,6 +20,9 @@
                 <Insets bottom="10" left="20" right="20" top="10" />
             </padding>
             <children>
+                <!-- BOUTON RETOUR -->
+                <Button text="←" onAction="#retourVersArticles" style="-fx-font-size: 18px;" />
+
                 <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="RecyConnect" />
                 <TextField prefWidth="200" promptText="Recherche" />
                 <Region HBox.hgrow="ALWAYS" />
@@ -33,6 +36,7 @@
             </children>
         </HBox>
     </top>
+
 
     <!-- Contenu principal -->
     <center>
