@@ -24,3 +24,11 @@
     -fx-padding: 10 20;
     -fx-background-radius: 5;
 }
+.tag-button {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #2e7d32;
+    -fx-border-width: 1;
+    -fx-padding: 5 10;
+}
+

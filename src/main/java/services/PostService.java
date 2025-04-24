@@ -171,50 +171,54 @@ public class PostService implements IService<Post>{
     }
 
     public void addWithMedia(Post post, List<String> mediaFilePaths) throws SQLException, IOException {
-        String query = "INSERT INTO post(user_p_id, contenu, date_publication, nbr_jaime, status_post) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement ps = conx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        ps.setInt(1, post.getUser_p_id());
-        ps.setString(2, post.getContenu());
-        ps.setTimestamp(3, Timestamp.valueOf(post.getDate_publication()));
-        ps.setInt(4, post.getNbr_jaime());
-        ps.setBoolean(5, post.isStatus_post());
-        ps.executeUpdate();
+        ObjectMapper mapper = new ObjectMapper();
+        String tagsJson = mapper.writeValueAsString(post.getTags().stream().map(PostTag::getLabel).toList());
 
-        System.out.println("Post ajouté avec succès");
+        String query = "INSERT INTO post(user_p_id, contenu, date_publication, nbr_jaime, status_post, tags) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = conx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, post.getUser_p_id());
+            ps.setString(2, post.getContenu());
+            ps.setTimestamp(3, Timestamp.valueOf(post.getDate_publication()));
+            ps.setInt(4, post.getNbr_jaime());
+            ps.setBoolean(5, post.isStatus_post());
+            ps.setString(6, tagsJson);
 
-        ResultSet rs = ps.getGeneratedKeys();
-        int postId = -1;
-        if (rs.next()) {
-            postId = rs.getInt(1);
-        }
+            ps.executeUpdate();
+            System.out.println("Post ajouté avec succès");
 
-        String uploadDir = "C:\\Users\\samar\\Desktop\\PI_RecyConnect_TechSquad\\public\\Posts\\uploads";
-        File uploadFolder = new File(uploadDir);
-        if (!uploadFolder.exists()) {
-            uploadFolder.mkdirs();
-        }
-
-        if (postId != -1 && mediaFilePaths != null) {
-            for (String path : mediaFilePaths) {
-                File sourceFile = new File(path);
-                if (!sourceFile.exists()) continue;
-
-                String extension = getFileExtension(sourceFile);
-                String uniqueFileName = UUID.randomUUID() + "." + extension;
-                File destFile = new File(uploadFolder, uniqueFileName);
-
-                Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                // Insertion en base
-                String mediaInsertSQL = "INSERT INTO media_post(post_id, chemin) VALUES (?, ?)";
-                PreparedStatement mediaPs = conx.prepareStatement(mediaInsertSQL);
-                mediaPs.setInt(1, postId);
-                mediaPs.setString(2, uniqueFileName);
-                mediaPs.executeUpdate();
+            int postId = -1;
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    postId = rs.getInt(1);
+                }
             }
-            System.out.println("Images ajoutées avec succès");
+
+            String uploadDir = "C:\\Users\\samar\\Desktop\\PI_RecyConnect_TechSquad\\public\\Posts\\uploads";
+            File uploadFolder = new File(uploadDir);
+            if (!uploadFolder.exists()) uploadFolder.mkdirs();
+
+            if (postId != -1 && mediaFilePaths != null) {
+                for (String path : mediaFilePaths) {
+                    File sourceFile = new File(path);
+                    if (!sourceFile.exists()) continue;
+
+                    String extension = getFileExtension(sourceFile);
+                    String uniqueFileName = UUID.randomUUID() + "." + extension;
+                    File destFile = new File(uploadFolder, uniqueFileName);
+                    Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                    String mediaInsertSQL = "INSERT INTO media_post(post_id, chemin) VALUES (?, ?)";
+                    try (PreparedStatement mediaPs = conx.prepareStatement(mediaInsertSQL)) {
+                        mediaPs.setInt(1, postId);
+                        mediaPs.setString(2, uniqueFileName);
+                        mediaPs.executeUpdate();
+                    }
+                }
+                System.out.println("Images ajoutées avec succès");
+            }
         }
     }
+
 
     private String getFileExtension(File file) {
         String name = file.getName();

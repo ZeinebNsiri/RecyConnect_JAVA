@@ -1,9 +1,11 @@
 package controllers;
 
 import entities.Post;
+import enums.PostTag;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.FlowPane;
 import services.PostService;
 
 import javafx.fxml.FXML;
@@ -34,6 +36,17 @@ public class AddPostController {
     @FXML
     private Label fileChosenLabel;
 
+    @FXML
+    private FlowPane tagsPane;
+
+    private List<String> allTags = List.of(
+            "Durabilité", "Réutilisation", "RecyclagePlastique", "RecyclagePapier",
+            "RecyclageMétal", "RecyclageVerre", "DIYRecyclage", "Question",
+            "Réclamation", "Initiative"
+    );
+
+    private List<String> selectedTags = new ArrayList<>();
+
     private List<String> selectedImagePaths = new ArrayList<>();
     private final PostService postService = new PostService();
 
@@ -42,6 +55,20 @@ public class AddPostController {
         chooseFileButton.setOnAction(e -> handleChooseFile());
         publishButton.setOnAction(e -> handlePublish());
         backButton.setOnAction(e -> handleBack());
+        for (String tag : allTags) {
+            ToggleButton tagButton = new ToggleButton("#" + tag);
+            tagButton.getStyleClass().add("tag-button");
+            tagButton.setOnAction(e -> {
+                if (tagButton.isSelected()) {
+                    selectedTags.add(tag);
+                    tagButton.setStyle("-fx-background-color: #2e7d32; -fx-text-fill: white;");
+                } else {
+                    selectedTags.remove(tag);
+                    tagButton.setStyle(""); // reset style
+                }
+            });
+            tagsPane.getChildren().add(tagButton);
+        }
     }
 
     private void handleBack() {
@@ -103,6 +130,19 @@ public class AddPostController {
             newPost.setDate_publication(LocalDateTime.now());
             newPost.setNbr_jaime(0);
             newPost.setStatus_post(false); // Post non approuvé par défaut
+            List<PostTag> postTags = selectedTags.stream()
+                    .map(label -> {
+                        try {
+                            return PostTag.fromLabel("#" + label); // car le label contient le #
+                        } catch (IllegalArgumentException e) {
+                            e.printStackTrace(); // ou log si besoin
+                            return null;
+                        }
+                    })
+                    .filter(tag -> tag != null)
+                    .toList();
+            newPost.setTags(postTags); // à adapter selon ton entité Post
+
 
             postService.addWithMedia(newPost, selectedImagePaths);
             Alert success = new Alert(Alert.AlertType.INFORMATION);

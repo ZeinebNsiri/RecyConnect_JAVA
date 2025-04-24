@@ -23,6 +23,8 @@
     <VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #e8f5e9; -fx-padding: 30; -fx-background-radius: 10;">
 
         <TextArea fx:id="postContent" promptText="Contenu du post" prefRowCount="4" prefWidth="400"/>
+        <Label text="Tags" style="-fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+        <FlowPane fx:id="tagsPane" hgap="10" vgap="10" prefWrapLength="400" />
 
 
         <HBox spacing="10" alignment="CENTER_LEFT">
