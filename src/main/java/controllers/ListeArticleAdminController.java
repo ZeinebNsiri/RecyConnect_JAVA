@@ -19,7 +19,6 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.control.Pagination;
 
 public class ListeArticleAdminController {
 
@@ -31,7 +30,6 @@ public class ListeArticleAdminController {
     @FXML private TableColumn<ArticleView, String> quantiteColumn;
     @FXML private TableColumn<ArticleView, String> prixColumn;
     @FXML private TableColumn<ArticleView, String> proprietaireColumn;
-    @FXML private TableColumn<ArticleView, Void> actionsColumn;
 
     @FXML private TextField nomArticleField;
     @FXML private TextField proprietaireField;
@@ -41,8 +39,7 @@ public class ListeArticleAdminController {
 
     private ObservableList<ArticleView> allViews;
     private FilteredList<ArticleView> filteredArticles;
-    private SortedList<ArticleView> sortedArticles;
-    private static final int ROWS_PER_PAGE = 10;
+    private static final int ROWS_PER_PAGE = 3;
 
     @FXML
     public void initialize() {
@@ -56,7 +53,6 @@ public class ListeArticleAdminController {
         proprietaireColumn.setCellValueFactory(new PropertyValueFactory<>("nomProprietaire"));
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("imagePath"));
 
-        // ✅ Image column with corrected updateItem
         imageColumn.setCellFactory(param -> new TableCell<ArticleView, String>() {
             private final ImageView imageView = new ImageView();
 
@@ -71,50 +67,18 @@ public class ListeArticleAdminController {
             @Override
             protected void updateItem(String imagePath, boolean empty) {
                 super.updateItem(imagePath, empty);
-
                 if (empty || imagePath == null || imagePath.trim().isEmpty()) {
-                    System.out.println("🔴 IMAGE VIDE");
                     setGraphic(null);
                 } else {
                     try {
                         String imageUrl = "C:/Users/Admin/Desktop/PI_RecyConnect_TechSquad/public/uploads/photo_dir/" + imagePath;
-                        System.out.println("🟢 Chargement image: " + imageUrl);
                         File file = new File(imageUrl);
                         imageView.setImage(new Image(file.toURI().toString()));
                         setGraphic(imageView);
                     } catch (Exception e) {
-                        System.out.println("⚠️ Erreur chargement image: " + e.getMessage());
                         setGraphic(null);
                     }
                 }
-            }
-        });
-
-        // Actions column
-        actionsColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button banButton = new Button("🗑 Ban");
-            private final HBox box = new HBox(banButton);
-
-            {
-                box.setStyle("-fx-alignment: center;");
-                banButton.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white;");
-                banButton.setOnAction(e -> {
-                    ArticleView view = getTableView().getItems().get(getIndex());
-                    try {
-                        ArticleService service = new ArticleService();
-                        Article articleToDelete = service.getArticleById(view.getId());
-                        service.delete(articleToDelete);
-                        loadArticles(); // Refresh
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
-                });
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : box);
             }
         });
 
@@ -148,14 +112,14 @@ public class ListeArticleAdminController {
             allViews = FXCollections.observableArrayList(views);
             filteredArticles = new FilteredList<>(allViews, p -> true);
 
-            pagination.setPageCount((int) Math.ceil((double) allViews.size() / ROWS_PER_PAGE));
+            int pageCount = (int) Math.ceil((double) filteredArticles.size() / ROWS_PER_PAGE);
+            pagination.setPageCount(Math.max(pageCount, 1));
             pagination.setPageFactory(this::createPage);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 
     private void loadCategories() {
         try {
@@ -191,8 +155,56 @@ public class ListeArticleAdminController {
         pagination.setPageFactory(this::createPage);
     }
 
+    private Node createPage(int pageIndex) {
+        int fromIndex = pageIndex * ROWS_PER_PAGE;
+        int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, filteredArticles.size());
 
-    // DTO interne pour affichage enrichi
+        ObservableList<ArticleView> currentPageData = FXCollections.observableArrayList(
+                filteredArticles.subList(fromIndex, toIndex)
+        );
+
+        SortedList<ArticleView> sortedData = new SortedList<>(currentPageData);
+        sortedData.comparatorProperty().bind(articleTable.comparatorProperty());
+        articleTable.setItems(sortedData);
+
+        addActionColumn(); // ✅ Toujours recréer la colonne d'action à chaque page
+        return new VBox();
+    }
+
+    private void addActionColumn() {
+        // Supprimer si déjà présent
+        articleTable.getColumns().removeIf(col -> col.getText().equals(""));
+
+        TableColumn<ArticleView, Void> actionsColumn = new TableColumn<>("");
+        actionsColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button banButton = new Button("🗑 Ban");
+
+            {
+                banButton.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white;");
+                banButton.setOnAction(e -> {
+                    ArticleView view = getTableView().getItems().get(getIndex());
+                    try {
+                        ArticleService service = new ArticleService();
+                        Article articleToDelete = service.getArticleById(view.getId());
+                        service.delete(articleToDelete);
+                        loadArticles(); // Rechargement complet
+                        applyFilters();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : new HBox(banButton));
+            }
+        });
+
+        articleTable.getColumns().add(actionsColumn);
+    }
+
     public static class ArticleView {
         private final int id;
         private final String nomArticle;
@@ -220,19 +232,4 @@ public class ListeArticleAdminController {
         public String getNomCategorie() { return nomCategorie; }
         public String getNomProprietaire() { return nomProprietaire; }
     }
-    private Node createPage(int pageIndex) {
-        int fromIndex = pageIndex * ROWS_PER_PAGE;
-        int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, filteredArticles.size());
-
-        SortedList<ArticleView> sortedData = new SortedList<>(
-                new FilteredList<>(FXCollections.observableArrayList(
-                        filteredArticles.subList(fromIndex, toIndex)
-                ))
-        );
-        sortedData.comparatorProperty().bind(articleTable.comparatorProperty());
-        articleTable.setItems(sortedData);
-
-        return new VBox(); // required for Pagination, although we're not using this node
-    }
-
 }
