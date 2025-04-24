@@ -1,32 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.Reservations.ReservationsListFrontController"
             style="-fx-background-color: #f9f9f9;">
 
       <top>
-            <VBox alignment="CENTER" style="-fx-padding: 20;">
-                  <Label text="📋 Mes Réservations"
-                         style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+            <VBox spacing="10" style="-fx-padding: 20; -fx-background-color: #eaf8ec;">
+                  <Label text="Rechercher une Réservation"
+                         style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #014421;" />
+
+                  <HBox spacing="10">
+                        <TextField fx:id="searchField"
+                                   promptText="Nom de l'événement"
+                                   style="-fx-background-radius: 8; -fx-padding: 8;" />
+
+                        <ComboBox fx:id="statusComboBox"
+                                  style="-fx-background-radius: 8;">
+                              <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                          <String fx:value="Active"/>
+                                          <String fx:value="Cancelled"/>
+                                    </FXCollections>
+                              </items>
+                        </ComboBox>
+
+                        <Button text="Rechercher" onAction="#handleSearch"
+                                style="-fx-background-color: #198754; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                  </HBox>
             </VBox>
       </top>
 
       <center>
-            <ScrollPane fitToWidth="true"
-                        style="-fx-background-color: transparent;"
-                        VBox.vgrow="ALWAYS">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
                   <VBox fx:id="reservationsContainer"
-                        spacing="15"
-                        style="-fx-padding: 20;">
-                        <!-- Les cartes de réservations seront ajoutées ici dynamiquement -->
-                  </VBox>
+                        spacing="15" style="-fx-padding: 20;" />
             </ScrollPane>
       </center>
 
       <bottom>
-            <Label fx:id="debugLabel" style="-fx-padding: 10; -fx-text-fill: gray; -fx-font-style: italic;" />
+            <Label fx:id="debugLabel"
+                   style="-fx-padding: 10; -fx-text-fill: gray; -fx-font-style: italic;" />
       </bottom>
 </BorderPane>

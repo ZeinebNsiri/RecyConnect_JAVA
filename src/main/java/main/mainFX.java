@@ -11,12 +11,23 @@ public class mainFX extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+       /* FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("RecyConnect - Admin");
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);*/
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseUser.fxml"));
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("RecyConnect - Interface Utilisateur");
         stage.show();
     }
 

@@ -4,7 +4,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -12,41 +11,47 @@
             style="-fx-background-color: #f8f9fa;"
             prefWidth="1200" prefHeight="800">
 
-    <!-- Top Section with Header and Navigation -->
     <top>
-        <VBox spacing="15"
-              style="-fx-background-color: linear-gradient(to right, #043c1c, #198754); -fx-padding: 25 30 25 30;">
-
+        <VBox spacing="15" style="-fx-background-color: linear-gradient(to right, #043c1c, #198754); -fx-padding: 25 30 25 30;">
             <Label text="Événements"
                    style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.2, 0, 1);"/>
 
-            <!-- Navigation Buttons -->
+            <!-- Barre de recherche -->
+            <HBox spacing="10">
+                <TextField fx:id="searchNameField" promptText="Nom de l'événement"
+                           style="-fx-background-radius: 8; -fx-padding: 8; -fx-font-size: 13px;" />
+                <TextField fx:id="searchLocationField" promptText="Lieu"
+                           style="-fx-background-radius: 8; -fx-padding: 8; -fx-font-size: 13px;" />
+                <DatePicker fx:id="searchDatePicker" promptText="jj/mm/aaaa"
+                            style="-fx-background-radius: 8; -fx-font-size: 13px;" />
+                <ComboBox fx:id="typeComboBox" promptText="Tous les types"
+                          style="-fx-background-radius: 8; -fx-font-size: 13px;" />
+                <Button text="Rechercher" onAction="#handleSearch"
+                        style="-fx-background-color: #198754; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 20;"/>
+            </HBox>
+
+            <!-- Navigation -->
             <HBox spacing="10">
                 <Button text="📋 Mes Réservations"
                         onAction="#handleShowMyReservations"
-                        style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 8 20 8 20; -fx-background-radius: 20;"/>
-
+                        style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;"/>
                 <Button text="Événements Recommandés"
-                        style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 8 20 8 20; -fx-background-radius: 20;"/>
+                        style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;"/>
             </HBox>
         </VBox>
     </top>
 
-    <!-- Main Content Area -->
     <center>
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
                     style="-fx-background: #f8f9fa; -fx-border-color: transparent; -fx-padding: 0;">
             <FlowPane fx:id="eventFlowPane" hgap="15" vgap="20"
                       style="-fx-background-color: #f8f9fa; -fx-padding: 20 15 20 15;"
-                      alignment="CENTER" columnHalignment="CENTER">
-                <!-- Event cards will be dynamically added here -->
-            </FlowPane>
+                      alignment="CENTER" columnHalignment="CENTER"/>
         </ScrollPane>
     </center>
 
-    <!-- Footer -->
     <bottom>
-        <HBox style="-fx-background-color: #e9ecef; -fx-padding: 10 20 10 20;" alignment="CENTER_RIGHT">
+        <HBox style="-fx-background-color: #e9ecef; -fx-padding: 10 20;" alignment="CENTER_RIGHT">
             <Label text="© 2023 Événements App" style="-fx-text-fill: #6c757d; -fx-font-size: 12px;"/>
         </HBox>
     </bottom>
