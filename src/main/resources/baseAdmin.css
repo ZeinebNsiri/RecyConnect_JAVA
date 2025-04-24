@@ -1,16 +1,65 @@
+/* Base styles */
 .root {
     -fx-background-color: #edf7ef;
 }
 
 .header {
     -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 2);
 }
 
 .sidebar {
     -fx-background-color: white;
     -fx-padding: 20 10 10 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 3, 0, 0, 1);
 }
 
+/* User Menu Button Styles */
+#userMenuButton {
+    -fx-background-color: white; /* Fond blanc comme demandé */
+    -fx-border-color: transparent; /* Pas de bordure */
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 5 10 5 10;
+    -fx-cursor: hand;
+}
+
+#userMenuButton:hover {
+    -fx-background-color: white; /* Reste blanc au survol */
+}
+
+#userMenuButton:pressed {
+    -fx-background-color: white; /* Reste blanc au clic */
+}
+
+#userMenuButton:focused {
+    -fx-background-color: white; /* Reste blanc quand focus */
+    -fx-border-color: transparent; /* Pas de bordure au focus */
+    -fx-focus-color: transparent; /* Enlève le halo de focus */
+    -fx-faint-focus-color: transparent; /* Enlève le halo secondaire */
+}
+/* Context menu styling */
+.context-menu {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 5);
+    -fx-padding: 5;
+}
+
+.menu-item {
+    -fx-padding: 8 20 8 10;
+}
+
+.menu-item:hover {
+    -fx-background-color: #f0f8ff;
+}
+
+.menu-item .label {
+    -fx-text-fill: #333333;
+}
+
+/* Sidebar styles */
 .sidebar-label {
     -fx-font-weight: bold;
     -fx-padding: 5 0 5 0;
@@ -35,6 +84,7 @@
     -fx-font-weight: bold;
     -fx-padding: 5 0 5 0;
 }
+
 .hyperlink:focused {
     -fx-border-color: transparent;
     -fx-border-width: 0;
@@ -43,8 +93,21 @@
     -fx-faint-focus-color: transparent;
 }
 
-.titled-pane > .header:hover {
+.titled-pane > .title {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.titled-pane > .title:hover {
     -fx-background-color: #ecf0f1;
     -fx-text-fill: #16a085;
     -fx-cursor: hand;
+}
+
+.titled-pane > .title > .arrow-button > .arrow {
+    -fx-background-color: #666;
+}
+
+.titled-pane:expanded > .title > .arrow-button > .arrow {
+    -fx-background-color: #2a7f62;
 }

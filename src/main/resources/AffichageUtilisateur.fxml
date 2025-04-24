@@ -3,25 +3,32 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import java.net.URL?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.UtilisateurController"
             style="-fx-background-color: #e6f4ea;" prefWidth="1000" prefHeight="700">
-
+    <stylesheets>
+        <URL value="@AffichageUsers.css" />
+    </stylesheets>
     <VBox fx:id="mainContainer"
           spacing="20" alignment="TOP_CENTER"
           style="-fx-background-color: white; -fx-padding: 25; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10,0,0,2);"
           AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
 
-
         <Label text="Liste des utilisateurs" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
-
 
         <HBox spacing="10" alignment="CENTER_LEFT">
             <ComboBox fx:id="globalFilter" promptText="Tous les utilisateurs" prefWidth="200"/>
         </HBox>
 
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <TextField fx:id="searchEmail" promptText="Email" prefWidth="250" />
+            <TextField fx:id="searchTel" promptText="Numéro de téléphone" prefWidth="200" />
+            <ComboBox fx:id="searchRole" promptText="Tous les rôles" prefWidth="200" />
+            <Button fx:id="btnSearch" text="Rechercher" styleClass="btn-primary" onAction="#handleSearch" />
+        </HBox>
 
-        <TableView fx:id="tableUtilisateur" prefHeight="600" style="-fx-background-color: white;">
+        <TableView fx:id="tableUtilisateur" prefHeight="500">
             <columns>
                 <TableColumn fx:id="idColumn" text="#" prefWidth="40"/>
                 <TableColumn fx:id="nomColumn" text="Nom utilisateur" prefWidth="130"/>
@@ -32,6 +39,14 @@
                 <TableColumn fx:id="matriculeColumn" text="Matricule_fiscale" prefWidth="150"/>
                 <TableColumn fx:id="etatColumn" text="État" prefWidth="80"/>
             </columns>
+
         </TableView>
+
+        <HBox spacing="10" alignment="CENTER">
+            <Button fx:id="btnPrevious" text="« Précédent" styleClass="btn-pagination" onAction="#handlePrevious" />
+            <HBox fx:id="paginationContainer" spacing="5" alignment="CENTER" />
+            <Button fx:id="btnNext" text="Suivant »" styleClass="btn-pagination" onAction="#handleNext" />
+
+        </HBox>
     </VBox>
 </AnchorPane>

@@ -6,6 +6,8 @@
 
 
 <?import java.net.URL?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane fx:id="rootBorderPane" fx:controller="controllers.BaseAdminController"
             xmlns:fx="http://javafx.com/fxml"
             prefWidth="1000.0" prefHeight="600.0"
@@ -30,9 +32,25 @@
                 <Button text="🔔" style="-fx-font-size: 16px;" />
                 <MenuButton fx:id="userMenuButton">
                     <items>
-                        <MenuItem fx:id="profilMenuItem" text="Profil"/>
-                        <MenuItem fx:id="logoutItem" text="Déconnexion"/>
-                    </items>
+                        <MenuItem fx:id="profilMenuItem" text="Profil">
+                            <graphic>
+                                <ImageView fitWidth="16" fitHeight="16">
+                                    <image>
+                                        <Image url="@user.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>
+
+                        <MenuItem fx:id="logoutItem" text="Déconnexion">
+                            <graphic>
+                                <ImageView fitWidth="16" fitHeight="16">
+                                    <image>
+                                        <Image url="@logout.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>                    </items>
                 </MenuButton>
             </children>
         </HBox>

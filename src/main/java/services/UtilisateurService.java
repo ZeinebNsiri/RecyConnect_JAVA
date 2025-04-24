@@ -131,4 +131,63 @@ public class UtilisateurService implements IService<utilisateur> {
             return "Le mot de passe doit contenir au moins un symbole.";
         return "";
     }
+    // Nouvelle méthode pour la recherche multicritères
+    public List<utilisateur> searchUtilisateurs(String email, String tel, String role) throws SQLException {
+        StringBuilder sql = new StringBuilder("SELECT * FROM utilisateur WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+
+        // Ajouter des filtres selon les critères fournis
+        if (email != null && !email.isEmpty()) {
+            sql.append(" AND LOWER(email) LIKE ?");
+            params.add("%" + email.toLowerCase() + "%");
+        }
+
+        if (tel != null && !tel.isEmpty()) {
+            sql.append(" AND num_tel LIKE ?");
+            params.add("%" + tel + "%");
+        }
+
+        if (role != null && !role.equals("Tous les rôles")) {
+            if (role.equals("Particulier")) {
+                sql.append(" AND roles LIKE ?");
+                params.add("%ROLE_USER%");
+            } else if (role.equals("Professionnel")) {
+                sql.append(" AND roles LIKE ?");
+                params.add("%ROLE_PROFESSIONNEL%");
+            }
+        }
+
+        // Filtrer pour n'avoir que les utilisateurs et professionnels
+        sql.append(" AND (roles LIKE ? OR roles LIKE ?)");
+        params.add("%ROLE_USER%");
+        params.add("%ROLE_PROFESSIONNEL%");
+
+        List<utilisateur> utilisateurs = new ArrayList<>();
+        PreparedStatement stmt = conx.prepareStatement(sql.toString());
+
+        // Définir les paramètres de la requête
+        for (int i = 0; i < params.size(); i++) {
+            stmt.setObject(i + 1, params.get(i));
+        }
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            utilisateur user = new utilisateur(
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(4),
+                    rs.getString(5),
+                    rs.getString("roles"),
+                    rs.getString(6),
+                    rs.getString(7),
+                    rs.getString(8),
+                    rs.getBoolean(10),
+                    rs.getString(9),
+                    rs.getString(11)
+            );
+            utilisateurs.add(user);
+        }
+
+        return utilisateurs;
+    }
 }
