@@ -39,7 +39,7 @@ public class ListeArticleAdminController {
 
     private ObservableList<ArticleView> allViews;
     private FilteredList<ArticleView> filteredArticles;
-    private static final int ROWS_PER_PAGE = 3;
+    private static final int ROWS_PER_PAGE = 5;
 
     @FXML
     public void initialize() {
@@ -172,26 +172,46 @@ public class ListeArticleAdminController {
     }
 
     private void addActionColumn() {
-        // Supprimer si déjà présent
-        articleTable.getColumns().removeIf(col -> col.getText().equals(""));
+        // Supprimer les anciennes colonnes d'action si elles existent
+        articleTable.getColumns().removeIf(col -> col.getText().isBlank());
 
         TableColumn<ArticleView, Void> actionsColumn = new TableColumn<>("");
+        actionsColumn.setPrefWidth(100); // Empêche l’affichage de "..."
+
         actionsColumn.setCellFactory(param -> new TableCell<>() {
             private final Button banButton = new Button("🗑 Ban");
 
             {
-                banButton.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white;");
+                banButton.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white; -fx-cursor: hand;");
+                banButton.setPrefWidth(80);
+
                 banButton.setOnAction(e -> {
                     ArticleView view = getTableView().getItems().get(getIndex());
-                    try {
-                        ArticleService service = new ArticleService();
-                        Article articleToDelete = service.getArticleById(view.getId());
-                        service.delete(articleToDelete);
-                        loadArticles(); // Rechargement complet
-                        applyFilters();
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
+
+                    // ✅ Alerte de confirmation
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Confirmation de bannissement");
+                    confirm.setHeaderText("Êtes-vous sûr de vouloir bannir cet article ?");
+                    confirm.setContentText("Cette action est irréversible.");
+
+                    ButtonType oui = new ButtonType("Oui", ButtonBar.ButtonData.OK_DONE);
+                    ButtonType non = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+                    confirm.getButtonTypes().setAll(oui, non);
+
+                    confirm.showAndWait().ifPresent(response -> {
+                        if (response == oui) {
+                            try {
+                                ArticleService service = new ArticleService();
+                                Article articleToDelete = service.getArticleById(view.getId());
+                                service.delete(articleToDelete);
+                                loadArticles(); // Recharge les données
+                                applyFilters(); // Réapplique les filtres
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                        // Sinon, on ne fait rien (bannissement annulé)
+                    });
                 });
             }
 
@@ -199,11 +219,13 @@ public class ListeArticleAdminController {
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
                 setGraphic(empty ? null : new HBox(banButton));
+                setStyle("-fx-alignment: CENTER;");
             }
         });
 
         articleTable.getColumns().add(actionsColumn);
     }
+
 
     public static class ArticleView {
         private final int id;

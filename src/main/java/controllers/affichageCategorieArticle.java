@@ -116,22 +116,38 @@ public class affichageCategorieArticle {
 
                 deleteButton.setOnAction(event -> {
                     CategorieArticle cat = getTableView().getItems().get(getIndex());
-                    try {
-                        CateArtService service = new CateArtService();
-                        service.delete(cat);
 
-                        // Recharger la liste depuis la base
-                        List<CategorieArticle> updatedList = service.displayList();
-                        allCategories.setAll(updatedList); // ✅ met à jour sans casser la liaison
+                    // ✅ Afficher une alerte de confirmation
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Confirmation de suppression");
+                    confirm.setHeaderText("Êtes-vous sûr de vouloir supprimer cette catégorie ?");
+                    confirm.setContentText("Cette action est irréversible.");
 
-                        // Mettre à jour le ComboBox si nécessaire
-                        updateComboBox(updatedList);
+                    ButtonType oui = new ButtonType("Oui", ButtonBar.ButtonData.OK_DONE);
+                    ButtonType non = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+                    confirm.getButtonTypes().setAll(oui, non);
 
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                        showAlert("Erreur lors de la suppression !");
-                    }
+                    confirm.showAndWait().ifPresent(response -> {
+                        if (response == oui) {
+                            try {
+                                CateArtService service = new CateArtService();
+                                service.delete(cat);
+
+                                // Recharger la liste depuis la base
+                                List<CategorieArticle> updatedList = service.displayList();
+                                allCategories.setAll(updatedList); // ✅ met à jour sans casser la liaison
+
+                                // Mettre à jour le ComboBox si nécessaire
+                                updateComboBox(updatedList);
+
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                                showAlert("Erreur lors de la suppression !");
+                            }
+                        }
+                    });
                 });
+
 
                 editButton.setOnAction(event -> {
                     CategorieArticle cat = getTableView().getItems().get(getIndex());
