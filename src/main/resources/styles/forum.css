@@ -1,55 +1,65 @@
 .root {
     -fx-font-family: "Segoe UI", sans-serif;
-    -fx-background-color: #f0f4ec;
-}
-
-.header {
-
-    -fx-background-size: cover;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center center;
+    -fx-background-color: #f4f7f5;
 }
 
 .header-title {
-    -fx-font-size: 36px;
+    -fx-font-size: 38px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-padding: 40px 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
 }
 
 .toggle-button, .button {
     -fx-background-radius: 20px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.toggle-button:selected {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
 }
 
 .button {
     -fx-background-color: #4CAF50;
     -fx-text-fill: white;
-    -fx-padding: 8px 16px;
+    -fx-padding: 10px 20px;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.2), 2, 0.0, 0, 1);
+}
+
+.post-container {
+    -fx-alignment: CENTER;
 }
 
 .post-card {
     -fx-background-color: white;
-    -fx-background-radius: 10px;
-    -fx-padding: 15px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-background-radius: 12px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 6, 0, 0, 2);
+    -fx-spacing: 10;
 }
 
 .tag-label {
-    -fx-background-color: #388e3c;
+    -fx-background-color: #66bb6a;
     -fx-text-fill: white;
-    -fx-padding: 3 6;
-    -fx-background-radius: 5;
+    -fx-padding: 4 8;
+    -fx-background-radius: 8;
+    -fx-font-size: 12px;
 }
 
 .stat-label {
-    -fx-text-fill: #666;
+    -fx-text-fill: #777;
+    -fx-font-size: 12px;
 }
 
-.timestamp {
-    -fx-font-size: 12px;
+.timestamp, .username {
+    -fx-font-size: 11px;
     -fx-text-fill: #555;
 }
 
-.username {
-    -fx-font-size: 12px;
+.image-gallery {
+    -fx-spacing: 10;
+    -fx-padding: 10 0 0 0;
 }

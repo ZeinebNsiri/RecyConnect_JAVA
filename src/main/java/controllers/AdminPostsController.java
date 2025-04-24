@@ -55,10 +55,13 @@ public class AdminPostsController {
         actionsCol.setCellFactory(param -> new TableCell<>() {
             private final Button approveBtn = new Button("Approuver");
             private final Button rejectBtn = new Button("Rejeter");
+            private final Button deleteBtn = new Button("Supprimer");
+            private final HBox actionButtons = new HBox(5);
 
             {
                 approveBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
                 rejectBtn.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+                deleteBtn.setStyle("-fx-background-color: #d9534f; -fx-text-fill: white;");
 
                 approveBtn.setOnAction(e -> {
                     Post post = getTableView().getItems().get(getIndex());
@@ -81,6 +84,25 @@ public class AdminPostsController {
                         ex.printStackTrace();
                     }
                 });
+
+                deleteBtn.setOnAction(e -> {
+                    Post post = getTableView().getItems().get(getIndex());
+                    Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmation.setTitle("Confirmation de suppression");
+                    confirmation.setHeaderText("Voulez-vous vraiment supprimer ce post ?");
+                    confirmation.setContentText(post.getContenu());
+
+                    confirmation.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            try {
+                                postService.delete(post);
+                                postList.remove(post);
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    });
+                });
             }
 
             @Override
@@ -90,13 +112,15 @@ public class AdminPostsController {
                     setGraphic(null);
                 } else {
                     Post post = getTableView().getItems().get(getIndex());
+                    actionButtons.getChildren().clear();
+
                     if (post.isStatus_post()) {
-                        // Si déjà approuvé, ne montrer que le bouton "Rejeter"
-                        setGraphic(rejectBtn);
+                        actionButtons.getChildren().addAll(rejectBtn, deleteBtn);
                     } else {
-                        // Si rejeté (ou par défaut), ne montrer que le bouton "Approuver"
-                        setGraphic(approveBtn);
+                        actionButtons.getChildren().addAll(approveBtn, deleteBtn);
                     }
+
+                    setGraphic(actionButtons);
                 }
             }
         });

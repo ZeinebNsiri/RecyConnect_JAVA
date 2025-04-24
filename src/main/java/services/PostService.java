@@ -9,12 +9,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class PostService implements IService<Post>{
     Connection conx;
+    private String currentRole = "USER";
     public PostService() {conx = MyDataBase.getInstance().getConx();}
 
 
@@ -29,7 +28,7 @@ public class PostService implements IService<Post>{
 
             while (rs.next()) {
                 String fileName = rs.getString("chemin");
-                String fullPath = "src/main/resources/uploads/" + fileName;
+                String fullPath = "C:\\Users\\samar\\Desktop\\PI_RecyConnect_TechSquad\\public\\Posts\\uploads\\" + fileName;
                 mediaUrls.add(fullPath);
             }
         } catch (SQLException e) {
@@ -61,8 +60,14 @@ public class PostService implements IService<Post>{
     @Override
     public List<Post> displayList() throws SQLException {
         List<Post> posts = new ArrayList<>();
-        String sql = "SELECT * FROM post";
 
+
+        String sql;
+        if (currentRole.equalsIgnoreCase("ADMIN")) {
+            sql = "SELECT * FROM post";
+        } else {
+            sql = "SELECT * FROM post WHERE status_post = true";
+        }
         try {
             Statement stmt = conx.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -85,6 +90,38 @@ public class PostService implements IService<Post>{
 
         return posts;
     }
+
+
+    public Map<Post, List<String>> getPostsWithMediaByUser(int userId) {
+        Map<Post, List<String>> postMediaMap = new HashMap<>();
+        String sql = "SELECT * FROM post WHERE user_p_id = ?";
+
+        try (PreparedStatement ps = conx.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Post p = new Post();
+                p.setId(rs.getInt("id"));
+                p.setUser_p_id(rs.getInt("user_p_id"));
+                p.setContenu(rs.getString("contenu"));
+                p.setDate_publication(rs.getTimestamp("date_publication").toLocalDateTime());
+                p.setNbr_jaime(rs.getInt("nbr_jaime"));
+                p.setStatus_post(rs.getBoolean("status_post"));
+
+                List<String> mediaList = getMediaForPost(p.getId());
+
+                postMediaMap.put(p, mediaList);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return postMediaMap;
+    }
+
+
 
     @Override
     public void add(Post post) throws SQLException {
@@ -109,7 +146,7 @@ public class PostService implements IService<Post>{
             postId = rs.getInt(1);
         }
 
-        String uploadDir = "src/main/resources/uploads";
+        String uploadDir = "C:\\Users\\samar\\Desktop\\PI_RecyConnect_TechSquad\\public\\Posts\\uploads";
         File uploadFolder = new File(uploadDir);
         if (!uploadFolder.exists()) {
             uploadFolder.mkdirs();
@@ -172,6 +209,8 @@ public class PostService implements IService<Post>{
         String updateQuery = "UPDATE post SET contenu = ? WHERE id = ?";
         try (PreparedStatement ps = conx.prepareStatement(updateQuery)) {
             ps.setString(1, post.getContenu());
+
+
             ps.setInt(2, post.getId());
             ps.executeUpdate();
             System.out.println("Contenu du post mis à jour !");
@@ -192,7 +231,7 @@ public class PostService implements IService<Post>{
                 String insertMediaQuery = "INSERT INTO media_post(post_id, chemin) VALUES (?, ?)";
                 try (PreparedStatement ps = conx.prepareStatement(insertMediaQuery)) {
                     ps.setInt(1, post.getId());
-                    ps.setString(2, path);
+                    ps.setString(2, new File(path).getName());
                     ps.executeUpdate();
                 }
             }

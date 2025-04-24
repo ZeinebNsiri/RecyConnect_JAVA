@@ -42,7 +42,8 @@
 
     <!-- Main content -->
     <center>
-        <VBox spacing="20">
+        <HBox alignment="CENTER">
+        <VBox spacing="20" maxWidth="900">
             <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
             <!-- Tabs and Button -->
@@ -56,11 +57,12 @@
 
             <!-- Post List -->
             <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;">
-                <VBox spacing="20" fx:id="postList">
+                <VBox spacing="20" fx:id="postList" styleClass="post-container">
                     <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
 
                 </VBox>
             </ScrollPane>
         </VBox>
+        </HBox>
     </center>
 </BorderPane>
