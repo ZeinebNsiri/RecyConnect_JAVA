@@ -43,6 +43,7 @@
     <!-- Main content -->
     <center>
         <HBox alignment="CENTER">
+
         <VBox spacing="20" maxWidth="900">
             <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
@@ -62,7 +63,12 @@
 
                 </VBox>
             </ScrollPane>
+
+
         </VBox>
+            <VBox fx:id="tagListBox" spacing="10" prefWidth="250" alignment="TOP_LEFT">
+
+            </VBox>
         </HBox>
     </center>
 </BorderPane>

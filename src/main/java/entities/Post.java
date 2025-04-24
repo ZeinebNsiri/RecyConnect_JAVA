@@ -1,5 +1,7 @@
 package entities;
 
+import enums.PostTag;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class Post {
     private LocalDateTime date_publication;
     private int nbr_jaime;
     private boolean status_post;
+    private List<PostTag> tags;
 
 
     public Post() {}
@@ -22,6 +25,7 @@ public class Post {
         this.date_publication = date_publication;
         this.nbr_jaime = nbr_jaime;
         this.status_post = status_post;
+
 
     }
 
@@ -46,6 +50,9 @@ public class Post {
     public boolean isStatus_post() { return status_post; }
     public void setStatus_post(boolean status_post) { this.status_post = status_post; }
 
+    public List<PostTag> getTags() {return tags;}
+
+    public void setTags(List<PostTag> tags) {this.tags = tags;}
 
     @Override
     public String toString() {

@@ -1,8 +1,12 @@
 package services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import entities.Post;
 import entities.utilisateur;
+import enums.PostTag;
 import utils.MyDataBase;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,6 +64,7 @@ public class PostService implements IService<Post>{
     @Override
     public List<Post> displayList() throws SQLException {
         List<Post> posts = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
 
 
         String sql;
@@ -81,6 +86,24 @@ public class PostService implements IService<Post>{
                 p.setNbr_jaime(rs.getInt("nbr_jaime"));
                 p.setStatus_post(rs.getBoolean("status_post"));
 
+                String tagsJson = rs.getString("tags");
+                if (tagsJson != null && !tagsJson.isEmpty()) {
+                    List<String> tagLabels = null;
+                    try {
+                        tagLabels = objectMapper.readValue(tagsJson, new TypeReference<List<String>>() {});
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                    List<PostTag> tags = new ArrayList<>();
+                    for (String label : tagLabels) {
+                        try {
+                            tags.add(PostTag.fromLabel(label));
+                        } catch (IllegalArgumentException e) {
+                            System.err.println("Tag inconnu ignoré: " + label);
+                        }
+                    }
+                    p.setTags(tags);
+                }
 
                 posts.add(p);
             }
@@ -94,6 +117,7 @@ public class PostService implements IService<Post>{
 
     public Map<Post, List<String>> getPostsWithMediaByUser(int userId) {
         Map<Post, List<String>> postMediaMap = new HashMap<>();
+        ObjectMapper objectMapper = new ObjectMapper();
         String sql = "SELECT * FROM post WHERE user_p_id = ?";
 
         try (PreparedStatement ps = conx.prepareStatement(sql)) {
@@ -108,6 +132,24 @@ public class PostService implements IService<Post>{
                 p.setDate_publication(rs.getTimestamp("date_publication").toLocalDateTime());
                 p.setNbr_jaime(rs.getInt("nbr_jaime"));
                 p.setStatus_post(rs.getBoolean("status_post"));
+                String tagsJson = rs.getString("tags");
+                if (tagsJson != null && !tagsJson.isEmpty()) {
+                    List<String> tagLabels = null;
+                    try {
+                        tagLabels = objectMapper.readValue(tagsJson, new TypeReference<List<String>>() {});
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                    List<PostTag> tags = new ArrayList<>();
+                    for (String label : tagLabels) {
+                        try {
+                            tags.add(PostTag.fromLabel(label));
+                        } catch (IllegalArgumentException e) {
+                            System.err.println("Tag inconnu ignoré: " + label);
+                        }
+                    }
+                    p.setTags(tags);
+                }
 
                 List<String> mediaList = getMediaForPost(p.getId());
 

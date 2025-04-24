@@ -48,6 +48,53 @@
     -fx-background-radius: 8;
     -fx-font-size: 12px;
 }
+.tag-badge {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-padding: 4px 8px;
+    -fx-background-radius: 10;
+    -fx-font-size: 12px;
+}
+.tag-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #dcdcdc;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.5, 0, 2);
+    -fx-padding: 15 15 15 15;
+}
+.tag-badgeL {
+    -fx-background-color: #777;
+    -fx-text-fill: white;
+    -fx-padding: 4 8;
+    -fx-background-radius: 15;
+    -fx-cursor: hand;
+}
+
+.active-tag {
+    -fx-background-color: #d0ddec ;
+    -fx-text-fill: white;
+}
+.tag-badge:hover {
+    -fx-background-color: #b2ebf2;
+}
+
+.sidebar {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #dcdcdc;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.5, 0, 2);
+}
+
+.sidebar-heading {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
 
 .stat-label {
     -fx-text-fill: #777;

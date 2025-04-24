@@ -2,7 +2,9 @@ package controllers;
 
 import entities.Post;
 import entities.utilisateur;
+import enums.PostTag;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -15,7 +17,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import services.PostService;
-import javafx.fxml.FXML;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -28,9 +29,11 @@ public class ForumController {
     @FXML private ToggleButton myPostsToggle;
     @FXML private ToggleButton savedToggle;
     @FXML private VBox postList;
+    @FXML private VBox tagListBox;
 
     private final PostService postService = new PostService();
     private final List<ToggleButton> toggleButtons = new ArrayList<>();
+    private final Set<String> selectedTags = new HashSet<>();
 
     private static final int POSTS_PER_PAGE = 5;
     private int currentPage = 1;
@@ -63,6 +66,7 @@ public class ForumController {
 
         selectToggle(recentToggle);
         loadPosts();
+        displayAllTags();
     }
 
     private void selectToggle(ToggleButton selectedButton) {
@@ -71,9 +75,61 @@ public class ForumController {
         }
     }
 
+    private void displayAllTags() {
+        tagListBox.getChildren().clear();
+
+        // Carte principale pour les tags
+        VBox card = new VBox();
+        card.setSpacing(10);
+        card.setPadding(new Insets(15));
+        card.getStyleClass().add("tag-card"); // Tu peux définir ça dans le CSS
+        card.setMaxWidth(250); // Largeur maximale de la carte
+
+        Label heading = new Label("Tags");
+        heading.getStyleClass().add("sidebar-heading");
+
+        FlowPane tagContainer = new FlowPane();
+        tagContainer.setHgap(8);
+        tagContainer.setVgap(8);
+        tagContainer.setPadding(new Insets(5));
+
+        for (PostTag tag : PostTag.values()) {
+            Label tagLabel = new Label(tag.getLabel());
+            tagLabel.getStyleClass().add("tag-badgeL");
+            if (selectedTags.contains(tag.getLabel())) {
+                tagLabel.getStyleClass().add("active-tag");
+            }
+
+            tagLabel.setOnMouseClicked(event -> {
+                if (selectedTags.contains(tag.getLabel())) {
+                    selectedTags.remove(tag.getLabel());
+                    tagLabel.getStyleClass().remove("active-tag");
+                } else {
+                    selectedTags.add(tag.getLabel());
+                    tagLabel.getStyleClass().add("active-tag");
+                }
+                loadPosts(); // Pour mettre à jour les posts affichés
+            });
+
+            tagContainer.getChildren().add(tagLabel);
+        }
+
+        card.getChildren().addAll(heading, tagContainer);
+        VBox.setMargin(card, new Insets(70, 0, 0, 0));
+        tagListBox.getChildren().add(card);
+    }
+
+
     public void loadPosts() {
         try {
             allPosts = postService.displayList();
+            // Filter posts by selected tags if any
+            if (!selectedTags.isEmpty()) {
+                allPosts = allPosts.stream()
+                        .filter(post -> post.getTags().stream()
+                                .anyMatch(tag -> selectedTags.contains(tag.getLabel())))
+                        .toList();
+            }
             allPosts.sort((p1, p2) -> p2.getDate_publication().compareTo(p1.getDate_publication()));
             postMediaMap.clear();
 
@@ -158,6 +214,11 @@ public class ForumController {
     }
 
     private VBox createPostCard(Post post, List<String> mediaUrls, boolean isMyPost) {
+        List<PostTag> tags = post.getTags();
+
+        if (tags == null) {
+            tags = new ArrayList<>(); // Initialize with an empty list if null
+        }
         VBox postCard = new VBox();
         postCard.setSpacing(10);
         postCard.getStyleClass().add("post-card");
@@ -181,7 +242,16 @@ public class ForumController {
 
         VBox content = new VBox();
         Label postText = new Label(post.getContenu());
-        content.getChildren().add(postText);
+
+
+        HBox tagBox = new HBox(5);
+        tagBox.setPadding(new Insets(5, 0, 0, 0));
+        for (PostTag tag : post.getTags()) {
+            Label tagLabel = new Label(tag.getLabel());
+            tagLabel.getStyleClass().add("tag-badge");
+            tagBox.getChildren().add(tagLabel);
+        }
+        content.getChildren().addAll(postText, tagBox);
 
         VBox mediaContainer = new VBox();
         mediaContainer.setSpacing(5);
