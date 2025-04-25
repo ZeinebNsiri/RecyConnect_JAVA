@@ -11,7 +11,7 @@
       style="-fx-background-color: #f8f9fa;">
 
     <!-- Header -->
-    <StackPane prefHeight="180" style="-fx-background-color: #014421;">
+    <StackPane prefHeight="180" style="-fx-background-color: linear-gradient(to right, #043c1c, #198754); -fx-padding: 25 30 25 30;">
         <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20;">
             <Label text="Workshops" style="-fx-font-size: 32px; -fx-text-fill: white; -fx-font-weight: bold;" />
             <Label text="Accueil  /  Workshops" style="-fx-text-fill: white; -fx-font-size: 14px;" />
@@ -31,7 +31,7 @@
                            style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #014421;" />
                 </VBox>
 
-                <!-- 🔍 Search -->
+                <!-- Search & Filters -->
                 <HBox spacing="10" alignment="CENTER"
                       style="-fx-padding: 15; -fx-background-radius: 10;">
                     <Label text="Rechercher par Titre:" style="-fx-font-weight: bold; -fx-text-fill: #343a40;"/>
@@ -45,7 +45,7 @@
                             style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" />
                 </HBox>
 
-                <!-- 🔘 Category Filters -->
+                <!-- Category Filters -->
                 <HBox alignment="CENTER">
                     <ScrollPane hbarPolicy="AS_NEEDED" vbarPolicy="NEVER"
                                 fitToHeight="true" prefHeight="60" maxHeight="60"
@@ -55,7 +55,7 @@
                     </ScrollPane>
                 </HBox>
 
-                <!-- 📦 Workshops Grid -->
+                <!-- Workshops Cards -->
                 <FlowPane fx:id="workshopsContainer"
                           hgap="30" vgap="30"
                           alignment="CENTER"

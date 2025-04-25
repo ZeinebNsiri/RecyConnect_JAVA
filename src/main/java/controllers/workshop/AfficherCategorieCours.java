@@ -35,7 +35,19 @@ public class AfficherCategorieCours {
 
     @FXML
     private void initialize() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colId.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    int indexOnPage = getIndex();
+                    int absoluteIndex = (currentPage - 1) * ITEMS_PER_PAGE + indexOnPage + 1;
+                    setText(String.valueOf(absoluteIndex));
+                }
+            }
+        });
         colNom.setCellValueFactory(new PropertyValueFactory<>("nomCategorie"));
         colDescription.setCellValueFactory(new PropertyValueFactory<>("descriptionCategorie"));
 

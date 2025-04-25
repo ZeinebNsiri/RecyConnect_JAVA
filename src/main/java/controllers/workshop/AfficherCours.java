@@ -70,7 +70,19 @@ public class AfficherCours {
     }
 
     private void setupColumns() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colId.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    int indexOnPage = getIndex();
+                    int absoluteIndex = (currentPage - 1) * ITEMS_PER_PAGE + indexOnPage + 1;
+                    setText(String.valueOf(absoluteIndex));
+                }
+            }
+        });
         colTitre.setCellValueFactory(new PropertyValueFactory<>("titreCours"));
         colDescription.setCellValueFactory(new PropertyValueFactory<>("descriptionCours"));
         colVideo.setCellValueFactory(new PropertyValueFactory<>("video"));

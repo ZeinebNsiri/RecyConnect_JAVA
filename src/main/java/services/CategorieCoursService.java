@@ -73,21 +73,46 @@ public class CategorieCoursService implements IService<CategorieCours> {
 
     @Override
     public void delete(CategorieCours categorieCours) throws SQLException {
-        // Supprimer les cours associés
-        String deleteCoursQuery = "DELETE FROM cours WHERE categorie_c_id = ?";
-        try (PreparedStatement psDeleteCours = conx.prepareStatement(deleteCoursQuery)) {
-            psDeleteCours.setInt(1, categorieCours.getId());
-            psDeleteCours.executeUpdate();
-        }
+        // Désactiver l'autocommit pour gérer la transaction
+        conx.setAutoCommit(false);
 
-        // Supprimer la catégorie
-        String deleteCategorieQuery = "DELETE FROM categorie_cours WHERE id = ?";
-        try (PreparedStatement psDeleteCategorie = conx.prepareStatement(deleteCategorieQuery)) {
-            psDeleteCategorie.setInt(1, categorieCours.getId());
-            psDeleteCategorie.executeUpdate();
-            System.out.println("Catégorie cours supprimé avec succès !");
+        try {
+            // 1. Supprimer les notes (rating) liées aux cours de la catégorie
+            String deleteRatingsQuery = "DELETE r FROM rating r " +
+                    "INNER JOIN cours c ON r.cours_id = c.id " +
+                    "WHERE c.categorie_c_id = ?";
+            try (PreparedStatement psRatings = conx.prepareStatement(deleteRatingsQuery)) {
+                psRatings.setInt(1, categorieCours.getId());
+                psRatings.executeUpdate();
+            }
+
+            // 2. Supprimer les cours de la catégorie
+            String deleteCoursQuery = "DELETE FROM cours WHERE categorie_c_id = ?";
+            try (PreparedStatement psCours = conx.prepareStatement(deleteCoursQuery)) {
+                psCours.setInt(1, categorieCours.getId());
+                psCours.executeUpdate();
+            }
+
+            // 3. Supprimer la catégorie
+            String deleteCategorieQuery = "DELETE FROM categorie_cours WHERE id = ?";
+            try (PreparedStatement psCategorie = conx.prepareStatement(deleteCategorieQuery)) {
+                psCategorie.setInt(1, categorieCours.getId());
+                psCategorie.executeUpdate();
+            }
+
+            // Valider la transaction
+            conx.commit();
+            System.out.println("Catégorie, cours et notes associés supprimés !");
+
+        } catch (SQLException e) {
+            // Annuler en cas d'erreur
+            conx.rollback();
+            throw e;
+        } finally {
+            conx.setAutoCommit(true);
         }
     }
+
 
 
 

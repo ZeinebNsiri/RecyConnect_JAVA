@@ -162,11 +162,22 @@ public class AfficherWorkshopsFront {
             description.setPrefHeight(60);
             description.setStyle("-fx-font-size: 12px; -fx-text-fill: #444;");
 
+
+            int avgNote = coursService.getAverageRatingForCours(cours.getId());
+            HBox stars = new HBox(5);
+            for (int i = 1; i <= 5; i++) {
+                Label star = new Label("★");
+                star.setStyle(i <= avgNote
+                        ? "-fx-text-fill: gold; -fx-font-size: 14px;"
+                        : "-fx-text-fill: #ccc; -fx-font-size: 14px;");
+                stars.getChildren().add(star);
+            }
+
             Button btnVoirPlus = new Button("Voir plus");
             btnVoirPlus.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 12px;");
             btnVoirPlus.setOnAction(ev -> BaseUserController.instance.showWorkshopDetails(cours));
 
-            card.getChildren().addAll(iv, category, title, description, btnVoirPlus);
+            card.getChildren().addAll(iv, category, title, description, stars, btnVoirPlus);
             workshopsContainer.getChildren().add(card);
         }
     }

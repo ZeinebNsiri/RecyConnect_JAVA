@@ -12,19 +12,19 @@
       style="-fx-background-color: #f8f9fa;"
       alignment="TOP_CENTER" spacing="0">
 
-    <!-- En-tête avec image en arrière-plan -->
+    <!-- Header -->
     <StackPane prefHeight="150" alignment="CENTER">
-        <ImageView fx:id="headerImage" fitWidth="900" preserveRatio="false" fitHeight="150" />
+        <ImageView fx:id="headerImage" fitWidth="900" preserveRatio="false" fitHeight="150"/>
         <VBox alignment="CENTER" spacing="10"
               style="-fx-background-color: rgba(0,0,0,0.4); -fx-padding: 30;">
             <Label text="Détails du Workshop"
-                   style="-fx-font-size: 28px; -fx-text-fill: white; -fx-font-weight: bold;" />
+                   style="-fx-font-size: 28px; -fx-text-fill: white; -fx-font-weight: bold;"/>
             <Label fx:id="breadcrumbLabel"
-                   style="-fx-font-size: 14px; -fx-text-fill: white;" />
+                   style="-fx-font-size: 14px; -fx-text-fill: white;"/>
         </VBox>
     </StackPane>
 
-    <!-- Scrollable zone centrée -->
+    <!-- Content -->
     <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;">
         <content>
             <HBox alignment="CENTER">
@@ -32,24 +32,41 @@
                       style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 5);"
                       HBox.hgrow="NEVER">
 
-                    <!-- Vidéo ou image -->
-                    <MediaView fx:id="mediaView" fitWidth="500" preserveRatio="true" />
+                    <!-- Video or Image -->
+                    <MediaView fx:id="mediaView" fitWidth="500" preserveRatio="true"/>
                     <ImageView fx:id="imageView" fitWidth="500" preserveRatio="true" visible="false"/>
 
-                    <!-- Titre -->
-                    <Label fx:id="titleLabel"
-                           style="-fx-font-size: 22px; -fx-text-fill: #014421; -fx-font-weight: bold;" />
+                    <!-- ⭐ Rating Section -->
+                    <VBox spacing="10" style="-fx-background-color: #e8f5e9; -fx-padding: 15; -fx-background-radius: 8;" alignment="CENTER_LEFT">
+                        <Label text="Donnez votre note :" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <HBox fx:id="starContainer" spacing="5"/>
+                            <Label fx:id="resetLabel"
+                                   text="🔄"
+                                   onMouseClicked="#handleResetStars"
+                                   style="-fx-font-size: 20px; -fx-cursor: hand;"/>
+                            <Button fx:id="btnRate"
+                                    text="Noter"
+                                    onAction="#handleRatingSubmit"
+                                    style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+                        </HBox>
+                    </VBox>
 
-                    <!-- Catégorie -->
+
+                    <!-- Title -->
+                    <Label fx:id="titleLabel"
+                           style="-fx-font-size: 22px; -fx-text-fill: #014421; -fx-font-weight: bold;"/>
+
+                    <!-- Category -->
                     <Label fx:id="categoryLabel"
-                           style="-fx-font-size: 14px; -fx-text-fill: #28a745;" />
+                           style="-fx-font-size: 14px; -fx-text-fill: #28a745;"/>
 
                     <!-- Description -->
                     <Label fx:id="descriptionLabel"
                            wrapText="true"
-                           style="-fx-font-size: 14px; -fx-text-fill: #444;" />
+                           style="-fx-font-size: 14px; -fx-text-fill: #444;"/>
 
-                    <!-- Bouton retour -->
+                    <!-- Back Button -->
                     <Button text="← Retour aux Workshops"
                             onAction="#handleBack"
                             style="-fx-background-color:#28a745; -fx-text-fill:white; -fx-font-size:14px; -fx-padding: 8 16;"/>
@@ -57,5 +74,4 @@
             </HBox>
         </content>
     </ScrollPane>
-
 </VBox>
