@@ -7,7 +7,10 @@ import utils.MyDataBase;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import java.util.Map;
 
 public class CoursService implements IService<Cours> {
 
@@ -137,5 +140,46 @@ public class CoursService implements IService<Cours> {
         }
         return 0;
     }
+
+    public Map<String, Integer> getWorkshopCountByCategory() throws SQLException {
+        String sql = "SELECT cc.nom_categorie, COUNT(*) as total FROM cours c " +
+                "JOIN categorie_cours cc ON c.categorie_c_id = cc.id GROUP BY cc.nom_categorie";
+        Map<String, Integer> map = new HashMap<>();
+        Statement st = conx.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        while (rs.next()) {
+            map.put(rs.getString("nom_categorie"), rs.getInt("total"));
+        }
+        return map;
+    }
+
+    public Map<String, Integer> getRatingSumByCategory() throws SQLException {
+        String sql = "SELECT cc.nom_categorie, SUM(r.note) as ratingSum " +
+                "FROM rating r " +
+                "JOIN cours c ON r.cours_id = c.id " +
+                "JOIN categorie_cours cc ON c.categorie_c_id = cc.id " +
+                "GROUP BY cc.nom_categorie";
+        Map<String, Integer> map = new HashMap<>();
+        Statement st = conx.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        while (rs.next()) {
+            map.put(rs.getString("nom_categorie"), rs.getInt("ratingSum"));
+        }
+        return map;
+    }
+
+    public Map<String, Double> getAverageRatingByWorkshop() throws SQLException {
+        String sql = "SELECT c.titre_cours, AVG(r.note) as averageRating " +
+                "FROM rating r JOIN cours c ON r.cours_id = c.id " +
+                "GROUP BY c.titre_cours";
+        Map<String, Double> map = new HashMap<>();
+        Statement st = conx.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        while (rs.next()) {
+            map.put(rs.getString("titre_cours"), rs.getDouble("averageRating"));
+        }
+        return map;
+    }
+
 
 }
