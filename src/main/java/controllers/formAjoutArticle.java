@@ -122,9 +122,20 @@ public class formAjoutArticle {
 
         if (articleToModify != null) {
             article.setId(articleToModify.getId());
+
+            // Si une nouvelle image est sélectionnée pendant la modification
+            if (selectedFile != null && !imageArticleField.getText().equals(articleToModify.getImage_article())) {
+                // Vérifier l'image avec Sightengine
+                if (!isImageSafeWithSightengine(selectedFile)) {
+                    showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient un contenu interdit.");
+                    return;
+                }
+            }
+
             articleService.update(article);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Article modifié avec succès !");
         } else {
+            // Ajout
             if (selectedFile == null || imageArticleField.getText().equals("Aucune image sélectionnée")) {
                 showAlert(Alert.AlertType.ERROR, "Image manquante", "Veuillez sélectionner une image.");
                 return;
@@ -138,6 +149,7 @@ public class formAjoutArticle {
             articleService.add(article);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Article ajouté avec succès !");
         }
+
 
         retourListeArticles();
     }
