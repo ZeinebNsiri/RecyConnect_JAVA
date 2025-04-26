@@ -21,6 +21,7 @@ import services.PostService;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ForumController {
 
@@ -31,9 +32,12 @@ public class ForumController {
     @FXML private VBox postList;
     @FXML private VBox tagListBox;
 
+    @FXML private FlowPane filterTagsPane;
+
     private final PostService postService = new PostService();
     private final List<ToggleButton> toggleButtons = new ArrayList<>();
     private final Set<String> selectedTags = new HashSet<>();
+
 
     private static final int POSTS_PER_PAGE = 5;
     private int currentPage = 1;
@@ -123,12 +127,17 @@ public class ForumController {
     public void loadPosts() {
         try {
             allPosts = postService.displayList();
+
             // Filter posts by selected tags if any
             if (!selectedTags.isEmpty()) {
                 allPosts = allPosts.stream()
-                        .filter(post -> post.getTags().stream()
-                                .anyMatch(tag -> selectedTags.contains(tag.getLabel())))
-                        .toList();
+                        .filter(post -> {
+                            List<String> postTagLabels = post.getTags().stream()
+                                    .map(PostTag::getLabel)
+                                    .collect(Collectors.toList());
+                            return postTagLabels.containsAll(selectedTags);
+                        })
+                        .collect(Collectors.toList());
             }
             allPosts.sort((p1, p2) -> p2.getDate_publication().compareTo(p1.getDate_publication()));
             postMediaMap.clear();

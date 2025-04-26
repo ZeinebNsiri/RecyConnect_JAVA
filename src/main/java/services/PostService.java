@@ -8,6 +8,16 @@ import enums.PostTag;
 import utils.MyDataBase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
+import kong.unirest.JsonNode;
+import kong.unirest.UnirestException;
+import org.json.JSONObject;
+
+import java.util.List;
+import java.util.Map;
+
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -306,6 +316,28 @@ public class PostService implements IService<Post>{
             System.out.println("Post rejeté !");
         }
     }
+
+
+    public boolean analyzePostContent(String content) {
+        try {
+            HttpResponse<JsonNode> response = Unirest.post("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyCvcwyNuZeyE5WaLCaCJZfaRc0gEG86LSM")
+                    .header("Content-Type", "application/json")
+                    .body(new JSONObject()
+                            .put("contents", List.of(
+                                    Map.of("parts", List.of(
+                                            Map.of("text", "Analyse ce contenu et dis-moi s'il contient de la haine, du racisme ou de l'agression : " + content)
+                                    ))
+                            ))
+                    ).asJson();
+
+            String result = response.getBody().toString();
+            return result.toLowerCase().contains("haine") || result.toLowerCase().contains("racisme") || result.toLowerCase().contains("agression");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 
 
