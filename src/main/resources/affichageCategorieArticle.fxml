@@ -10,9 +10,16 @@
         <Insets top="30" right="30" bottom="30" left="30"/>
     </padding>
 
-    <Button fx:id="addCategorieBtn" text="➕ Ajouter une catégorie"
-            style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;"
-            onAction="#ajouterCategorieAction" />
+    <HBox spacing="10">
+        <Button fx:id="addCategorieBtn" text="➕ Ajouter une catégorie"
+                style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;"
+                onAction="#ajouterCategorieAction" />
+
+        <Button text="📊 Voir Statistiques"
+                style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;"
+                onAction="#goToStatistics" />
+    </HBox>
+
 
     <ComboBox fx:id="categorieFilterCombo" promptText="Filtrer par catégorie" />
 

@@ -44,9 +44,14 @@ public class BaseAdminController {
 
 
     @FXML
-    private void showArticlesView() {
+    public void showArticlesView() {
         loadView("/ListeArticleAdmin.fxml");
     }
+
+    public void showStatistiquesView() {
+        loadView("/StatistiquesArticle.fxml");
+    }
+
 
     @FXML
     private void showCommandesView() {

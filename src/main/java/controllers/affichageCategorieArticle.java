@@ -264,5 +264,20 @@ public class affichageCategorieArticle {
         applyFilter(); // ✅ réapplique le filtre après suppression
     }
 
+    @FXML
+    private void goToStatistics() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+            Parent root = loader.load();
+            BaseAdminController baseAdminController = loader.getController();
+            baseAdminController.showStatistiquesView();
+
+            addCategorieBtn.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
