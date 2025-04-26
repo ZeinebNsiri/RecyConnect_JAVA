@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Carte</title>
+    <title>Carte Mapbox</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Leaflet CSS -->
@@ -15,13 +15,13 @@
             height: 100%;
             width: 100%;
         }
-
         #map {
             width: 100%;
             height: 100%;
         }
     </style>
 </head>
+
 <body>
 <div id="map"></div>
 
@@ -32,8 +32,10 @@
     function initMap(lat, lon, locationName) {
         var map = L.map('map').setView([lat, lon], 13);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+        // 🔥 Mapbox Streets v11 style SANS Clé API (public version)
+        L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=uBRImSr1h9AkTVTMUkkN', {
+            attribution: '&copy; OpenStreetMap contributors & MapTiler',
+            maxZoom: 20,
         }).addTo(map);
 
         var marker = L.marker([lat, lon]).addTo(map)
