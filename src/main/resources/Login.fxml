@@ -4,12 +4,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.paint.Color?>
 
 
 <?import java.net.URL?>
+<?import javafx.scene.text.Text?>
 <StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="controllers.LoginController">
-
 
 
     <ImageView fx:id="backgroundImage" fitHeight="800" fitWidth="1200" preserveRatio="false"/>
@@ -24,12 +26,9 @@
             <Insets top="30" right="30" bottom="30" left="30"/>
         </padding>
 
-
         <Label text="Se connecter" style="-fx-font-size: 26px; -fx-text-fill: darkgreen; -fx-font-weight: bold;"/>
 
-
         <TextField fx:id="emailField" promptText="Email" styleClass="styled-textfield"/>
-
 
         <StackPane>
             <PasswordField fx:id="passwordField" promptText="Mot de passe" styleClass="styled-textfield"/>
@@ -40,11 +39,22 @@
         </StackPane>
 
 
+
         <Button fx:id="loginButton" text="Connexion" onAction="#Login"
                 style="-fx-background-color: darkgreen; -fx-text-fill: white;"/>
+        <!-- Ajout du bouton avec une icône pour la connexion avec visage -->
+        <Button onAction="#loginWithFace" text="Connexion avec visage" style="-fx-background-color: transparent; -fx-border-color: transparent;-fx-text-fill: black;">
+            <graphic>
+                <ImageView fx:id="faceIcon" fitHeight="30" fitWidth="30" preserveRatio="true">
+                    <Image url="@face-recognition-icon.png"/> <!-- Remplace par le chemin de ton icône -->
+                </ImageView>
+            </graphic>
+
+        </Button>
 
         <HBox spacing="5" alignment="CENTER">
-        <Label fx:id="signupLink" text="Vous n'avez pas de compte ?" style="-fx-text-fill: #333333;"/><Label onMouseClicked="#signupD" text="S'inscrire" style="-fx-text-fill: #333333;"/>
+            <Label fx:id="signupLink" text="Vous n'avez pas de compte ?" style="-fx-text-fill: #333333;"/>
+            <Label onMouseClicked="#signupD" text="S'inscrire" style="-fx-text-fill: #333333;"/>
         </HBox>
     </VBox>
 </StackPane>

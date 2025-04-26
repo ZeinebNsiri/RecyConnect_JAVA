@@ -13,6 +13,7 @@
 
 <?import java.net.URL?>
 <?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.image.Image?>
 <StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignupController">
 
 
@@ -80,7 +81,17 @@
                 <TextField fx:id="proConfirmVisibleField" managed="false" promptText="Confirmer le mot de passe" styleClass="styled-textfield" visible="false" />
                 <Button fx:id="toggleProConfirmVisibility" style="-fx-background-color: transparent; -fx-text-fill: black;" text="👁" StackPane.alignment="CENTER_RIGHT" />
             </StackPane>
+
+
         </VBox>
+        <Button onAction="#captureFaceImage" text="Scanner mon visage" style="-fx-background-color: transparent; -fx-border-color: transparent;-fx-text-fill: black;">
+            <graphic>
+                <ImageView fx:id="faceIcon" fitHeight="30" fitWidth="30" preserveRatio="true">
+                    <Image url="@face-recognition-icon.png"/> <!-- Remplace par le chemin de ton icône -->
+                </ImageView>
+            </graphic>
+
+        </Button>
 
 
         <Button fx:id="inscrireButton" onAction="#Sigup" style="-fx-background-color: darkgreen; -fx-text-fill: white;" text="S'inscrire" />

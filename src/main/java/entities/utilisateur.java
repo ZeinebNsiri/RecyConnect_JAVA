@@ -14,7 +14,48 @@ public class utilisateur {
     private boolean status;
     private String matricule_fiscale;
     private String photo_profil;
+    private String face_image; // Nouveau champ pour stocker le chemin de l'image faciale
 
+
+    public utilisateur(String email, String nom_user, String prenom, String roles, String num_tel, String password, boolean status, String face_image) {
+        this.email = email;
+        this.nom_user = nom_user;
+        this.prenom = prenom;
+        this.roles = roles;
+        this.num_tel = num_tel;
+
+        this.password = password;
+        this.status = status;
+
+        this.face_image = face_image;
+    }
+
+    public utilisateur(String email, String nom_user, String roles, String num_tel, String password, boolean status, String matricule_fiscale, String face_image) {
+        this.email = email;
+        this.nom_user = nom_user;
+
+        this.roles = roles;
+        this.num_tel = num_tel;
+        this.password = password;
+        this.status = status;
+        this.matricule_fiscale = matricule_fiscale;
+        this.face_image = face_image;
+    }
+
+    public utilisateur(int id, String email, String nom_user, String prenom, String roles, String num_tel, String adresse, String password, boolean status, String matricule_fiscale, String photo_profil, String face_image) {
+        this.id = id;
+        this.email = email;
+        this.nom_user = nom_user;
+        this.prenom = prenom;
+        this.roles = roles;
+        this.num_tel = num_tel;
+        this.adresse = adresse;
+        this.password = password;
+        this.status = status;
+        this.matricule_fiscale = matricule_fiscale;
+        this.photo_profil = photo_profil;
+        this.face_image = face_image;
+    }
 
     public utilisateur(int id, String email, String nom_user, String prenom, String roles, String num_tel, String adresse, boolean status, String matricule_fiscale, String photo_profil) {
         this.id = id;
@@ -167,6 +208,13 @@ public class utilisateur {
 
     public void setPhoto_profil(String photo_profil) {
         this.photo_profil = photo_profil;
+    }
+    public String getFace_image() {
+        return face_image;
+    }
+
+    public void setFace_image(String face_image) {
+        this.face_image = face_image;
     }
 
     @Override

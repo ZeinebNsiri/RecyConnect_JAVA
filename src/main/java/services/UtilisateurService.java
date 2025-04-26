@@ -26,7 +26,7 @@ public class UtilisateurService implements IService<utilisateur> {
         ResultSet rs = stm.executeQuery(sql);
         while (rs.next()){
 
-            utilisateur user =new utilisateur(rs.getInt(1),rs.getString(2),rs.getString(4),rs.getString(5),rs.getString("roles"),rs.getString(6),rs.getString(7),rs.getString(8),rs.getBoolean(10),rs.getString(9),rs.getString(11));
+            utilisateur user =new utilisateur(rs.getInt(1),rs.getString(2),rs.getString(4),rs.getString(5),rs.getString("roles"),rs.getString(6),rs.getString(7),rs.getString(8),rs.getBoolean(10),rs.getString(9),rs.getString(11), rs.getString(12));
             utilisateurs.add(user);
         }
         return utilisateurs;
@@ -34,7 +34,7 @@ public class UtilisateurService implements IService<utilisateur> {
 
     @Override
     public void add(utilisateur utilisateur) throws SQLException {
-        String query = "INSERT INTO `utilisateur`(`email`, `roles`, `nom_user`, `prenom`, `num_tel`, `password`, `matricule_fiscale`, `status`) VALUES (?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO `utilisateur`(`email`, `roles`, `nom_user`, `prenom`, `num_tel`, `password`, `matricule_fiscale`, `status`,`face_image`) VALUES (?,?,?,?,?,?,?,?,?)";
         PreparedStatement ps = conx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         String pass = BCrypt.hashpw(utilisateur.getPassword(), BCrypt.gensalt(13));
         pass = pass.replaceFirst("^\\$2a\\$", "\\$2y\\$");
@@ -46,6 +46,8 @@ public class UtilisateurService implements IService<utilisateur> {
         ps.setString(6, pass);
         ps.setString(7, utilisateur.getMatricule_fiscale());
         ps.setBoolean(8, utilisateur.isStatus());
+        ps.setString(9, utilisateur.getFace_image());
+
 
         ps.executeUpdate();
         System.out.println("Utilisateur added successfully!");

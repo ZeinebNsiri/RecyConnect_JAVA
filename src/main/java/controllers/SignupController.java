@@ -1,9 +1,13 @@
 package controllers;
 
 import entities.utilisateur;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,8 +16,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import services.FaceRecognitionService;
 import services.UtilisateurService;
+import utils.WebcamUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,6 +65,7 @@ public class SignupController {
     @FXML private TextField matriculeField;
     @FXML private TextField proTelField;
     @FXML private TextField proEmailField;
+    private String faceToken = null;
 
 
     @FXML
@@ -131,7 +140,7 @@ public class SignupController {
                 } else if (motDePasse.equals(confirmerMotDePasse)) {
 
                     try {
-                        utilisateurService.add(new utilisateur(email, nom, prenom, "ROLE_USER", tel, motDePasse, true));
+                        utilisateurService.add(new utilisateur(email, nom, prenom, "ROLE_USER", tel, motDePasse, true,faceToken));
                         clearAll();
                     } catch (SQLIntegrityConstraintViolationException e) {
 
@@ -181,7 +190,7 @@ public class SignupController {
                 } else if (motDePassePro.equals(confirmerMotDePassePro)) {
 
                     try {
-                        utilisateurService.add(new utilisateur(email, nom, "ROLE_PROFESSIONNEL", tel, motDePassePro, true, matricule));
+                        utilisateurService.add(new utilisateur(email, nom, "ROLE_PROFESSIONNEL", tel, motDePassePro, true, matricule,faceToken));
                         clearAll();
                     }catch (SQLIntegrityConstraintViolationException e) {
 
@@ -303,12 +312,14 @@ public class SignupController {
         alert.showAndWait();
     }
 
+
     private void showAlertControle(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Erreur de validation");
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 
 
 
@@ -319,6 +330,75 @@ public class SignupController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+    }
+    @FXML
+    private void captureFaceImage() {
+        // Créer et afficher un indicateur de chargement JavaFX
+        Stage loadingStage = createLoadingStage("Capture et analyse en cours...");
+        loadingStage.show();
+
+        // Créer une tâche en arrière-plan avec Task de JavaFX (pas SwingWorker)
+        Task<Void> task = new Task<Void>() {
+            private String resultToken = null;
+            private boolean success = false;
+
+            @Override
+            protected Void call() throws Exception {
+                File image = WebcamUtils.captureImage();
+                if (image != null) {
+                    FaceRecognitionService faceService = new FaceRecognitionService();
+                    resultToken = faceService.detectFace(image);
+                    success = (resultToken != null);
+                }
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                // Fermer la fenêtre de chargement
+                Platform.runLater(() -> loadingStage.close());
+
+                if (success) {
+                    faceToken = resultToken;
+                    showAlertControle("Visage détecté avec succès !");
+                } else {
+                    showAlertControle("Échec de la détection du visage.");
+                }
+            }
+        };
+
+        // Démarrer la tâche dans un thread séparé
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    private Stage createLoadingStage(String message) {
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+
+        VBox root = new VBox(10);
+        root.setAlignment(Pos.CENTER);
+        root.setPadding(new Insets(20));
+        root.setStyle("-fx-background-color: white; -fx-border-color: #cccccc;");
+
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setMaxSize(50, 50);
+
+        Label messageLabel = new Label(message);
+        messageLabel.setStyle("-fx-font-size: 14px;");
+
+        root.getChildren().addAll(progressIndicator, messageLabel);
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setResizable(false);
+
+        // Centre la fenêtre sur l'écran
+        stage.centerOnScreen();
+
+        return stage;
     }
 
 
