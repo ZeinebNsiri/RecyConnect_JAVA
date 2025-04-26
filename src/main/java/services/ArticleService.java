@@ -116,21 +116,28 @@ public class ArticleService implements IService<Article>{
         return null;  // Return null if no article found
     }
 
-    public String getNomUtilisateurById2(int utilisateurId) throws SQLException {
-        String query = "SELECT nom FROM utilisateur WHERE id = ?";
-        PreparedStatement ps = con.prepareStatement(query);
-        ps.setInt(1, utilisateurId);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return rs.getString("nom");
+
+    private final UserService userService = new UserService();
+
+    public String getNomUtilisateurById(int utilisateurId) {
+        try {
+            utilisateur user = userService.getUserById(utilisateurId);
+            if (user != null) {
+                String nom = user.getNom_user();
+                String prenom = user.getPrenom();
+                if (prenom != null && !prenom.trim().isEmpty()) {
+                    return nom + " " + prenom;
+                } else {
+                    return nom;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return "";
     }
 
-    public String getNomUtilisateurById(int utilisateurId) {
-        // Comme l'utilisateur est statique (id = 1)
-        return "zeineb nsiri";
-    }
+
 
 
 

@@ -2,6 +2,7 @@ package controllers;
 
 import entities.Article;
 import entities.CategorieArticle;
+import entities.utilisateur;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import services.ArticleService;
 import services.CateArtService;
+import services.UserService;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -42,6 +44,8 @@ public class formAjoutArticle {
     private List<CategorieArticle> categoriesList;
     private static final String article_IMAGE_DIR = "C:/Users/Admin/Desktop/PI_RecyConnect_TechSquad/public/uploads/photo_dir";
     private Article articleToModify = null;
+    private final UserService userService = new UserService();
+
 
     @FXML
     public void initialize() {
@@ -116,7 +120,8 @@ public class formAjoutArticle {
             return;
         }
 
-        int utilisateurId = 1; // Simulé
+        utilisateur user = userService.getUserById(9);
+        int utilisateurId = user.getId();// Simulé
 
         Article article = new Article(categorieId, utilisateurId, nom, description, quantite, prix, image, localisation);
 
