@@ -20,6 +20,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.*;
+import javax.mail.internet.*;
+import java.util.Properties;
+
+
 public class ListeArticleAdminController {
 
     @FXML private TableView<ArticleView> articleTable;
@@ -188,7 +193,6 @@ public class ListeArticleAdminController {
                 banButton.setOnAction(e -> {
                     ArticleView view = getTableView().getItems().get(getIndex());
 
-                    // ✅ Alerte de confirmation
                     Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                     confirm.setTitle("Confirmation de bannissement");
                     confirm.setHeaderText("Êtes-vous sûr de vouloir bannir cet article ?");
@@ -203,14 +207,18 @@ public class ListeArticleAdminController {
                             try {
                                 ArticleService service = new ArticleService();
                                 Article articleToDelete = service.getArticleById(view.getId());
+                                String ownerEmail = service.getEmailUtilisateurById(articleToDelete.getUtilisateur_id());
+
                                 service.delete(articleToDelete);
-                                loadArticles(); // Recharge les données
-                                applyFilters(); // Réapplique les filtres
+
+                                sendBanEmail(ownerEmail, articleToDelete.getNom_article());
+
+                                loadArticles();
+                                applyFilters();
                             } catch (SQLException ex) {
                                 ex.printStackTrace();
                             }
                         }
-                        // Sinon, on ne fait rien (bannissement annulé)
                     });
                 });
             }
@@ -225,6 +233,7 @@ public class ListeArticleAdminController {
 
         articleTable.getColumns().add(actionsColumn);
     }
+
 
 
     public static class ArticleView {
@@ -254,4 +263,54 @@ public class ListeArticleAdminController {
         public String getNomCategorie() { return nomCategorie; }
         public String getNomProprietaire() { return nomProprietaire; }
     }
+
+    private void sendBanEmail(String recipientEmail, String articleName) {
+        final String username = "recyconnectapp2425@gmail.com";  // 🔥 Ton Gmail d'envoi
+        final String password = "kqfn xmcd aquh gbpe";    // 🔥 Ton App Password ici
+
+        try {
+            Properties props = new Properties();
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.host", "smtp.gmail.com");
+            props.put("mail.smtp.port", "587");
+
+            Session session = Session.getInstance(props,
+                    new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(username, password);
+                        }
+                    });
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(recipientEmail)
+            );
+            message.setSubject("Notification de bannissement de votre article");
+
+            String content = "Bonjour,\n\nVotre article intitulé \"" + articleName + "\" a été banni de la plateforme RecyConnect.\n\nMerci de votre compréhension.\nL'équipe RecyConnect.";
+            message.setText(content);
+
+            Transport.send(message);
+
+            System.out.println("✅ Email envoyé avec succès à : " + recipientEmail);
+
+        } catch (AuthenticationFailedException e) {
+            System.out.println("❌ Erreur d'authentification : " + e.getMessage());
+            e.printStackTrace();
+        } catch (SendFailedException e) {
+            System.out.println("❌ Erreur d'envoi : " + e.getMessage());
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            System.out.println("❌ Erreur de messagerie : " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("❌ Erreur inconnue : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
 }

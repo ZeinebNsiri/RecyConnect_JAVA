@@ -137,6 +137,19 @@ public class ArticleService implements IService<Article>{
         return "";
     }
 
+    public String getEmailUtilisateurById(int utilisateurId) {
+        try {
+            utilisateur user = userService.getUserById(utilisateurId);
+            if (user != null) {
+                return user.getEmail();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
 
 
 
