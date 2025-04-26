@@ -60,6 +60,48 @@
                           hgap="30" vgap="30"
                           alignment="CENTER"
                           style="-fx-padding: 20;" />
+
+                <!-- 🌟 Floating Chat Bubble and Window -->
+                <StackPane alignment="BOTTOM_RIGHT" style="-fx-padding: 30;">
+                    <VBox fx:id="chatContainer" alignment="BOTTOM_RIGHT" spacing="10">
+
+                        <!-- Chat Button -->
+                        <Button fx:id="chatToggleButton"
+                                text="💬 Chat"
+                                style="-fx-background-color: #2c7a4b; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 50;"/>
+
+                        <!-- Chat Window -->
+                        <VBox fx:id="chatWindow"
+                              spacing="10"
+                              visible="false"
+                              style="-fx-background-color: #f9f9f9; -fx-padding: 20; -fx-background-radius: 10; -fx-border-color: #ccc; -fx-border-radius: 10; -fx-pref-width: 350;">
+
+                            <Label text="Discuter avec Chatbot"
+                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #014421;" />
+
+                            <ScrollPane fitToWidth="true" fitToHeight="true" prefHeight="350" maxHeight="350">
+                                <content>
+                                    <VBox fx:id="chatMessagesContainer" spacing="8"
+                                          style="-fx-padding: 5;">
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+
+                            <HBox spacing="5">
+                                <TextField fx:id="chatInputField"
+                                           promptText="Posez votre question ici..."
+                                           prefWidth="730"
+                                style="-fx-background-radius: 8; -fx-border-radius: 8;" />
+                                <Button fx:id="sendButton"
+                                        text="Envoyer"
+                                        style="-fx-background-color: #2c7a4b; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" />
+                            </HBox>
+
+                        </VBox>
+
+                    </VBox>
+                </StackPane>
+
             </VBox>
         </content>
     </ScrollPane>

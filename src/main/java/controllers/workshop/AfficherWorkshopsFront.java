@@ -14,12 +14,27 @@ import services.CoursService;
 import java.sql.SQLException;
 import java.util.List;
 
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import services.ChatService;
+import javafx.application.Platform;
+
+
 public class AfficherWorkshopsFront {
 
     @FXML private FlowPane workshopsContainer;
     @FXML private HBox filterButtonsContainer;
     @FXML private TextField searchField;
     @FXML private ComboBox<String> videoComboBox;
+
+    @FXML private VBox chatContainer;
+    @FXML private VBox chatWindow;
+    @FXML private Button chatToggleButton;
+    @FXML private VBox chatMessagesContainer;
+    @FXML private TextField chatInputField;
+    @FXML private Button sendButton;
+
 
     private final CoursService coursService = new CoursService();
     private List<Cours> allCourses;
@@ -36,10 +51,43 @@ public class AfficherWorkshopsFront {
             videoComboBox.getItems().addAll("-- Tous --", "Avec vidéo", "Sans vidéo");
             videoComboBox.setValue("-- Tous --");
 
+            // ✨ Chat logic
+            chatToggleButton.setOnAction(event -> {
+                chatWindow.setVisible(!chatWindow.isVisible());
+            });
+
+            sendButton.setOnAction(event -> {
+                String userInput = chatInputField.getText().trim();
+                if (!userInput.isEmpty()) {
+                    addMessage(userInput, true); // true = user
+                    chatInputField.clear();
+                    new Thread(() -> {
+                        String botReply = ChatService.sendMessage(userInput);
+                        Platform.runLater(() -> addMessage(botReply, false)); // false = bot
+                    }).start();
+                }
+            });
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    private void addMessage(String message, boolean isUser) {
+        Label msgLabel = new Label(message);
+        msgLabel.setWrapText(true);
+        msgLabel.setMaxWidth(200);
+        msgLabel.setStyle(
+                isUser ?
+                        "-fx-background-color: #2c7a4b; -fx-text-fill: white; -fx-padding: 10 15; -fx-background-radius: 18 2 18 18;" :
+                        "-fx-background-color: #e4e6eb; -fx-text-fill: black; -fx-padding: 10 15; -fx-background-radius: 2 18 18 18;"
+        );
+        HBox wrapper = new HBox(msgLabel);
+        wrapper.setAlignment(isUser ? javafx.geometry.Pos.CENTER_RIGHT : javafx.geometry.Pos.CENTER_LEFT);
+        chatMessagesContainer.getChildren().add(wrapper);
+    }
+
 
     private void buildCategoryFilters() {
         filterButtonsContainer.getChildren().clear();
