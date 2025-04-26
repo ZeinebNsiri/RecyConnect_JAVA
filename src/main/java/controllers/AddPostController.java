@@ -122,6 +122,7 @@ public class AddPostController {
             alert.showAndWait();
             return;
         }
+        postService.analyzePostContent(content);
 
         try {
             Post newPost = new Post();

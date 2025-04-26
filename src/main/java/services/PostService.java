@@ -12,7 +12,8 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kong.unirest.JsonNode;
 import kong.unirest.UnirestException;
-import org.json.JSONObject;
+import kong.unirest.json.JSONArray;
+import kong.unirest.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -320,23 +321,88 @@ public class PostService implements IService<Post>{
 
     public boolean analyzePostContent(String content) {
         try {
-            HttpResponse<JsonNode> response = Unirest.post("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyCvcwyNuZeyE5WaLCaCJZfaRc0gEG86LSM")
+            HttpResponse<JsonNode> response = Unirest.post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyCvcwyNuZeyE5WaLCaCJZfaRc0gEG86LSM")
                     .header("Content-Type", "application/json")
                     .body(new JSONObject()
                             .put("contents", List.of(
                                     Map.of("parts", List.of(
-                                            Map.of("text", "Analyse ce contenu et dis-moi s'il contient de la haine, du racisme ou de l'agression : " + content)
+                                            Map.of("text", "Analyse ce contenu attentivement : \"" + content + "\". Si tu détectes un langage de haine, racisme, ou agression, réponds uniquement avec le mot 'Toxique'. Sinon, réponds uniquement 'Non Toxique'.")
                                     ))
                             ))
                     ).asJson();
 
-            String result = response.getBody().toString();
-            return result.toLowerCase().contains("haine") || result.toLowerCase().contains("racisme") || result.toLowerCase().contains("agression");
+            JSONObject responseBody = response.getBody().getObject();
+
+            // Vérifier s'il y a des erreurs d'abord
+            if (responseBody.has("error")) {
+                System.err.println("Erreur de l'API Gemini: " + responseBody.getJSONObject("error").getString("message"));
+                return false;
+            }
+
+            // Vérifier si 'candidates' existe
+            if (!responseBody.has("candidates")) {
+                System.err.println("Réponse inattendue: " + responseBody.toString());
+                return false;
+            }
+
+            // Extraire la réponse de Gemini
+            JSONArray candidates = responseBody.getJSONArray("candidates");
+            if (candidates.isEmpty()) {
+                System.err.println("Pas de candidats retournés par Gemini.");
+                return false;
+            }
+
+            JSONObject firstCandidate = candidates.getJSONObject(0);
+            JSONObject contentObject = firstCandidate.getJSONObject("content");
+            JSONArray partsArray = contentObject.getJSONArray("parts");
+            String result = partsArray.getJSONObject(0).getString("text").toLowerCase().trim();
+
+            // Vérifier si le contenu est toxique
+            if (result.equals("toxique")) {
+                // Construire le mail HTML
+                String htmlContent = "<html>"
+                        + "<body style='font-family: Arial, sans-serif; margin: 0; padding: 0;'>"
+                        + "<div style='background-color: #f44336; padding: 20px; color: white; text-align: center;'>"
+                        + "<h1>Alerte de Contenu Inapproprié 🚨</h1>"
+                        + "</div>"
+                        + "<div style='padding: 20px; text-align: center;'>"
+                        + "<img src='/images/mainlogo.png' alt='Logo' width='100' style='margin-bottom: 20px;'/>"
+                        + "<p>Bonjour Admin,</p>"
+                        + "<p>Un contenu potentiellement <strong>violent, raciste ou haineux</strong> a été détecté sur la plateforme.</p>"
+                        + "<div style='margin-top: 20px; padding: 10px; background-color: #eee; border-radius: 5px;'>"
+                        + "<p style='color: #333;'>" + escapeHtml(content) + "</p>"
+                        + "</div>"
+                        + "<p style='margin-top: 20px;'>Merci de vérifier rapidement !</p>"
+                        + "</div>"
+                        + "</body>"
+                        + "</html>";
+
+                // Envoyer le mail à l'admin
+                MailService.sendMail("samartouil2018@gmail.com", "Alerte : Contenu Inapproprié détecté", htmlContent);
+
+                return true;
+            }
+
+            return false;
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+
+    /**
+     * Pour éviter toute injection HTML dans l'email
+     */
+    private String escapeHtml(String input) {
+        return input.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#x27;");
+    }
+
+
 
 
 
