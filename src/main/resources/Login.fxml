@@ -43,10 +43,10 @@
         <Button fx:id="loginButton" text="Connexion" onAction="#Login"
                 style="-fx-background-color: darkgreen; -fx-text-fill: white;"/>
         <!-- Ajout du bouton avec une icône pour la connexion avec visage -->
-        <Button onAction="#loginWithFace" text="Connexion avec visage" style="-fx-background-color: transparent; -fx-border-color: transparent;-fx-text-fill: black;">
+        <Button onAction="#loginWithFace" text="Reconnaissance faciale" style="-fx-background-color: transparent; -fx-border-color: transparent;-fx-text-fill: black;">
             <graphic>
                 <ImageView fx:id="faceIcon" fitHeight="30" fitWidth="30" preserveRatio="true">
-                    <Image url="@face-recognition-icon.png"/> <!-- Remplace par le chemin de ton icône -->
+                    <Image url="@face-recognition-icon.png"/>
                 </ImageView>
             </graphic>
 

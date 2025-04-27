@@ -84,7 +84,7 @@
 
 
         </VBox>
-        <Button onAction="#captureFaceImage" text="Scanner mon visage" style="-fx-background-color: transparent; -fx-border-color: transparent;-fx-text-fill: black;">
+        <Button onAction="#captureFaceImage" text="Enregistrement biométrique du visage" style="-fx-background-color: transparent; -fx-border-color: transparent;-fx-text-fill: black;">
             <graphic>
                 <ImageView fx:id="faceIcon" fitHeight="30" fitWidth="30" preserveRatio="true">
                     <Image url="@face-recognition-icon.png"/> <!-- Remplace par le chemin de ton icône -->

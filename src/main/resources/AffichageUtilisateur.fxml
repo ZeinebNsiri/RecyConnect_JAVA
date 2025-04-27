@@ -19,6 +19,9 @@
 
         <HBox spacing="10" alignment="CENTER_LEFT">
             <ComboBox fx:id="globalFilter" promptText="Tous les utilisateurs" prefWidth="200"/>
+            <Button text="📊 Voir Statistiques"
+                    style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;"
+                    onAction="#Statistiques" />
         </HBox>
 
         <HBox spacing="15" alignment="CENTER_LEFT">

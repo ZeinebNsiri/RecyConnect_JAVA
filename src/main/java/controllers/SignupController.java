@@ -192,6 +192,8 @@ public class SignupController {
                     try {
                         utilisateurService.add(new utilisateur(email, nom, "ROLE_PROFESSIONNEL", tel, motDePassePro, true, matricule,faceToken));
                         clearAll();
+
+
                     }catch (SQLIntegrityConstraintViolationException e) {
 
                         Alert error = new Alert(Alert.AlertType.ERROR);

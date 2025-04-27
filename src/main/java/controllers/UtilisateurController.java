@@ -4,6 +4,8 @@ import entities.utilisateur;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -17,6 +19,7 @@ import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 import services.UtilisateurService;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -328,5 +331,18 @@ public class UtilisateurController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    @FXML
+    private void Statistiques() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+            Parent root = loader.load();
+            BaseAdminController baseAdminController = loader.getController();
+            baseAdminController.showStatistiquesUserView();
+
+            btnNext.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -53,6 +53,10 @@ public class BaseAdminController {
         loadView("/categorie.fxml");
     }
 
+    public void showStatistiquesUserView() {
+        loadView("/StatistiquesUtilisateur.fxml");
+    }
+
     @FXML
     public void showDashboardView() {
         Label dashboardLabel = new Label("📊 Tableau de bord");

@@ -94,13 +94,11 @@ public class UtilisateurService implements IService<utilisateur> {
         ps.executeUpdate();
         System.out.println("Utilisateur updated successfully!");
     }
-    // Vérifie si l'email est valide
+
     public static boolean isValidEmail(String email) {
         return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
     }
 
-
-    // Vérifie si le numéro est exactement 8 chiffres
     public static boolean isValidPhoneNumber(String phone) {
         return phone.matches("^\\d{8}$");
     }
@@ -119,7 +117,7 @@ public class UtilisateurService implements IService<utilisateur> {
         return Upper && Num && Symbol && Lower;
     }
 
-    // Affiche les erreurs (facultatif)
+
     public  String getPasswordError(String password) {
         if (password == null || password.length() < 8)
             return "Le mot de passe doit contenir au moins 8 caractères.";
@@ -133,7 +131,7 @@ public class UtilisateurService implements IService<utilisateur> {
             return "Le mot de passe doit contenir au moins un symbole.";
         return "";
     }
-    // Nouvelle méthode pour la recherche multicritères
+
     public List<utilisateur> searchUtilisateurs(String email, String tel, String role) throws SQLException {
         StringBuilder sql = new StringBuilder("SELECT * FROM utilisateur WHERE 1=1");
         List<Object> params = new ArrayList<>();
@@ -191,5 +189,28 @@ public class UtilisateurService implements IService<utilisateur> {
         }
 
         return utilisateurs;
+    }
+    public int getCountByStatus(boolean status) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM utilisateur WHERE status = ?";
+        try (PreparedStatement stmt = conx.prepareStatement(sql)) {
+            stmt.setBoolean(1, status);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public int getCountByRole(String role) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM utilisateur WHERE roles LIKE ?";
+        try (PreparedStatement stmt = conx.prepareStatement(sql)) {
+            stmt.setString(1, "%" + role + "%");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
     }
 }
