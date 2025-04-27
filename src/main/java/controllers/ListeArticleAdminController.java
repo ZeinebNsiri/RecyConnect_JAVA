@@ -16,13 +16,19 @@ import services.ArticleService;
 import services.CateArtService;
 
 import java.io.File;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.activation.DataHandler;
 import javax.mail.*;
 import javax.mail.internet.*;
+import javax.mail.util.ByteArrayDataSource;
+import javax.activation.DataSource;
 import java.util.Properties;
+
+
 
 
 public class ListeArticleAdminController {
@@ -265,8 +271,8 @@ public class ListeArticleAdminController {
     }
 
     private void sendBanEmail(String recipientEmail, String articleName) {
-        final String username = "recyconnectapp2425@gmail.com";  // 🔥 Ton Gmail d'envoi
-        final String password = "kqfn xmcd aquh gbpe";    // 🔥 Ton App Password ici
+        final String username = "recyconnectapp2425@gmail.com";
+        final String password = "kqfn xmcd aquh gbpe";
 
         try {
             Properties props = new Properties();
@@ -275,23 +281,53 @@ public class ListeArticleAdminController {
             props.put("mail.smtp.host", "smtp.gmail.com");
             props.put("mail.smtp.port", "587");
 
-            Session session = Session.getInstance(props,
-                    new javax.mail.Authenticator() {
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(username, password);
-                        }
-                    });
+            Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(username, password);
+                }
+            });
 
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    InternetAddress.parse(recipientEmail)
-            );
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
             message.setSubject("Notification de bannissement de votre article");
 
-            String content = "Bonjour,\n\nVotre article intitulé \"" + articleName + "\" a été banni de la plateforme RecyConnect.\n\nMerci de votre compréhension.\nL'équipe RecyConnect.";
-            message.setText(content);
+            // 🔥 Email HTML + Image
+            MimeMultipart multipart = new MimeMultipart("related");
+
+            // 1. Partie HTML
+            BodyPart htmlPart = new MimeBodyPart();
+            String htmlContent = "<html><body style='font-family: Arial, sans-serif; color: #333;'>"
+                    + "<div style='text-align: center;'>"
+                    + "<img src='cid:logo' style='width: 120px; height: auto; margin-bottom: 20px;' />"
+                    + "</div>"
+                    + "<div style='text-align: center;'>"
+                    + "<h2 style='color: #dc3545;'>Article Banni</h2>"
+                    + "<p>Bonjour,</p>"
+                    + "<p>Votre article intitulé <strong>\"" + articleName + "\"</strong> a été <span style='color: #dc3545;'>banni</span> de la plateforme <strong>RecyConnect</strong> pour non-conformité.</p>"
+                    + "<p>Si vous pensez qu'il s'agit d'une erreur, veuillez nous contacter.</p>"
+                    + "<br>"
+                    + "<p style='font-size: 12px; color: #777;'>Merci de votre compréhension.<br>L'équipe RecyConnect.</p>"
+                    + "</div>"
+                    + "</body></html>";
+
+            htmlPart.setContent(htmlContent, "text/html; charset=utf-8");
+            multipart.addBodyPart(htmlPart);
+
+            // 2. Partie Image (logo)
+            MimeBodyPart imagePart = new MimeBodyPart();
+            InputStream logoStream = getClass().getResourceAsStream("/mainlogo.png");
+            if (logoStream == null) {
+                System.out.println("❌ Logo introuvable !");
+                return;
+            }
+            DataSource fds = new ByteArrayDataSource(logoStream, "image/png");
+            imagePart.setDataHandler(new DataHandler(fds));
+            imagePart.setHeader("Content-ID", "<logo>");
+            imagePart.setDisposition(MimeBodyPart.INLINE);
+            multipart.addBodyPart(imagePart);
+
+            message.setContent(multipart);
 
             Transport.send(message);
 
@@ -311,6 +347,8 @@ public class ListeArticleAdminController {
             e.printStackTrace();
         }
     }
+
+
 
 
 }
