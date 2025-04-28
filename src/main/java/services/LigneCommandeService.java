@@ -168,7 +168,13 @@ public class LigneCommandeService {
     }
 
 
-
-
+    public void updateEtatEtCommande(LigneCommande ligne) throws SQLException {
+        String sql = "UPDATE ligne_commande SET etat_c = ?, commande_id_id = ? WHERE id = ?";
+        PreparedStatement ps = conx.prepareStatement(sql);
+        ps.setString(1, ligne.getEtat());
+        ps.setInt(2, ligne.getCommandeId());
+        ps.setInt(3, ligne.getId());
+        ps.executeUpdate();
+    }
 
 }

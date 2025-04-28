@@ -125,6 +125,27 @@ public class CommandeService {
         }
     }
 
+    public Commande getCommandeEnCoursParUtilisateur(int userId) throws SQLException {
+        String sql = "SELECT c.* FROM commande c " +
+                "LEFT JOIN ligne_commande lc ON lc.commande_id_id = c.id " +
+                "WHERE c.statut = 'En attente' AND lc.user_c_id = ? " +
+                "ORDER BY c.date_commande DESC LIMIT 1";
+
+        try (PreparedStatement ps = conx.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Commande commande = new Commande();
+                commande.setId(rs.getInt("id"));
+                commande.setDateCommande(rs.getTimestamp("date_commande").toLocalDateTime());
+                commande.setStatut(rs.getString("statut"));
+                commande.setPrixTotal(rs.getDouble("prix_total"));
+                return commande;
+            }
+        }
+        return null;
+    }
 
 
 

@@ -46,6 +46,11 @@
                         <TableColumn fx:id="articlesColumn" text="Articles" prefWidth="150"/>
                     </columns>
                 </TableView>
+                <!--  pagination  -->
+                <HBox fx:id="paginationContainer"
+                      alignment="CENTER"
+                      spacing="8"
+                      style="-fx-padding: 10 0 0 0;" />
             </VBox>
         </VBox>
     </center>

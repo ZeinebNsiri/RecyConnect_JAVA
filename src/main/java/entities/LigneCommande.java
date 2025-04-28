@@ -98,6 +98,16 @@ public class LigneCommande {
         return dateCommande.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
+    private int commandeId;
+
+    public int getCommandeId() {
+        return commandeId;
+    }
+
+    public void setCommandeId(int commandeId) {
+        this.commandeId = commandeId;
+    }
+
 
 
 }

@@ -7,10 +7,12 @@ import entities.utilisateur;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import services.CommandeService;
 
 import java.sql.SQLException;
@@ -22,6 +24,8 @@ public class ListeCommandesController {
 
     @FXML
     private ComboBox<String> filterComboBox;
+
+    @FXML private HBox paginationContainer;
 
     @FXML
     private TableView<LigneCommande> commandesTable;
@@ -44,6 +48,11 @@ public class ListeCommandesController {
     @FXML
     private TableColumn<LigneCommande, String> articlesColumn;
 
+    private int currentPage = 1;
+    private static final int ITEMS_PER_PAGE = 5;
+    private List<LigneCommande> filteredList = new ArrayList<>();
+
+
     private final ObservableList<LigneCommande> allCommandes = FXCollections.observableArrayList();
     private final CommandeService commandeService = new CommandeService();
 
@@ -63,21 +72,15 @@ public class ListeCommandesController {
     private void loadCommandes() {
         try {
             List<Commande> commandes = commandeService.getCommandesAvecDetailsParUtilisateur(1);
-            System.out.println("Commandes récupérées: " + commandes.size());
-
             List<LigneCommande> lignes = new ArrayList<>();
 
             for (Commande commande : commandes) {
-                System.out.println("Commande ID: " + commande.getId() + ", Total: " + commande.getPrixTotal());
-
                 StringBuilder articleNames = new StringBuilder();
                 String nomClient = "";
 
                 for (LigneCommande lc : commande.getLigneCommandes()) {
                     articleNames.append(lc.getArticle().getNom_article()).append(", ");
                     nomClient = lc.getUtilisateur().getNom_user();
-
-                    System.out.println(" - Article: " + lc.getArticle().getNom_article() + ", Client: " + nomClient);
                 }
 
                 if (!commande.getLigneCommandes().isEmpty()) {
@@ -100,7 +103,10 @@ public class ListeCommandesController {
             }
 
             allCommandes.setAll(lignes);
-            commandesTable.setItems(allCommandes);
+            filteredList = new ArrayList<>(allCommandes);
+            currentPage = 1;
+            updateCommandesTable();
+            buildPagination();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,14 +115,65 @@ public class ListeCommandesController {
 
     private void filterCommandes() {
         String selected = filterComboBox.getValue();
+
         if (selected != null) {
-            if (selected.equals("En attente")) {
-                commandesTable.setItems(allCommandes.filtered(ligne -> "En attente".equals(ligne.getEtat())));
-            } else if (selected.equals("Payées")) {
-                commandesTable.setItems(allCommandes.filtered(ligne -> "Payée".equals(ligne.getEtat())));
+            if (selected.equals("Payées")) {
+                filteredList = allCommandes.filtered(ligne -> "Payée".equals(ligne.getEtat()));
+            } else if (selected.equals("Non payées")) {
+                filteredList = allCommandes.filtered(ligne -> "Non payée".equals(ligne.getEtat()));
             } else {
-                commandesTable.setItems(allCommandes);
+                filteredList = new ArrayList<>(allCommandes);
             }
+
+            currentPage = 1;
+            updateCommandesTable();
+            buildPagination();
         }
     }
+
+    private void updateCommandesTable() {
+        int fromIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        int toIndex = Math.min(fromIndex + ITEMS_PER_PAGE, filteredList.size());
+        List<LigneCommande> pageItems = filteredList.subList(fromIndex, toIndex);
+        commandesTable.setItems(FXCollections.observableArrayList(pageItems));
+    }
+    private void buildPagination() {
+        paginationContainer.getChildren().clear();
+        int totalPages = (int) Math.ceil((double) filteredList.size() / ITEMS_PER_PAGE);
+
+        Button prev = new Button("« Précédent");
+        prev.setDisable(currentPage == 1);
+        prev.setStyle("-fx-background-color: #198754; -fx-text-fill: white;");
+        prev.setOnAction(e -> {
+            currentPage--;
+            updateCommandesTable();
+            buildPagination();
+        });
+        paginationContainer.getChildren().add(prev);
+
+        for (int i = 1; i <= totalPages; i++) {
+            Button pageBtn = new Button(String.valueOf(i));
+            pageBtn.setStyle(i == currentPage
+                    ? "-fx-background-color: #198754; -fx-text-fill: white;"
+                    : "-fx-background-color: white; -fx-border-color: #198754; -fx-text-fill: #198754;");
+            final int pageIndex = i;
+            pageBtn.setOnAction(e -> {
+                currentPage = pageIndex;
+                updateCommandesTable();
+                buildPagination();
+            });
+            paginationContainer.getChildren().add(pageBtn);
+        }
+
+        Button next = new Button("Suivant »");
+        next.setDisable(currentPage == totalPages);
+        next.setStyle("-fx-background-color: #198754; -fx-text-fill: white;");
+        next.setOnAction(e -> {
+            currentPage++;
+            updateCommandesTable();
+            buildPagination();
+        });
+        paginationContainer.getChildren().add(next);
+    }
+
 }
