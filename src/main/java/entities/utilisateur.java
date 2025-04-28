@@ -14,7 +14,8 @@ public class utilisateur {
     private boolean status;
     private String matricule_fiscale;
     private String photo_profil;
-    private String face_image; // Nouveau champ pour stocker le chemin de l'image faciale
+    private String face_image;
+    private String bannedBy;
 
 
     public utilisateur(String email, String nom_user, String prenom, String roles, String num_tel, String password, boolean status, String face_image) {
@@ -215,6 +216,14 @@ public class utilisateur {
 
     public void setFace_image(String face_image) {
         this.face_image = face_image;
+    }
+
+    public String getBannedBy() {
+        return bannedBy;
+    }
+
+    public void setBannedBy(String bannedBy) {
+        this.bannedBy = bannedBy;
     }
 
     @Override

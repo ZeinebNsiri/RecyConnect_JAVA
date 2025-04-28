@@ -76,7 +76,7 @@ public class UtilisateurService implements IService<utilisateur> {
 
     @Override
     public void update(utilisateur utilisateur) throws SQLException {
-        String query = "UPDATE `utilisateur` SET `email`=?, `roles`=?, `nom_user`=?, `prenom`=?, `num_tel`=?, `password`=?, `matricule_fiscale`=?, `status`=? , `photo_profil`=?,`adresse`=? WHERE `id`=?";
+        String query = "UPDATE `utilisateur` SET `email`=?, `roles`=?, `nom_user`=?, `prenom`=?, `num_tel`=?, `password`=?, `matricule_fiscale`=?, `status`=? , `photo_profil`=?,`adresse`=?,`bannedBy`=? WHERE `id`=?";
         PreparedStatement ps = conx.prepareStatement(query);
 
         ps.setString(1, utilisateur.getEmail());
@@ -89,7 +89,8 @@ public class UtilisateurService implements IService<utilisateur> {
         ps.setBoolean(8, utilisateur.isStatus());
         ps.setString(9, utilisateur.getPhoto_profil());
         ps.setString(10, utilisateur.getAdresse());
-        ps.setInt(11, utilisateur.getId());
+        ps.setString(11,utilisateur.getBannedBy());
+        ps.setInt(12, utilisateur.getId());
 
         ps.executeUpdate();
         System.out.println("Utilisateur updated successfully!");
@@ -191,9 +192,11 @@ public class UtilisateurService implements IService<utilisateur> {
         return utilisateurs;
     }
     public int getCountByStatus(boolean status) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM utilisateur WHERE status = ?";
+        String sql = "SELECT COUNT(*) FROM utilisateur WHERE status = ? AND (roles LIKE ? OR roles LIKE ?)";
         try (PreparedStatement stmt = conx.prepareStatement(sql)) {
             stmt.setBoolean(1, status);
+            stmt.setString(2,"%ROLE_USER%");
+            stmt.setString(3,"%ROLE_PROFESSIONNEL%");
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);
@@ -213,4 +216,53 @@ public class UtilisateurService implements IService<utilisateur> {
         }
         return 0;
     }
+
+    public void banUser(int userId) throws SQLException {
+        String updateStatusQuery = "UPDATE utilisateur SET status = false, ban_time = ? ,bannedBy = ?  WHERE id = ?";
+        PreparedStatement ps = conx.prepareStatement(updateStatusQuery);
+
+
+        long currentTime = System.currentTimeMillis();
+        long banDuration = (2 * 60 * 60 * 1000) + (15 * 60 * 1000);
+        long banUntil = currentTime + banDuration;
+
+        ps.setLong(1, banUntil);
+        ps.setString(2,"USER");
+        ps.setInt(3, userId);
+
+        ps.executeUpdate();
+    }
+    public boolean ReactiverUser (int userId) throws SQLException {
+        String query = "SELECT ban_time , bannedBy FROM utilisateur WHERE id = ? AND status = false ";
+        PreparedStatement ps = conx.prepareStatement(query);
+        ps.setInt(1, userId);
+        ResultSet rs = ps.executeQuery();
+
+
+        if (rs.next()) {
+            String bannedBy = rs.getString("bannedBy");
+            if(bannedBy.equals("ADMIN")) {
+                return false;
+            }
+
+            long banTime = rs.getLong("ban_time");
+            long currentTime = System.currentTimeMillis();
+
+
+            if (banTime <= currentTime) {
+
+                String updateStatusQuery = "UPDATE utilisateur SET status = true WHERE id = ?";
+                PreparedStatement updatePs = conx.prepareStatement(updateStatusQuery);
+                updatePs.setInt(1, userId);
+                updatePs.executeUpdate();
+
+                System.out.println("Compte réactivé.");
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+
+
 }

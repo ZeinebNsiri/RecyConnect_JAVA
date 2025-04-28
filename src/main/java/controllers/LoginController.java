@@ -33,6 +33,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import com.twilio.Twilio;
+import com.twilio.converter.Promoter;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
+
+import java.net.URI;
+import java.math.BigDecimal;
 
 public class LoginController {
 
@@ -41,6 +48,11 @@ public class LoginController {
     @FXML private TextField passwordVisibleField;
     @FXML private Button togglePasswordVisibility;
     @FXML private ImageView backgroundImage;
+    private int i=0;
+    private String emailUser ="";
+    private static final String ACCOUNT_SID = "AC4ebfff16d923e8985a997190aa11d2cf";
+    private static final String AUTH_TOKEN = "bc1bba3a4ae3f28117e49e8ee815a344";
+    private UtilisateurService utilisateurService = new UtilisateurService();
 
     @FXML
     public void initialize() {
@@ -95,30 +107,58 @@ public class LoginController {
                     return;
                 }
 
-                // Étape 2 :  mot de passe
+                //   mot de passe
+                int id = emailResult.getInt("id");
                 String storedPassword = emailResult.getString("password");
                 storedPassword = storedPassword.replaceFirst("^\\$2y\\$", "\\$2a\\$");
                 if (!BCrypt.checkpw(password,storedPassword)) {
+                    if (!email.equals(emailUser)) {
+                        emailUser = email;
+                        i=0;
+                    }
+                    if (i==3){
+                        utilisateurService.banUser(id);
+                        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+                        String tel = "+216"+emailResult.getString("num_tel");
+                        String Content = "Votre compte a été banni pendant 2 heures et 15 minutes . Vous serez réactivé à la fin de cette période.";
+                        Message message = Message.creator(
+                                new com.twilio.type.PhoneNumber(tel),
+                                new com.twilio.type.PhoneNumber("+12293480582"),
+                                Content)
+                                .create();
+                    }
+                    System.out.println(i);
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Erreur de connexion");
                     alert.setContentText("Mot de passe incorrect.");
                     alert.show();
+                    i++;
                     return;
                 }else {
 
-                    // Étape 3 :  statut
-                    boolean status = emailResult.getBoolean("status");
+                    //   statut
+
+
+                    try{
+                    boolean status = utilisateurService.ReactiverUser(id);
                     if (!status) {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Compte banni");
                         alert.setContentText("Votre compte est banni.");
                         alert.show();
                         return;
+                    }} catch (SQLException e) {
+                        e.printStackTrace();
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Erreur base de données");
+                        alert.setContentText("Une erreur est survenue lors de la connexion.");
+                        alert.show();
                     }
 
-                    // Étape 4 :  rôle
+
+                    //   rôle
                     String role = emailResult.getString("roles");
-                    int id = emailResult.getInt("id");
+                    id = emailResult.getInt("id");
 
 
                     utilisateur user = new utilisateur(id,emailResult.getString(2),emailResult.getString(4),emailResult.getString(5),emailResult.getString("roles"),emailResult.getString(6),emailResult.getString(7),emailResult.getString(8),emailResult.getBoolean(10),emailResult.getString(9),emailResult.getString(11));

@@ -42,7 +42,7 @@ public class FaceRecognitionService {
             System.out.println(200);
             double confidence = response.getBody().getObject().getDouble("confidence");
             System.out.println(confidence);
-            return confidence >= 90.0;
+            return confidence >= 80.0;
         }
 
         return false;

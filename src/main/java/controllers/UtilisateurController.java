@@ -127,7 +127,7 @@ public class UtilisateurController {
                             utilisateur u = getTableView().getItems().get(getIndex());
                             boolean newStatus = !u.isStatus();
                             u.setStatus(newStatus);
-
+                            u.setBannedBy("ADMIN");
                             // Préserver le rôle lors de la mise à jour
                             if (u.getRoles().contains("Professionnel")) {
                                 u.setRoles("ROLE_PROFESSIONNEL");
@@ -171,7 +171,7 @@ public class UtilisateurController {
                 }
             });
 
-            // Initialisation du filtre global
+            // filtre
             globalFilter.setItems(FXCollections.observableArrayList(
                     "Tous les utilisateurs",
                     "Les particuliers",
