@@ -132,7 +132,6 @@ public class formAjoutArticle {
             if (selectedFile != null && !imageArticleField.getText().equals(articleToModify.getImage_article())) {
                 // Vérifier l'image avec Sightengine
                 if (!isImageSafeWithSightengine(selectedFile)) {
-                    showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient un contenu interdit.");
                     return;
                 }
             }
@@ -147,7 +146,6 @@ public class formAjoutArticle {
             }
 
             if (!isImageSafeWithSightengine(selectedFile)) {
-                showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient un contenu interdit.");
                 return;
             }
 
@@ -254,8 +252,16 @@ public class formAjoutArticle {
                 double verySuggestive = nudity.optDouble("very_suggestive", 0);
 
                 if (erotica > 0.4 || suggestive > 0.5 || verySuggestive > 0.5) {
+                    showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient de la nudité ou des contenus suggestifs.");
                     return false;
                 }
+            }
+
+            // Vérification alcool
+            JSONObject alcohol = json.optJSONObject("alcohol");
+            if (alcohol != null && alcohol.optDouble("prob", 0) > 0.3) {
+                showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient de l'alcool.");
+                return false;
             }
 
             // Vérification armes
@@ -264,24 +270,26 @@ public class formAjoutArticle {
                 JSONObject classes = weapon.optJSONObject("classes");
                 for (String key : classes.keySet()) {
                     if (classes.getDouble(key) > 0.3) {
+                        showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient des armes.");
                         return false;
                     }
                 }
             }
 
-            // Drogue, alcool, violence
-            if (json.optJSONObject("alcohol").optDouble("prob", 0) > 0.3 ||
-                    json.optJSONObject("recreational_drug").optDouble("prob", 0) > 0.3 ||
+            // Vérification drogues, violence
+            if (json.optJSONObject("recreational_drug").optDouble("prob", 0) > 0.3 ||
                     json.optJSONObject("violence").optDouble("prob", 0) > 0.3) {
+                showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient des drogues ou de la violence.");
                 return false;
             }
 
-            // Texte offensif
+            // Vérification texte offensif
             JSONObject text = json.optJSONObject("text");
             if (text != null) {
                 for (String key : text.keySet()) {
                     JSONArray arr = text.optJSONArray(key);
                     if (arr != null && arr.length() > 0) {
+                        showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient du texte offensant.");
                         return false;
                     }
                 }
@@ -291,9 +299,11 @@ public class formAjoutArticle {
 
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur est survenue lors de la vérification de l'image.");
             return false;
         }
     }
+
 
 
 
