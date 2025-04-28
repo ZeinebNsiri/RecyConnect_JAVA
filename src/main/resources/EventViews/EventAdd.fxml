@@ -59,7 +59,7 @@
         <Label fx:id="remainingErrorLabel" textFill="red" visible="false" />
     </VBox>
 
-    <TextField fx:id="linkField" promptText="Lien Google Meet" />
+    <TextField fx:id="linkField" promptText="Lien Google Meet" visible="false" />
     <TextField fx:id="coordinatesField" promptText="Coordonnées carte" />
 
     <HBox spacing="10" alignment="CENTER">

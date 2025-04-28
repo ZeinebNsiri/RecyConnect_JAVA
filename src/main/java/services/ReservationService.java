@@ -1,5 +1,7 @@
 package services;
-
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import entities.Reservation;
 import utils.MyDataBase;
 import java.sql.*;
@@ -231,4 +233,18 @@ public class ReservationService implements IService<Reservation> {
             }
         }
     }
+    public boolean isUserRegisteredForEvent(int eventId, String nom) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM reservation WHERE event_id = ? AND nom = ? AND status = 'Active'";
+        try (PreparedStatement stmt = cnx.prepareStatement(sql)) {
+            stmt.setInt(1, eventId);
+            stmt.setString(2, nom);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
+
+
 }

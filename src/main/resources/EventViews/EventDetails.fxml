@@ -21,6 +21,7 @@
                                style="-fx-border-radius: 10; -fx-background-radius: 10;" />
                     <Label fx:id="eventTitle" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
                     <Label fx:id="eventDateTime" style="-fx-font-size: 14px; -fx-text-fill: #6c757d;" />
+                    <Label fx:id="eventPeriod" style="-fx-font-size: 14px; -fx-text-fill: #6c757d;" />
                     <Label fx:id="eventDescription" wrapText="true" style="-fx-font-size: 14px;" />
                     <Label fx:id="eventPlaces" style="-fx-font-weight: bold; -fx-text-fill: green;" />
                     <HBox spacing="10">

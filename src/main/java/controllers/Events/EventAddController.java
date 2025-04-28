@@ -74,7 +74,8 @@ public class EventAddController {
             event.setDescription(descriptionField.getText().trim());
             event.setCapacity(Integer.parseInt(capacityField.getText().trim()));
             event.setRemaining(Integer.parseInt(remainingField.getText().trim()));
-            event.setMeetingLink(linkField.getText().trim());
+            String meetRoomName = event.getName().trim().replaceAll("\\s+", "-") + "-" + System.currentTimeMillis();
+            event.setMeetingLink("https://meet.jit.si/" + meetRoomName);
             event.setCoordinates(coordinatesField.getText().trim());
 
             if (selectedImageFile != null) {

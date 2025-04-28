@@ -28,10 +28,6 @@
         <Label fx:id="placesError" textFill="red" visible="false" />
     </VBox>
 
-    <VBox spacing="4" alignment="CENTER_LEFT">
-        <ComboBox fx:id="statusCombo" promptText="Statut" />
-        <Label fx:id="statusError" textFill="red" visible="false" />
-    </VBox>
 
     <HBox spacing="15" alignment="CENTER">
         <Button text="Mettre à jour" onAction="#handleSave"

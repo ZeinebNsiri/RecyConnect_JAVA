@@ -3,12 +3,17 @@ package controllers.Reservations;
 import entities.Reservation;
 import entities.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import services.ReservationService;
 import services.EventService;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
@@ -126,7 +131,25 @@ public class ReservationsListFrontController {
     }
 
     private void handleEdit(Reservation reservation) {
-        // Tu peux garder ton code de modification ici.
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReservationViews/ReservationEdit.fxml"));
+            Parent root = loader.load();
+
+            ReservationEditController controller = loader.getController();
+            controller.setReservation(reservation);
+
+            Stage stage = new Stage();
+            stage.setTitle("Modifier la réservation");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            // Reload reservations after closing edit window
+            loadReservations();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Erreur lors de l'ouverture du formulaire d'édition : " + e.getMessage());
+        }
     }
 
     private void showError(String message) {
