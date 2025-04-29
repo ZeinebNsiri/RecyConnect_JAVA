@@ -25,6 +25,13 @@ import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.activation.DataHandler;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.mail.util.ByteArrayDataSource;
+import javax.activation.DataSource;
+import java.util.Properties;
+
 public class formAjoutArticle {
 
     @FXML private TextField nomArticleField;
@@ -45,6 +52,7 @@ public class formAjoutArticle {
     private static final String article_IMAGE_DIR = "C:/Users/Admin/Desktop/PI_RecyConnect_TechSquad/public/uploads/photo_dir";
     private Article articleToModify = null;
     private final UserService userService = new UserService();
+    private utilisateur user;
 
 
     @FXML
@@ -120,7 +128,7 @@ public class formAjoutArticle {
             return;
         }
 
-        utilisateur user = userService.getUserById(9);
+        user = userService.getUserById(9);
         int utilisateurId = user.getId();// Simulé
 
         Article article = new Article(categorieId, utilisateurId, nom, description, quantite, prix, image, localisation);
@@ -253,6 +261,7 @@ public class formAjoutArticle {
 
                 if (erotica > 0.4 || suggestive > 0.5 || verySuggestive > 0.5) {
                     showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient de la nudité ou des contenus suggestifs.");
+                    sendViolationEmail(user, "Nudité ou contenus suggestifs");
                     return false;
                 }
             }
@@ -261,6 +270,7 @@ public class formAjoutArticle {
             JSONObject alcohol = json.optJSONObject("alcohol");
             if (alcohol != null && alcohol.optDouble("prob", 0) > 0.3) {
                 showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient de l'alcool.");
+                sendViolationEmail(user, "Présence d'alcool");
                 return false;
             }
 
@@ -271,6 +281,7 @@ public class formAjoutArticle {
                 for (String key : classes.keySet()) {
                     if (classes.getDouble(key) > 0.3) {
                         showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient des armes.");
+                        sendViolationEmail(user, "Présence d'armes");
                         return false;
                     }
                 }
@@ -280,6 +291,7 @@ public class formAjoutArticle {
             if (json.optJSONObject("recreational_drug").optDouble("prob", 0) > 0.3 ||
                     json.optJSONObject("violence").optDouble("prob", 0) > 0.3) {
                 showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient des drogues ou de la violence.");
+                sendViolationEmail(user, "Drogues ou violence");
                 return false;
             }
 
@@ -290,6 +302,7 @@ public class formAjoutArticle {
                     JSONArray arr = text.optJSONArray(key);
                     if (arr != null && arr.length() > 0) {
                         showAlert(Alert.AlertType.ERROR, "Image inappropriée", "L'image contient du texte offensant.");
+                        sendViolationEmail(user, "Texte offensant");
                         return false;
                     }
                 }
@@ -303,6 +316,88 @@ public class formAjoutArticle {
             return false;
         }
     }
+
+
+    private void sendViolationEmail(utilisateur user, String reason) {
+        try {
+            String to = user.getEmail();  // Email du destinataire
+            String from = "recyconnectapp2425@gmail.com"; // <<< Remplacer par ton adresse Gmail
+            String password = "kqfn xmcd aquh gbpe"; // <<< Ton mot de passe d'application ou SMTP
+
+            String host = "smtp.gmail.com";
+
+            Properties props = new Properties();
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.host", host);
+            props.put("mail.smtp.port", "587");
+
+            Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(from, password);
+                }
+            });
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(to)
+            );
+            message.setSubject("Tentative de publication d'une image interdite");
+
+            // 🔥 Email HTML + Image
+            MimeMultipart multipart = new MimeMultipart("related");
+
+            // 1. Partie HTML
+            BodyPart htmlPart = new MimeBodyPart();
+            String htmlContent = "<html><body style='font-family: Arial, sans-serif; color: #333;'>"
+                    + "<div style='text-align: center;'>"
+                    + "<img src='cid:logo' style='width: 120px; height: auto; margin-bottom: 20px;' />"
+                    + "</div>"
+                    + "<div style='text-align: center;'>"
+                    + "<h2 style='color: #dc3545;'>Image Inappropriée</h2>"
+                    + "<p>Bonjour " + user.getNom_user() + ",</p>"
+                    + "<p>Nous avons détecté que vous avez tenté d'ajouter un article dont son image contient : "
+                    + "<strong style='color: #dc3545;'>" + reason + "</strong>.</p>"
+                    + "<p>Nous vous rappelons que ce type de contenu est interdit sur notre plateforme <strong>RecyConnect</strong>.</p>"
+                    + "<p>Merci de respecter les règles pour continuer à utiliser nos services.</p>"
+                    + "<br>"
+                    + "<p style='font-size: 12px; color: #777;'>Merci de votre compréhension.<br>L'équipe RecyConnect.</p>"
+                    + "</div>"
+                    + "</body></html>";
+
+            htmlPart.setContent(htmlContent, "text/html; charset=utf-8");
+            multipart.addBodyPart(htmlPart);
+
+            // 2. Partie Image (logo intégré)
+            MimeBodyPart imagePart = new MimeBodyPart();
+            InputStream logoStream = getClass().getResourceAsStream("/mainlogo.png");
+            if (logoStream == null) {
+                System.out.println("❌ Logo introuvable !");
+                return;
+            }
+            DataSource fds = new ByteArrayDataSource(logoStream, "image/png");
+            imagePart.setDataHandler(new DataHandler(fds));
+            imagePart.setHeader("Content-ID", "<logo>");
+            imagePart.setDisposition(MimeBodyPart.INLINE);
+            multipart.addBodyPart(imagePart);
+
+            // Assembler tout
+            message.setContent(multipart);
+
+            // Envoyer
+            Transport.send(message);
+
+            System.out.println("✅ Email d'avertissement envoyé avec succès à " + to);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("❌ Erreur lors de l'envoi de l'email.");
+        }
+    }
+
+
 
 
 
