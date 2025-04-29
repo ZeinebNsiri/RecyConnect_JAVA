@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.web.WebView?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.Events.MapPickerController">
+    <center>
+        <WebView fx:id="mapView" />
+    </center>
+    <bottom>
+        <VBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
+            <Label fx:id="selectedLocationLabel" text="Lieu sélectionné: Aucun" />
+            <Button text="Confirmer" onAction="#handleConfirmLocation" />
+        </VBox>
+    </bottom>
+</BorderPane>
+

@@ -1,48 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.web.WebView?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.Events.EventDetailsController"
             style="-fx-background-color: #f0f2f5;">
 
     <center>
         <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;">
-            <!-- Card container -->
             <HBox spacing="40" alignment="CENTER"
                   style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);">
 
-                <!-- Left: Event visual + info -->
+                <!-- Left side: Event information -->
                 <VBox spacing="15" prefWidth="500">
-                    <ImageView fx:id="eventImageView" fitWidth="400" fitHeight="250" preserveRatio="true"
-                               style="-fx-border-radius: 10; -fx-background-radius: 10;" />
+                    <ImageView fx:id="eventImageView" fitWidth="400" fitHeight="250" preserveRatio="true" />
                     <Label fx:id="eventTitle" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
                     <Label fx:id="eventDateTime" style="-fx-font-size: 14px; -fx-text-fill: #6c757d;" />
-                    <Label fx:id="eventPeriod" style="-fx-font-size: 14px; -fx-text-fill: #6c757d;" />
                     <Label fx:id="eventDescription" wrapText="true" style="-fx-font-size: 14px;" />
                     <Label fx:id="eventPlaces" style="-fx-font-weight: bold; -fx-text-fill: green;" />
                     <HBox spacing="10">
                         <Button text="📝 S'inscrire" onAction="#handleInscription"
-                                style="-fx-background-color: #198754; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" />
+                                style="-fx-background-color: #198754; -fx-text-fill: white; -fx-background-radius: 8;" />
                         <Button text="⬅ Retour à la liste" onAction="#handleBack"
-                                style="-fx-background-color: #ced4da; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 8;" />
+                                style="-fx-background-color: #ced4da; -fx-text-fill: black; -fx-background-radius: 8;" />
                     </HBox>
                 </VBox>
 
-                <!-- Right: Info details -->
+                <!-- Right side: Location -->
                 <VBox spacing="15" alignment="TOP_LEFT">
                     <Label text="📌 Détails" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #014421;" />
                     <Label fx:id="eventDate" style="-fx-font-size: 14px;" />
                     <Label fx:id="eventTime" style="-fx-font-size: 14px;" />
                     <Label fx:id="eventLocation" style="-fx-font-size: 14px;" />
-                    <Label text="🗺️ Carte:" style="-fx-font-weight: bold; -fx-padding: 10 0 0 0;" />
-                    <ImageView fx:id="mapImageView" fitWidth="300" fitHeight="200"
-                               style="-fx-border-color: #ccc; -fx-border-radius: 10;" />
+                    <Label text="🗺️ Localisation:" style="-fx-font-weight: bold; -fx-padding: 10 0 0 0;" />
+                    <Label fx:id="eventPeriod" style="-fx-font-size: 14px;" />
+                    <WebView fx:id="mapWebView" prefWidth="400" prefHeight="300" />
                 </VBox>
+
             </HBox>
         </VBox>
     </center>
+
 </BorderPane>

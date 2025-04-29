@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import controllers.Reservations.EventReservationController;
 import services.ReservationService;
@@ -33,18 +35,17 @@ public class EventDetailsController {
     @FXML private Label eventDate;
     @FXML private Label eventTime;
     @FXML private Label eventLocation;
-    @FXML private Label eventPeriod; // 🌟 nouveau pour afficher début/fin
-    @FXML private ImageView mapImageView;
+    @FXML private Label eventPeriod;
+    @FXML private WebView mapWebView; // ✅ Correct one (remove mapImageView)
 
     private Event event;
     private final ReservationService reservationService = new ReservationService();
-    private String currentUserName = "amal"; // TODO: remplacer par vrai utilisateur connecté plus tard
+    private String currentUserName = "amal"; // ✅ Hardcoded for now
 
     @FXML
     public void setEvent(Event event) {
         this.event = event;
 
-        // Charger les données
         eventTitle.setText(event.getName());
         eventDateTime.setText(event.getDate().format(DateTimeFormatter.ofPattern("EEEE d MMMM yyyy")) + " à " + event.getTime());
         eventDescription.setText(event.getDescription());
@@ -54,26 +55,59 @@ public class EventDetailsController {
         eventTime.setText("⏰ Heure : " + event.getTime());
         eventLocation.setText("📍 Lieu : " + event.getLocation());
 
-        // ✨ Afficher heure début + heure fin
         if (event.getEndTime() != null) {
             eventPeriod.setText("⏳ De " + event.getTime() + " à " + event.getEndTime());
         } else {
             eventPeriod.setText("⏳ Début : " + event.getTime());
         }
 
-        // Image
+        // Set Image
         File imageFile = new File("uploads/" + event.getImage());
         if (imageFile.exists()) {
             eventImageView.setImage(new Image(imageFile.toURI().toString()));
         }
 
-        // Lien vers la réunion en ligne
+        // Add meeting link if exists
         String meetingUrl = event.getMeetingLink();
         if (meetingUrl != null && !meetingUrl.isEmpty()) {
             Hyperlink meetLink = new Hyperlink("🧑‍💻 Rejoindre l'événement en ligne");
             meetLink.setOnAction(e -> handleJoinOnlineEvent());
             ((VBox) eventLocation.getParent()).getChildren().add(meetLink);
         }
+
+        // Load the Map
+        loadMap(event.getCoordinates());
+    }
+
+    private void loadMap(String coordinates) {
+        if (coordinates == null || coordinates.isEmpty()) {
+            return;
+        }
+
+        String[] parts = coordinates.split(",");
+        if (parts.length != 2) {
+            return;
+        }
+
+        String lat = parts[0].trim();
+        String lon = parts[1].trim();
+
+        String mapHtml = "<html><head>"
+                + "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
+                + "<link rel='stylesheet' href='https://unpkg.com/leaflet@1.9.3/dist/leaflet.css'/>"
+                + "<script src='https://unpkg.com/leaflet@1.9.3/dist/leaflet.js'></script>"
+                + "</head>"
+                + "<body style='margin:0;'>"
+                + "<div id='map' style='width:100%;height:100%;'></div>"
+                + "<script>"
+                + "var map = L.map('map').setView([" + lat + "," + lon + "], 15);"
+                + "L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19}).addTo(map);"
+                + "L.marker([" + lat + "," + lon + "]).addTo(map).bindPopup('Emplacement').openPopup();"
+                + "</script>"
+                + "</body></html>";
+
+        WebEngine webEngine = mapWebView.getEngine();
+        webEngine.loadContent(mapHtml);
     }
 
     private void handleJoinOnlineEvent() {

@@ -1,7 +1,11 @@
 package controllers.Events;
 
+import controllers.Events.MapPickerResult;
 import entities.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -16,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class EventAddController {
+
     @FXML private TextField nameField;
     @FXML private TextField locationField;
     @FXML private DatePicker datePicker;
@@ -201,5 +206,24 @@ public class EventAddController {
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleOpenMap() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventViews/MapPicker.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Choisir un lieu");
+            stage.setScene(new Scene(root));
+            stage.showAndWait(); // Wait until map is closed
+
+            if (!MapPickerResult.selectedCoordinates.isEmpty()) {
+                coordinatesField.setText(MapPickerResult.selectedCoordinates);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
