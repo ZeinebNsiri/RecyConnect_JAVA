@@ -1,20 +1,19 @@
 package controllers;
 
-import javafx.concurrent.Worker;
+import entities.Article;
+import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import netscape.javascript.JSObject;
+import javafx.scene.layout.AnchorPane;
+import services.ArticleService;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import services.ArticleService;
-import entities.Article;
 
-import java.io.*;
+import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -29,7 +28,7 @@ public class ArticleDetailController {
     @FXML private Label quantityLabel;
     @FXML private Label articleDescription;
     @FXML private Button orderButton;
-    @FXML private WebView mapView;
+    @FXML private AnchorPane mapContainer;
 
     private final ArticleService articleService = new ArticleService();
 
@@ -38,7 +37,6 @@ public class ArticleDetailController {
             Article article = articleService.getArticleById(articleId);
             if (article == null) return;
 
-            // Données article
             articleName.setText(article.getNom_article());
             articleCategory.setText(articleService.getCategorieById(article.getCategorie_id()).getNom_categorie());
             articleLocation.setText(article.getLocalisation_article());
@@ -46,28 +44,15 @@ public class ArticleDetailController {
             priceLabel.setText(article.getPrix() + " TN/Kg");
             quantityLabel.setText(article.getQuantite_article() + " Kg");
 
-            // ✅ Affichage image
-            String imagePath = "C:/Users/Admin/Desktop/PI_RecyConnect_TechSquad/public/uploads/photo_dir/" + article.getImage_article();
+            String imagePath = "file:/C:/Users/Admin/Desktop/PI_RecyConnect_TechSquad/public/uploads/photo_dir/" + article.getImage_article();
             articleImage.setImage(new Image(imagePath));
 
-            // ✅ Chargement de la carte dans le WebView
-            String htmlPath = getClass().getResource("/map.html").toExternalForm(); // 🔥 assure-toi que `map.html` est bien dans `resources/`
-            WebEngine webEngine = mapView.getEngine();
-            // ✅ Fixer la taille de la carte (agrandir pour éviter le bug de découpage)
-            mapView.setPrefSize(1000, 500); // Largeur x Hauteur
-            mapView.setMinSize(1000, 500);
-            mapView.setMaxSize(1000, 500);
-            webEngine.load(htmlPath);
-
-            // Geocodage Nominatim
             String localisation = article.getLocalisation_article();
-            String apiUrl = "https://nominatim.openstreetmap.org/search?format=json&countrycodes=TN&q=" +
-                    URLEncoder.encode(localisation, "UTF-8");
+            String apiUrl = "https://nominatim.openstreetmap.org/search?format=json&countrycodes=TN&q=" + URLEncoder.encode(localisation, "UTF-8");
+            HttpURLConnection conn = (HttpURLConnection) new URL(apiUrl).openConnection();
+            conn.setRequestProperty("User-Agent", "JavaFX-App");
 
-            HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
-            connection.setRequestProperty("User-Agent", "JavaFX-App");
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder response = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) response.append(line);
@@ -78,21 +63,41 @@ public class ArticleDetailController {
                 JSONObject result = results.getJSONObject(0);
                 double lat = result.getDouble("lat");
                 double lon = result.getDouble("lon");
-
-                webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-                    if (newState == Worker.State.SUCCEEDED) {
-                        JSObject window = (JSObject) webEngine.executeScript("window");
-                        window.call("initMap", lat, lon, localisation);
-                    }
-                });
+                showMap(lat, lon, localisation);
+                System.out.println(">> Carte insérée avec succès.");
             } else {
-                System.out.println("❌ Localisation introuvable : " + localisation);
+                System.out.println("Localisation introuvable : " + localisation);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public void showMap(double lat, double lon, String name) {
+        javafx.application.Platform.runLater(() -> {
+            SwingNode swingNode = new SwingNode();
+            SwingUtilities.invokeLater(() -> {
+                MapViewerController mapViewer = new MapViewerController();
+                JPanel mapPanel = mapViewer.createMapPanel(lat, lon, name);
+
+                javafx.application.Platform.runLater(() -> {
+                    swingNode.setContent(mapPanel);
+
+                    // Nettoyer le conteneur et insérer le SwingNode
+                    mapContainer.getChildren().clear();
+                    mapContainer.getChildren().add(swingNode);
+
+                    // Lier le SwingNode aux bords pour qu’il prenne toute la place
+                    AnchorPane.setTopAnchor(swingNode, 0.0);
+                    AnchorPane.setBottomAnchor(swingNode, 0.0);
+                    AnchorPane.setLeftAnchor(swingNode, 0.0);
+                    AnchorPane.setRightAnchor(swingNode, 0.0);
+                });
+            });
+        });
+    }
+
 
     @FXML
     private void addToCart() {

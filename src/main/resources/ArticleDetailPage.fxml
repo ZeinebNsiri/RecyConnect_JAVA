@@ -20,7 +20,7 @@
         <VBox spacing="10">
 
             <!-- CONTENU SCROLLABLE -->
-            <ScrollPane fitToWidth="true" fitToHeight="true">
+            <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
                 <VBox spacing="30" alignment="CENTER" >
 
                     <!-- Zone article (image + infos) -->
@@ -60,16 +60,9 @@
                     </HBox>
 
                     <!-- MAP -->
-                    <VBox spacing="10" alignment="CENTER">
+                    <VBox spacing="10" alignment="CENTER" VBox.vgrow="ALWAYS">
                         <Label text="Localisation sur la carte :" styleClass="subtitle-label" />
-                        <WebView fx:id="mapView"
-                                 prefWidth="1000"
-                                 prefHeight="500"
-                                 minWidth="800"
-                                 minHeight="400"
-                                 maxWidth="Infinity"
-                                 maxHeight="Infinity"
-                        />
+                        <AnchorPane fx:id="mapContainer" minHeight="700" prefHeight="800" maxHeight="Infinity" VBox.vgrow="ALWAYS"/>
                     </VBox>
 
                     <!-- ✅ FOOTER déplacé ici -->
