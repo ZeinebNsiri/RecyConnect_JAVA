@@ -7,6 +7,7 @@
 <?import javafx.scene.web.WebView?>
 <?import java.lang.String?>
 
+<?import javafx.scene.text.Text?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.ArticleDetailController"
             prefWidth="1000" prefHeight="600"
@@ -36,8 +37,6 @@
                             <Label fx:id="articleName" styleClass="title-label" />
                             <Label text="Catégorie:" styleClass="subtitle-label"/>
                             <Label fx:id="articleCategory" styleClass="normal-label" />
-                            <Label text="Description:" styleClass="subtitle-label"/>
-                            <Label fx:id="articleDescription" styleClass="normal-label" />
                             <Label text="Localisation:" styleClass="subtitle-label"/>
                             <Label fx:id="articleLocation" styleClass="normal-label" />
                             <Button fx:id="orderButton" text="Ajouter au panier" onAction="#addToCart" styleClass="green-button"/>
@@ -58,6 +57,14 @@
                             </VBox>
                         </VBox>
                     </HBox>
+
+                    <VBox spacing="10" alignment="CENTER" maxWidth="800" styleClass="description-section">
+                        <Label text="Description de l’article :" styleClass="subtitle-label"/>
+                        <Text fx:id="articleDescription"
+                              wrappingWidth="800"
+                              styleClass="normal-label"
+                              textAlignment="JUSTIFY"/>
+                    </VBox>
 
                     <!-- MAP -->
                     <VBox spacing="10" alignment="CENTER" VBox.vgrow="ALWAYS">

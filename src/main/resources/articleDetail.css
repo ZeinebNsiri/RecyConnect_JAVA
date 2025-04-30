@@ -90,3 +90,26 @@
     -fx-text-fill: #4CAF50;
     -fx-cursor: hand;
 }
+.description-section {
+    -fx-background-color: #ffffff;
+    -fx-padding: 40 60 40 60; /* haut, droite, bas, gauche */
+    -fx-background-radius: 8;
+    -fx-border-color: #dddddd;
+    -fx-border-width: 0 0 1 0; /* ligne discrète en bas */
+}
+
+.subtitle-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0a3e27; /* cohérence avec le titre principal */
+    -fx-alignment: CENTER;
+}
+
+.normal-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #444444;
+    -fx-wrap-text: true;
+    -fx-text-alignment: justify;
+    -fx-alignment: center;
+    -fx-max-width: 800;
+}

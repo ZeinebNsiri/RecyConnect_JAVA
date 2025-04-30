@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import services.ArticleService;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,7 +27,7 @@ public class ArticleDetailController {
     @FXML private Label articleLocation;
     @FXML private Label priceLabel;
     @FXML private Label quantityLabel;
-    @FXML private Label articleDescription;
+    @FXML private Text articleDescription;
     @FXML private Button orderButton;
     @FXML private AnchorPane mapContainer;
 

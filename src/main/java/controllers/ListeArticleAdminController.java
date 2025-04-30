@@ -46,11 +46,16 @@ public class ListeArticleAdminController {
     @FXML private TextField proprietaireField;
     @FXML private ComboBox<String> categorieFilterCombo;
     @FXML private Button rechercherBtn;
-    @FXML private Pagination pagination;
+    @FXML private Button btnPrevious;
+    @FXML private Button btnNext;
+    @FXML private HBox pagination;
 
     private ObservableList<ArticleView> allViews;
     private FilteredList<ArticleView> filteredArticles;
     private static final int ROWS_PER_PAGE = 5;
+    private int currentPageIndex = 0;
+    private int pageCount = 1;
+
 
     @FXML
     public void initialize() {
@@ -123,9 +128,12 @@ public class ListeArticleAdminController {
             allViews = FXCollections.observableArrayList(views);
             filteredArticles = new FilteredList<>(allViews, p -> true);
 
-            int pageCount = (int) Math.ceil((double) filteredArticles.size() / ROWS_PER_PAGE);
-            pagination.setPageCount(Math.max(pageCount, 1));
-            pagination.setPageFactory(this::createPage);
+
+            pageCount = (int) Math.ceil((double) filteredArticles.size() / ROWS_PER_PAGE);
+            pageCount = Math.max(pageCount, 1);
+            currentPageIndex = 0;
+            setCurrentPage(currentPageIndex);
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -161,26 +169,13 @@ public class ListeArticleAdminController {
         });
 
         int pageCount = (int) Math.ceil((double) filteredArticles.size() / ROWS_PER_PAGE);
-        pagination.setPageCount(Math.max(pageCount, 1));
-        pagination.setCurrentPageIndex(0);
-        pagination.setPageFactory(this::createPage);
+        pageCount = (int) Math.ceil((double) filteredArticles.size() / ROWS_PER_PAGE);
+        pageCount = Math.max(pageCount, 1);
+        currentPageIndex = 0;
+        setCurrentPage(currentPageIndex);
+
     }
 
-    private Node createPage(int pageIndex) {
-        int fromIndex = pageIndex * ROWS_PER_PAGE;
-        int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, filteredArticles.size());
-
-        ObservableList<ArticleView> currentPageData = FXCollections.observableArrayList(
-                filteredArticles.subList(fromIndex, toIndex)
-        );
-
-        SortedList<ArticleView> sortedData = new SortedList<>(currentPageData);
-        sortedData.comparatorProperty().bind(articleTable.comparatorProperty());
-        articleTable.setItems(sortedData);
-
-        addActionColumn(); // ✅ Toujours recréer la colonne d'action à chaque page
-        return new VBox();
-    }
 
     private void addActionColumn() {
         // Supprimer les anciennes colonnes d'action si elles existent
@@ -345,6 +340,57 @@ public class ListeArticleAdminController {
         } catch (Exception e) {
             System.out.println("❌ Erreur inconnue : " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    private void setCurrentPage(int index) {
+        currentPageIndex = index;
+        createPage(index);
+        updateCustomPagination();
+    }
+
+    private void updateCustomPagination() {
+        pagination.getChildren().clear();
+
+        for (int i = 0; i < pageCount; i++) {
+            final int index = i;
+            Button pageButton = new Button(String.valueOf(i + 1));
+            pageButton.getStyleClass().add("btn-pagination");
+            if (i == currentPageIndex) {
+                pageButton.getStyleClass().add("btn-pagination-active");
+            }
+            pageButton.setOnAction(e -> setCurrentPage(index));
+            pagination.getChildren().add(pageButton);
+        }
+    }
+
+
+    private void createPage(int pageIndex) {
+        int fromIndex = pageIndex * ROWS_PER_PAGE;
+        int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, filteredArticles.size());
+
+        ObservableList<ArticleView> currentPageData = FXCollections.observableArrayList(
+                filteredArticles.subList(fromIndex, toIndex)
+        );
+
+        SortedList<ArticleView> sortedData = new SortedList<>(currentPageData);
+        sortedData.comparatorProperty().bind(articleTable.comparatorProperty());
+        articleTable.setItems(sortedData);
+
+        addActionColumn();
+    }
+
+    @FXML
+    private void handlePrevious() {
+        if (currentPageIndex > 0) {
+            setCurrentPage(currentPageIndex - 1);
+        }
+    }
+
+    @FXML
+    private void handleNext() {
+        if (currentPageIndex < pageCount - 1) {
+            setCurrentPage(currentPageIndex + 1);
         }
     }
 
