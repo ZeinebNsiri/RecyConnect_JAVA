@@ -176,5 +176,12 @@ public class LigneCommandeService {
         ps.setInt(3, ligne.getId());
         ps.executeUpdate();
     }
+    public void updateCommandeIdPourUtilisateur(int userId, int commandeId) throws SQLException {
+        String sql = "UPDATE ligne_commande SET commande_id_id = ?, etat_c = 'confirmée' WHERE user_c_id = ? AND commande_id_id IS NULL";
+        PreparedStatement ps = conx.prepareStatement(sql);
+        ps.setInt(1, commandeId);
+        ps.setInt(2, userId);
+        ps.executeUpdate();
+    }
 
 }

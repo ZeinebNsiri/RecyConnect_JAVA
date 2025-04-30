@@ -1,75 +1,125 @@
-/* ==== HEADER : Bande contact ==== */
-.top-bar {
-    -fx-background-color: #014421; /* vert foncé */
-    -fx-padding: 8;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-}
-.top-bar Label {
-    -fx-text-fill: white;
-}
-
-/* ==== MENU PRINCIPAL ==== */
-.menu-bar {
-    -fx-background-color: white;
-    -fx-padding: 15;
-}
-.menu-bar Label {
-    -fx-font-size: 16px;
-    -fx-text-fill: #014421;
-    -fx-font-weight: bold;
-}
-.nav-link:hover {
-    -fx-underline: true;
-    -fx-text-fill: #28a745;
-}
-
-/* ==== ICONES HEADER ==== */
-.icon {
-    -fx-font-size: 18px;
-    -fx-text-fill: #014421;
-}
-
-/* ==== BOUTON UTILISATEUR ==== */
-.user-menu {
-    -fx-font-size: 14px;
-    -fx-background-color: transparent;
-    -fx-text-fill: #014421;
-}
-.user-menu .label {
-    -fx-text-fill: #014421;
-}
-
-/* ==== CONTENU CENTRAL ==== */
-#rootBorderPane .center Label {
-    -fx-font-size: 22px;
-    -fx-text-fill: #333;
-}
-
-/* ==== FOOTER HAUT ==== */
-.footer-top {
-    -fx-background-color: #014421; /* vert foncé */
-    -fx-padding: 30;
-}
-.footer-top Label {
-    -fx-text-fill: white;
-}
-.footer-title {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-    -fx-text-fill: white;
-}
-
-/* ==== FOOTER BAS ==== */
-.footer-bottom {
-    -fx-background-color: #012d1a;
-    -fx-padding: 10;
-}
-.footer-bottom Label {
-    -fx-text-fill: white;
-}
-
-/* ==== FONT GLOBAL ==== */
+/* === GENERAL === */
 .root {
-    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-family: "Poppins", "Segoe UI", sans-serif;
+    -fx-background-color: linear-gradient(to bottom, #f8fafc, #e2e8f0);
+}
+
+/* === TOP BAR === */
+.top-bar {
+    -fx-background-color: #ffffffcc; /* light glass effect */
+    -fx-padding: 0 20px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1px 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 2);
+}
+
+/* === CONTACT LABELS === */
+.contact-label {
+    -fx-text-fill: #475569;
+    -fx-font-size: 13px;
+}
+
+/* === SEPARATOR === */
+.separator {
+    -fx-text-fill: #cbd5e1;
+}
+
+/* === SOCIAL MEDIA ICONS === */
+.social-media {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 14px;
+}
+
+/* === MENU BAR === */
+.menu-bar {
+    -fx-background-color: #f1f5f9aa; /* semi-transparent */
+    -fx-padding: 0 40px;
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 0 0 1px 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 3);
+}
+
+/* === NAVIGATION LINKS === */
+.nav-link {
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+/* === ICONS === */
+.icon {
+    -fx-font-size: 20px;
+    -fx-text-fill: #475569;
+    -fx-cursor: hand;
+}
+
+/* === USER MENU BASIC === */
+.user-menu {
+    -fx-background-color: transparent;
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+/* === WELCOME TITLES === */
+.welcome-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+}
+
+.welcome-subtitle {
+    -fx-text-fill: #475569;
+    -fx-font-size: 18px;
+}
+
+/* === PROFILE DROPDOWN MENU - GLASSMORPHISM === */
+.profile-menu {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-background-radius: 20;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.2), 10, 0, 0, 2),
+    dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 10, 0, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.6);
+    -fx-border-width: 1px;
+}
+
+/* === AVATAR STACK === */
+.avatar-stack {
+    -fx-background-radius: 50%;
+    -fx-overflow: hidden;
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.avatar-stack ImageView {
+    -fx-clip: new Circle(15, 15, 15);
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+/* === GLOW EFFECT ON HOVER === */
+.profile-menu:hover .avatar-stack ImageView {
+    -fx-effect: dropshadow(gaussian, rgba(0, 191, 255, 0.6), 10, 0.5, 0, 0);
+    -fx-rotate: 8;
+}
+
+/* === PROFILE NAME === */
+.profile-name {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* === DROPDOWN ICON === */
+.dropdown-icon {
+    -fx-font-size: 12px;
+    -fx-text-fill: grey;
+    -fx-transition: rotate 0.3s ease;
+}
+
+/* === ROTATE DROPDOWN ICON ON OPEN === */
+.profile-menu:showing .dropdown-icon {
+    -fx-rotate: 180;
 }

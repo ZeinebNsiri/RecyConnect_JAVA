@@ -1,33 +1,40 @@
 package controllers;
 
-import javafx.fxml.FXML;
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.Pane;
 
-import java.io.IOException;
+public class BaseUserController extends Application {
 
-public class BaseUserController {
-
-    @FXML
-    private BorderPane rootBorderPane;
-
-    @FXML
-    public void initialize() {
-        loadView("/formAjoutArticle.fxml"); // Charge dynamiquement le body
-    }
-
-    @FXML
-    public void showArticleView() {
-        loadView("/listeArticlesUser.fxml");
-    }
-
-    public void loadView(String fxmlPath) {
+    @Override
+    public void start(Stage primaryStage) {
         try {
-            Parent view = FXMLLoader.load(getClass().getResource(fxmlPath));
-            rootBorderPane.setCenter(view);
-        } catch (IOException e) {
+            Parent root = FXMLLoader.load(getClass().getResource("/BaseUser.fxml"));
+            Scene scene = new Scene(root);
+
+            // Créer un effet de blur sur un Pane ici
+            Pane profileMenu = new Pane(); // Normalement tu récupères le vrai pane de ton FXML
+            BoxBlur blur = new BoxBlur();
+            blur.setWidth(10);
+            blur.setHeight(10);
+            blur.setIterations(3);
+
+            profileMenu.setEffect(blur);
+
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Page Utilisateur");
+            primaryStage.show();
+        } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Erreur de chargement de BaseUser.fxml");
         }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

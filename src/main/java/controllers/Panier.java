@@ -208,16 +208,18 @@ public class Panier {
         commande.setPrixTotal(SessionPanier.getTotalPanier()); // Prix total du panier
 
         // Ajouter la commande dans la base de données et récupérer l'ID
-        int commandeId = commandeService.addCommande(commande); // Retourne l'ID de la commande insérée
+        int commandeId = commandeService.addCommande(commande).getId(); // Retourne l'ID de la commande insérée
         System.out.println("Commande ajoutée avec l'ID : " + commandeId);
         LigneCommandeService ligneCommandeService = new LigneCommandeService();
         List<LigneCommande> liste = ligneCommandeService.getLignesEnAttenteParUtilisateur(u.getId());
         // Associer chaque ligne de commande à cette commande
         for (LigneCommande ligne : liste) {
-            System.out.println(ligne);
             ligne.setEtat("confirmée");
-            ligneCommandeService.updateEtat(ligne); // Ajouter la ligne de commande à la base
+            ligne.setCommandeId(commandeId); // Association à la commande
+            ligneCommandeService.updateEtatEtCommande(ligne); // Sauvegarder dans la BDD
+            ligneCommandeService.updateEtat(ligne);       // Mettre à jour le statut
         }
+
 
         // Redirection vers la page commande.fxml
         try {
@@ -230,9 +232,6 @@ public class Panier {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // Optionnellement, vider le panier après la commande
-        SessionPanier.viderPanier();
     }
 
     @FXML

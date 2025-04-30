@@ -35,7 +35,7 @@
         </VBox>
 
         <!-- Bouton valider -->
-        <Button fx:id="finaliserBtn" text="Valider le paiement" onAction="#finaliserCommande"
+        <Button fx:id="finaliserBtn" text="Valider le paiement" onAction="#PayerCommande"
                 style="-fx-background-color: #00796b; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12 40; -fx-background-radius: 8;"/>
     </VBox>
 

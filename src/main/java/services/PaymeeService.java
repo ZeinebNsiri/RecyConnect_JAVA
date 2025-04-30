@@ -18,14 +18,16 @@ public class PaymeeService {
         connection.setRequestProperty("Authorization", "Token 0d1057005686148c3a26dd6d1aa6f89591b01784");
         connection.setDoOutput(true);
 
+        // ⚠️ Le champ "vendor" doit être une chaîne, même s'il contient un nombre
         JSONObject json = new JSONObject();
-        json.put("vendor", "YOUR_VENDOR_ID");
-        json.put("amount", amount);
+        json.put("vendor", 3666);
+        json.put("amount", amount); // double est accepté
         json.put("currency", "TND");
         json.put("note", note);
         json.put("order_id", orderId);
-        json.put("webhook_url", webhookUrl);
+        json.put("webhook_url", "https://yourdomain.com/webhook");
 
+        // ✅ Structure correcte du client
         JSONObject customer = new JSONObject();
         customer.put("first_name", firstName);
         customer.put("last_name", lastName);
@@ -35,7 +37,6 @@ public class PaymeeService {
 
         String jsonInputString = json.toString();
 
-        // 👉 AFFICHER LE JSON AVANT D'ENVOYER
         System.out.println("---- CONTENU DE LA REQUÊTE ENVOYÉE À PAYMEE ----");
         System.out.println(jsonInputString);
         System.out.println("------------------------------------------------");
@@ -46,31 +47,31 @@ public class PaymeeService {
         }
 
         int responseCode = connection.getResponseCode();
+        InputStream responseStream = (responseCode == HttpURLConnection.HTTP_OK)
+                ? connection.getInputStream()
+                : connection.getErrorStream();
 
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
-                StringBuilder response = new StringBuilder();
-                String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-
-                JSONObject responseObject = new JSONObject(response.toString());
-                if (responseObject.getBoolean("status")) {
-                    JSONObject data = responseObject.getJSONObject("data");
-
-                    Map<String, String> paymentData = new HashMap<>();
-                    paymentData.put("payment_url", data.getString("payment_url"));
-                    paymentData.put("payment_id", data.getString("payment_id"));
-                    paymentData.put("payment_token", data.getString("payment_token"));
-
-                    return paymentData;
-                } else {
-                    throw new Exception("Erreur lors de la création du paiement Paymee: " + responseObject.getString("message"));
-                }
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(responseStream, "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
             }
-        } else {
-            throw new Exception("Erreur HTTP: " + responseCode);
+
+            JSONObject responseObject = new JSONObject(response.toString());
+
+            if (responseCode == HttpURLConnection.HTTP_OK && responseObject.getBoolean("status")) {
+                JSONObject data = responseObject.getJSONObject("data");
+
+                Map<String, String> paymentData = new HashMap<>();
+                paymentData.put("payment_url", data.getString("payment_url"));
+                paymentData.put("payment_id", data.getString("payment_id"));
+                paymentData.put("payment_token", data.getString("payment_token"));
+
+                return paymentData;
+            } else {
+                throw new Exception("Erreur lors de la création du paiement Paymee: " + responseObject.optString("message", "Réponse invalide"));
+            }
         }
     }
 }

@@ -21,28 +21,25 @@ public class CommandeService {
     }
 
     // Retirer le static pour rendre cette méthode non statique
-    public int addCommande(Commande commande) throws SQLException {
-        String query = "INSERT INTO `commande`(`date_commande`, `statut`, `prix_total`) VALUES (?, ?, ?)";
-        PreparedStatement ps = conx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+    public Commande addCommande(Commande commande) {
+        String sql = "INSERT INTO commande (date_commande, prix_total, statut) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = conx.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setTimestamp(1, Timestamp.valueOf(commande.getDateCommande()));
+            stmt.setDouble(2, commande.getPrixTotal());
+            stmt.setString(3, commande.getStatut());
+            stmt.executeUpdate();
 
-        // Préparation de la requête d'insertion
-        ps.setTimestamp(1, Timestamp.valueOf(commande.getDateCommande())); // date_commande
-        ps.setString(2, commande.getStatut()); // statut
-        ps.setDouble(3, commande.getPrixTotal()); // prix_total
-
-        // Lancer l'insertion dans la base de données
-        int rowsAffected = ps.executeUpdate();
-        if (rowsAffected > 0) {
-            // Si l'insertion est réussie, récupérer l'ID généré
-            ResultSet rs = ps.getGeneratedKeys();
+            ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                int generatedId = rs.getInt(1);
-                commande.setId(generatedId); // Mise à jour de l'objet commande avec l'ID généré
-                return generatedId;  // Retourner l'ID généré
+                commande.setId(rs.getInt(1)); // ✅ Très important
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        throw new SQLException("Échec de la création de la commande.");
+        return commande;
     }
+
+
 
     public void updateCommande(Commande commande) throws SQLException {
         String query = "UPDATE commande SET statut = ?, prix_total = ?, date_commande = ? WHERE id = ?";
@@ -126,10 +123,7 @@ public class CommandeService {
     }
 
     public Commande getCommandeEnCoursParUtilisateur(int userId) throws SQLException {
-        String sql = "SELECT c.* FROM commande c " +
-                "LEFT JOIN ligne_commande lc ON lc.commande_id_id = c.id " +
-                "WHERE c.statut = 'En attente' AND lc.user_c_id = ? " +
-                "ORDER BY c.date_commande DESC LIMIT 1";
+        String sql = "SELECT c.* FROM commande c INNER JOIN ligne_commande lc ON lc.commande_id_id = c.id WHERE c.statut = 'En attente' AND lc.user_c_id = ? ORDER BY c.date_commande DESC LIMIT 1";
 
         try (PreparedStatement ps = conx.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -143,8 +137,9 @@ public class CommandeService {
                 commande.setPrixTotal(rs.getDouble("prix_total"));
                 return commande;
             }
+            return null;
         }
-        return null;
+
     }
 
 
