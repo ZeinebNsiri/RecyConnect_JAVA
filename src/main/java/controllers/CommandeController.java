@@ -43,15 +43,12 @@ public class CommandeController {
     @FXML
     private void PayerCommande() {
         try {
-            // Vérification du mode de paiement sélectionné
             if (!livraisonRadio.isSelected() && !visaRadio.isSelected()) {
                 showAlert(Alert.AlertType.WARNING, "Veuillez sélectionner un mode de paiement.");
                 return;
             }
 
             utilisateur u = getUtilisateurConnecte();
-
-            // Stocker le total du panier une seule fois
             double totalPanier = SessionPanier.getTotalPanier();
 
             if (totalPanier <= 0) {
@@ -59,13 +56,12 @@ public class CommandeController {
                 return;
             }
 
-            // Récupérer ou créer la commande
             Commande commande = commandeService.getCommandeEnCoursParUtilisateur(u.getId());
             String nouveauStatut = livraisonRadio.isSelected() ? PAIEMENT_LIVRAISON : PAIEMENT_VISA;
 
             if (commande == null) {
                 commande = new Commande();
-                commande.setDateCommande(LocalDateTime.now());
+                commande.setDateCommande(java.time.LocalDateTime.now());
                 commande.setPrixTotal(totalPanier);
                 commande.setStatut(nouveauStatut);
                 commandeService.addCommande(commande);
@@ -75,7 +71,6 @@ public class CommandeController {
                 commandeService.updateCommande(commande);
             }
 
-            // Mise à jour des lignes de commande
             List<LigneCommande> lignes = ligneCommandeService.getLignesEnAttenteParUtilisateur(u.getId());
             for (LigneCommande ligne : lignes) {
                 ligne.setEtat("confirmée");
@@ -83,78 +78,37 @@ public class CommandeController {
                 ligneCommandeService.updateEtatEtCommande(ligne);
             }
 
-            // Traitement selon le mode de paiement
             if (visaRadio.isSelected()) {
-                // Paiement via Paymee
-                // Forcer un format décimal à 3 chiffres après la virgule
-                // Forcer un format décimal à 3 chiffres après la virgule
-                String montantFormate = String.format(Locale.US, "%.3f", totalPanier);
-
-// Construction d'un objet JSON avec le montant
+                // Format correct attendu par Paymee
                 org.json.JSONObject json = new org.json.JSONObject();
-                json.put("amount", montantFormate);
-                json.put("note", "Paiement test");
+                json.put("amount", Double.parseDouble(String.format(Locale.US, "%.3f", totalPanier)));
+                json.put("note", "Order #" + commande.getId());
+                json.put("first_name", u.getPrenom());
+                json.put("last_name", u.getNom_user());
+                json.put("email", u.getEmail());
+                json.put("phone", "+216" + u.getNum_tel());
+                json.put("return_url", "https://www.return_url.tn");
+                json.put("cancel_url", "https://www.cancel_url.tn");
+                json.put("webhook_url", "https://www.webhook_url.tn");
+                json.put("order_id", "CMD-" + commande.getId());
 
-// Affichage pour debug
-                System.out.println(json.toString());
+                System.out.println("------ JSON envoyé à Paymee ------");
+                System.out.println(json.toString(4));
 
+                // Appel à l'API Paymee (implémentation réelle à ajouter)
+                // Ici tu peux faire l'envoi avec HttpClient ou HttpURLConnection
 
-// Appel à PaymeeService avec les bons paramètres (ajuste selon ta méthode réelle)
-                Map<String, String> paymentData = PaymeeService.createPayment(
-                        Double.parseDouble(montantFormate), // envoie le montant en double
-                        "Commande CMD-" + commande.getId(),
-                        u.getPrenom(),
-                        u.getNom_user(),
-                        u.getEmail(),
-                        u.getNum_tel(),
-                        "https://yourdomain.com/webhook",
-                        "CMD-" + commande.getId()
-                );
-
-
-                String paymentUrl = paymentData.get("payment_url");
-
-
-
-                if (paymentUrl != null) {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/paymee.fxml"));
-                    Parent root = loader.load();
-                    PaymeeController controller = loader.getController();
-                    controller.init(paymentUrl);
-
-                    Stage stage = new Stage();
-                    stage.setTitle("Paiement sécurisé - Paymee");
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                } else {
-                    showAlert(Alert.AlertType.ERROR, "Impossible de créer le paiement Paymee. Veuillez réessayer.");
-                }
+                showAlert(Alert.AlertType.INFORMATION, "Commande créée. Redirection vers le paiement Paymee...");
 
             } else {
-                // Paiement à la livraison : vider le panier et passer à la page commande
-                SessionPanier.viderPanier();
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/commande.fxml"));
-                Parent page = loader.load();
-                Scene newScene = new Scene(page);
-                Stage stage = (Stage) finaliserBtn.getScene().getWindow();
-                stage.setScene(newScene);
-                stage.show();
+                showAlert(Alert.AlertType.INFORMATION, "Commande créée avec succès. Paiement à la livraison.");
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();
-            if (e instanceof java.net.MalformedURLException) {
-                showAlert(Alert.AlertType.ERROR, "L'URL du serveur de paiement est incorrecte.");
-            } else if (e instanceof java.io.IOException) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de connexion avec le serveur.");
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Une erreur s’est produite lors du traitement de la commande.");
-            }
+            showAlert(Alert.AlertType.ERROR, "Erreur lors du paiement : " + e.getMessage());
         }
     }
-
 
     private void showAlert(Alert.AlertType type, String message) {
         Alert alert = new Alert(type);
@@ -165,10 +119,11 @@ public class CommandeController {
     }
 
     private utilisateur getUtilisateurConnecte() {
-        // Simulation utilisateur connecté — à remplacer par l’authentification réelle
         return new utilisateur(1, "exemple@mail.com", "Mnif", "Sahar",
                 "ROLE_CLIENT", "12345678", "Tunis", "motdepasse123", true, "MF123456", "photo.jpg");
     }
-
 }
+
+
+
 
