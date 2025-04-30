@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class PaymeeService {
@@ -18,22 +19,18 @@ public class PaymeeService {
         connection.setRequestProperty("Authorization", "Token 0d1057005686148c3a26dd6d1aa6f89591b01784");
         connection.setDoOutput(true);
 
-        // ⚠️ Le champ "vendor" doit être une chaîne, même s'il contient un nombre
         JSONObject json = new JSONObject();
-        json.put("vendor", 3666);
-        json.put("amount", amount); // double est accepté
-        json.put("currency", "TND");
+        String amountStr = String.format(Locale.US, "%.2f", amount);
+        json.put("amount", amountStr);
         json.put("note", note);
         json.put("order_id", orderId);
-        json.put("webhook_url", "https://yourdomain.com/webhook");
-
-        // ✅ Structure correcte du client
-        JSONObject customer = new JSONObject();
-        customer.put("first_name", firstName);
-        customer.put("last_name", lastName);
-        customer.put("email", email);
-        customer.put("phone", phone);
-        json.put("customer", customer);
+        json.put("first_name", firstName);
+        json.put("last_name", lastName);
+        json.put("email", email);
+        json.put("phone", phone);
+        json.put("webhook_url", webhookUrl);
+        json.put("return_url", "https://yourdomain.com/success");
+        json.put("cancel_url", "https://yourdomain.com/cancel");
 
         String jsonInputString = json.toString();
 
@@ -60,17 +57,22 @@ public class PaymeeService {
 
             JSONObject responseObject = new JSONObject(response.toString());
 
-            if (responseCode == HttpURLConnection.HTTP_OK && responseObject.getBoolean("status")) {
+            System.out.println("---- RÉPONSE PAYMEE ----");
+            System.out.println(responseObject.toString(4));
+            System.out.println("------------------------");
+
+            if (responseObject.has("status") && responseObject.getBoolean("status") && responseObject.has("data")) {
                 JSONObject data = responseObject.getJSONObject("data");
 
                 Map<String, String> paymentData = new HashMap<>();
-                paymentData.put("payment_url", data.getString("payment_url"));
-                paymentData.put("payment_id", data.getString("payment_id"));
-                paymentData.put("payment_token", data.getString("payment_token"));
+                paymentData.put("payment_url", data.optString("payment_url", ""));
+                paymentData.put("payment_id", data.optString("payment_id", ""));
+                paymentData.put("payment_token", data.optString("payment_token", ""));
 
                 return paymentData;
             } else {
-                throw new Exception("Erreur lors de la création du paiement Paymee: " + responseObject.optString("message", "Réponse invalide"));
+                String errorMsg = responseObject.optString("message", "Réponse invalide ou champ 'data' absent.");
+                throw new Exception("Erreur Paymee : " + errorMsg + "\nRéponse brute : " + responseObject.toString(2));
             }
         }
     }

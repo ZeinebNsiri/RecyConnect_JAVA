@@ -11,14 +11,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.stage.Stage;
-import org.h2.util.json.JSONObject;
 import services.CommandeService;
 import services.LigneCommandeService;
 import services.PaymeeService;
 import utils.SessionPanier;
 
-
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -56,6 +53,7 @@ public class CommandeController {
                 return;
             }
 
+            // Déterminer ou créer la commande
             Commande commande = commandeService.getCommandeEnCoursParUtilisateur(u.getId());
             String nouveauStatut = livraisonRadio.isSelected() ? PAIEMENT_LIVRAISON : PAIEMENT_VISA;
 
@@ -71,6 +69,7 @@ public class CommandeController {
                 commandeService.updateCommande(commande);
             }
 
+            // Mettre à jour les lignes de commande
             List<LigneCommande> lignes = ligneCommandeService.getLignesEnAttenteParUtilisateur(u.getId());
             for (LigneCommande ligne : lignes) {
                 ligne.setEtat("confirmée");
@@ -79,26 +78,42 @@ public class CommandeController {
             }
 
             if (visaRadio.isSelected()) {
-                // Format correct attendu par Paymee
-                org.json.JSONObject json = new org.json.JSONObject();
-                json.put("amount", Double.parseDouble(String.format(Locale.US, "%.3f", totalPanier)));
-                json.put("note", "Order #" + commande.getId());
-                json.put("first_name", u.getPrenom());
-                json.put("last_name", u.getNom_user());
-                json.put("email", u.getEmail());
-                json.put("phone", "+216" + u.getNum_tel());
-                json.put("return_url", "https://www.return_url.tn");
-                json.put("cancel_url", "https://www.cancel_url.tn");
-                json.put("webhook_url", "https://www.webhook_url.tn");
-                json.put("order_id", "CMD-" + commande.getId());
+                // Appel réel à PaymeeService
+                String amountStr = String.format(Locale.US, "%.3f", totalPanier);
 
-                System.out.println("------ JSON envoyé à Paymee ------");
-                System.out.println(json.toString(4));
 
-                // Appel à l'API Paymee (implémentation réelle à ajouter)
-                // Ici tu peux faire l'envoi avec HttpClient ou HttpURLConnection
+                Map<String, String> result = PaymeeService.createPayment(
+                        totalPanier,
+                        "Commande #" + commande.getId(),
+                        u.getPrenom(),
+                        u.getNom_user(),
+                        u.getEmail(),
+                        "+216" + u.getNum_tel(),
+                        "https://www.webhook_url.tn", // webhook
+                        "CMD-" + commande.getId()
+                );
+
+                String token = result.get("payment_token");
+                String urlPaiement = result.get("payment_url");
+
+                System.out.println("Token: " + token);
+                System.out.println("URL Paiement: " + urlPaiement);
 
                 showAlert(Alert.AlertType.INFORMATION, "Commande créée. Redirection vers le paiement Paymee...");
+
+                // Charger la vue WebView
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/PaymeeView.fxml"));
+                Parent root = loader.load();
+
+                // Initialiser le contrôleur avec l'URL
+                PaymeeController controller = loader.getController();
+                controller.init(urlPaiement);
+
+                // Afficher dans une nouvelle fenêtre
+                Stage stage = new Stage();
+                stage.setTitle("Paiement sécurisé via Paymee");
+                stage.setScene(new Scene(root));
+                stage.show();
 
             } else {
                 showAlert(Alert.AlertType.INFORMATION, "Commande créée avec succès. Paiement à la livraison.");
@@ -123,7 +138,3 @@ public class CommandeController {
                 "ROLE_CLIENT", "12345678", "Tunis", "motdepasse123", true, "MF123456", "photo.jpg");
     }
 }
-
-
-
-
