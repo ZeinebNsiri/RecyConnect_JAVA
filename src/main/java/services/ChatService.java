@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class ChatService {
     // Choisissez un des modèles suggérés
     private static final String CHAT_MODEL_API_URL = "https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1";
-    private static final String API_KEY = "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";
+    private static final String API_KEY = "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";
 
     public static String sendMessage(String message) {
         try {

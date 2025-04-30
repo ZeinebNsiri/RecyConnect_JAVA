@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import services.CategorieCoursService;
 import services.CoursService;
+import services.VideoAnalysisService;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,6 +100,8 @@ public class AjouterCours {
         }
     }
 
+    // Dans la classe AjouterCours.java
+
     @FXML
     private void handleVideoBrowse() {
         FileChooser fileChooser = new FileChooser();
@@ -110,6 +113,28 @@ public class AjouterCours {
         if (selectedVideoFile != null) {
             videoLabel.setText(selectedVideoFile.getName());
             errorVideo.setText("");
+
+            // Afficher un indicateur de progression
+            ProgressIndicator progressIndicator = new ProgressIndicator();
+            videoLabel.setGraphic(progressIndicator);
+
+            // Générer la description en arrière-plan pour ne pas bloquer l'interface
+            new Thread(() -> {
+                try {
+                    String generatedDescription = VideoAnalysisService.generateVideoDescription(selectedVideoFile);
+
+                    // Mettre à jour l'UI dans le thread principal
+                    javafx.application.Platform.runLater(() -> {
+                        descriptionField.setText(generatedDescription);
+                        videoLabel.setGraphic(null); // Enlever l'indicateur de progression
+                    });
+                } catch (Exception e) {
+                    javafx.application.Platform.runLater(() -> {
+                        videoLabel.setGraphic(null);
+                        showAlert("Erreur", "Impossible de générer la description automatique: " + e.getMessage(), Alert.AlertType.ERROR);
+                    });
+                }
+            }).start();
         } else {
             videoLabel.setText("Aucune vidéo choisie");
         }
