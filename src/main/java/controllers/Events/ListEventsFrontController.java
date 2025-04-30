@@ -3,14 +3,19 @@ package controllers.Events;
 import controllers.BaseUserController;
 import entities.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import services.EventService;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -108,4 +113,18 @@ public class ListEventsFrontController {
     private void handleShowMyReservations() {
         BaseUserController.instance.loadMyReservationsView();
     }
+    @FXML
+    private void handleShowRecommendations() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventViews/RecommendationView.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) eventFlowPane.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

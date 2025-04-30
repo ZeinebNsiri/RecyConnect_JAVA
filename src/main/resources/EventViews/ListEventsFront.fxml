@@ -36,7 +36,10 @@
                         onAction="#handleShowMyReservations"
                         style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;"/>
                 <Button text="Événements Recommandés"
+                        onAction="#handleShowRecommendations"
                         style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;"/>
+
+
             </HBox>
         </VBox>
     </top>
