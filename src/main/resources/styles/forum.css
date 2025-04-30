@@ -90,6 +90,15 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.5, 0, 2);
 }
 
+.stat-label {
+    -fx-font-size: 14px;
+}
+
+.like-heart {
+    -fx-font-size: 20px;
+    -fx-cursor: hand;
+}
+
 .sidebar-heading {
     -fx-font-size: 16px;
     -fx-font-weight: bold;

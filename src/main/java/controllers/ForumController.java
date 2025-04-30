@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import services.LikeService;
 import services.PostService;
 
 import java.io.IOException;
@@ -35,6 +37,8 @@ public class ForumController {
     @FXML private FlowPane filterTagsPane;
 
     private final PostService postService = new PostService();
+    private final LikeService likeService = new LikeService();
+    int userId = 2;
     private final List<ToggleButton> toggleButtons = new ArrayList<>();
     private final Set<String> selectedTags = new HashSet<>();
 
@@ -57,7 +61,11 @@ public class ForumController {
         myPostsToggle.setOnAction(event -> {
             selectToggle(myPostsToggle);
             currentPage = 1;
-            handleMyPosts();
+            try {
+                handleMyPosts();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         likedToggle.setOnAction(event -> {
@@ -72,6 +80,26 @@ public class ForumController {
         loadPosts();
         displayAllTags();
     }
+
+    @FXML
+    private void handleCommentaireClick(Post post) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/PostDetail.fxml"));
+            Parent root = loader.load();
+
+            PostDetailController controller = loader.getController();
+            controller.setPost(post); // <-- On transmet le post sélectionné
+
+            Stage stage = new Stage();
+            stage.setTitle("Détails du Post");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void selectToggle(ToggleButton selectedButton) {
         for (ToggleButton btn : toggleButtons) {
@@ -153,7 +181,7 @@ public class ForumController {
         }
     }
 
-    private void displayCurrentPage() {
+    private void displayCurrentPage() throws SQLException {
         postList.getChildren().clear();
 
         int start = (currentPage - 1) * POSTS_PER_PAGE;
@@ -181,19 +209,27 @@ public class ForumController {
 
         prevButton.setOnAction(e -> {
             currentPage--;
-            displayCurrentPage();
+            try {
+                displayCurrentPage();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         nextButton.setOnAction(e -> {
             currentPage++;
-            displayCurrentPage();
+            try {
+                displayCurrentPage();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         paginationBox.getChildren().addAll(prevButton, new Label("Page " + currentPage), nextButton);
         postList.getChildren().add(paginationBox);
     }
 
-    private void handleMyPosts() {
+    private void handleMyPosts() throws SQLException {
         int fakeUserId = 2;
         postList.getChildren().clear();
 
@@ -222,12 +258,60 @@ public class ForumController {
         }
     }
 
-    private VBox createPostCard(Post post, List<String> mediaUrls, boolean isMyPost) {
-        List<PostTag> tags = post.getTags();
+    private void openImageModal(List<String> mediaUrls, int startIndex) {
+        Stage modalStage = new Stage();
+        modalStage.initModality(Modality.APPLICATION_MODAL);
+        modalStage.setTitle("Voir les images");
 
+        VBox modalRoot = new VBox();
+        modalRoot.setSpacing(10);
+        modalRoot.setAlignment(Pos.CENTER);
+        modalRoot.setPadding(new Insets(10));
+
+        ImageView bigImageView = new ImageView();
+        bigImageView.setFitWidth(600);
+        bigImageView.setPreserveRatio(true);
+
+        Button prevButton = new Button("<");
+        Button nextButton = new Button(">");
+
+        HBox navigation = new HBox(10, prevButton, nextButton);
+        navigation.setAlignment(Pos.CENTER);
+
+        modalRoot.getChildren().addAll(bigImageView, navigation);
+
+        Scene modalScene = new Scene(modalRoot, 1000, 700);
+        modalStage.setScene(modalScene);
+
+        final int[] currentIndex = {startIndex};
+        modalStage.setResizable(true);
+
+        // Fonction pour mettre à jour l'image
+        Runnable updateImage = () -> {
+            bigImageView.setImage(new Image("file:" + mediaUrls.get(currentIndex[0])));
+        };
+        updateImage.run();
+
+        prevButton.setOnAction(e -> {
+            currentIndex[0] = (currentIndex[0] - 1 + mediaUrls.size()) % mediaUrls.size();
+            updateImage.run();
+        });
+
+        nextButton.setOnAction(e -> {
+            currentIndex[0] = (currentIndex[0] + 1) % mediaUrls.size();
+            updateImage.run();
+        });
+
+        modalStage.showAndWait();
+    }
+
+
+    private VBox createPostCard(Post post, List<String> mediaUrls, boolean isMyPost) throws SQLException {
+        List<PostTag> tags = post.getTags();
         if (tags == null) {
-            tags = new ArrayList<>(); // Initialize with an empty list if null
+            tags = new ArrayList<>();
         }
+
         VBox postCard = new VBox();
         postCard.setSpacing(10);
         postCard.getStyleClass().add("post-card");
@@ -252,24 +336,38 @@ public class ForumController {
         VBox content = new VBox();
         Label postText = new Label(post.getContenu());
 
-
         HBox tagBox = new HBox(5);
         tagBox.setPadding(new Insets(5, 0, 0, 0));
-        for (PostTag tag : post.getTags()) {
+        for (PostTag tag : tags) {
             Label tagLabel = new Label(tag.getLabel());
             tagLabel.getStyleClass().add("tag-badge");
             tagBox.getChildren().add(tagLabel);
         }
         content.getChildren().addAll(postText, tagBox);
 
-        VBox mediaContainer = new VBox();
+        HBox mediaContainer = new HBox();
         mediaContainer.setSpacing(5);
-        for (String mediaUrl : mediaUrls) {
+        int maxVisibleImages = 3;
+        for (int i = 0; i < Math.min(mediaUrls.size(), maxVisibleImages); i++) {
+            String mediaUrl = mediaUrls.get(i);
             ImageView imageView = new ImageView(new Image("file:" + mediaUrl));
             imageView.setFitWidth(80);
             imageView.setFitHeight(80);
-            imageView.setPreserveRatio(true);
-            mediaContainer.getChildren().add(imageView);
+            imageView.setPreserveRatio(false);
+
+            StackPane imageWrapper = new StackPane(imageView);
+            if (i == maxVisibleImages - 1 && mediaUrls.size() > maxVisibleImages) {
+                int extraImages = mediaUrls.size() - maxVisibleImages;
+                Label moreLabel = new Label("+" + extraImages);
+                moreLabel.setStyle("-fx-background-color: rgba(0,0,0,0.6); -fx-text-fill: white; -fx-font-size: 18px;");
+                StackPane.setAlignment(moreLabel, Pos.CENTER);
+                imageWrapper.getChildren().add(moreLabel);
+            }
+
+            final int index = i;
+            imageView.setOnMouseClicked(e -> openImageModal(mediaUrls, index));
+
+            mediaContainer.getChildren().add(imageWrapper);
         }
 
         HBox stats = new HBox();
@@ -277,15 +375,37 @@ public class ForumController {
         stats.setStyle("-fx-alignment: center-left;");
         stats.setPrefWidth(Double.MAX_VALUE);
 
-        Label likesLabel = new Label("♥ " + post.getNbr_jaime());
+        Label likeHeart = new Label("♥");
+        likeHeart.setStyle("-fx-font-size: 20px; -fx-cursor: hand;");
+
+        if (likeService.hasUserLikedPost(userId, post.getId())) {
+            likeHeart.setStyle("-fx-text-fill: red; -fx-font-size: 20px; -fx-cursor: hand;");
+        }
+
+        Label likesLabel = new Label("" +likeService.getLikesCountForPost(post.getId())); //
         Label commentsLabel = new Label("💬 0");
+        commentsLabel.setStyle("-fx-cursor: hand;");
+        commentsLabel.setOnMouseClicked(event -> handleCommentaireClick(post));
+
         likesLabel.getStyleClass().add("stat-label");
         commentsLabel.getStyleClass().add("stat-label");
+
+        likeHeart.setOnMouseClicked(event -> {
+            if (likeService.hasUserLikedPost(userId, post.getId())) {
+                likeService.removeLike(userId, post.getId());
+                likeHeart.setStyle("-fx-text-fill: black; -fx-font-size: 20px; -fx-cursor: hand;");
+            } else {
+                likeService.addLike(userId, post.getId());
+                likeHeart.setStyle("-fx-text-fill: red; -fx-font-size: 20px; -fx-cursor: hand;");
+            }
+
+            likesLabel.setText(""+likeService.getLikesCountForPost(post.getId()));
+        });
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        stats.getChildren().addAll(likesLabel, commentsLabel, spacer);
+        stats.getChildren().addAll(likeHeart, likesLabel, commentsLabel, spacer);
 
         if (isMyPost) {
             ImageView editIcon = new ImageView(new Image(getClass().getResourceAsStream("/images/icons/edit.png")));
@@ -310,7 +430,6 @@ public class ForumController {
                     stage.showAndWait();
 
                     loadPosts();
-
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

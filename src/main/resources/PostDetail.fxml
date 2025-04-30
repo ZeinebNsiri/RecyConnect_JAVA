@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<?import javafx.scene.shape.Circle?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.PostDetailController">
+    <VBox spacing="20" >
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <!-- Bouton retour -->
+        <Button fx:id="btnRetour" text="← Retour"  />
+
+        <!-- Partie Post -->
+        <VBox style="-fx-background-color: #f9f9f9; -fx-padding: 15; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, #ccc, 10, 0, 0, 0);">
+            <HBox spacing="10">
+                <Circle radius="25" fill="#ddd" />
+                <VBox>
+                    <Label fx:id="auteurPostLabel" style="-fx-font-weight: bold;" />
+                    <Label fx:id="datePostLabel" style="-fx-font-size: 12;" />
+                </VBox>
+            </HBox>
+
+            <Label fx:id="contenuPostText" wrapText="true" />
+            <FlowPane fx:id="hashtagsPane" hgap="10" vgap="5" />
+        </VBox>
+
+        <!-- Partie Commentaires -->
+        <VBox spacing="10">
+            <Label text="Les Commentaires" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+            <Button fx:id="btnAjouterCommentaire" text="+ Ajouter un Commentaire"  />
+
+            <VBox fx:id="commentairesVBox" spacing="10" />
+        </VBox>
+
+    </VBox>
+</AnchorPane>

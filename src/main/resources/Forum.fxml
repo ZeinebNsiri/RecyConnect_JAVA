@@ -44,7 +44,7 @@
     <center>
         <HBox alignment="CENTER">
 
-        <VBox spacing="20" maxWidth="900">
+        <VBox spacing="20" maxWidth="900" VBox.vgrow="ALWAYS" prefHeight="Infinity" >
             <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
             <!-- Tabs and Button -->

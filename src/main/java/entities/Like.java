@@ -2,21 +2,21 @@ package entities;
 
 public class Like {
     private int id;
-    private Post postLike;
-    private utilisateur userLike;
+    private int post_like_id;
+    private int user_like_id;
 
     public Like() {
     }
 
-    public Like(int id, Post postLike, utilisateur userLike) {
+    public Like(int id, int post_like_id, int user_like_id) {
         this.id = id;
-        this.postLike = postLike;
-        this.userLike = userLike;
+        this.post_like_id = post_like_id;
+        this.user_like_id = user_like_id;
     }
 
-    public Like(Post postLike, utilisateur userLike) {
-        this.postLike = postLike;
-        this.userLike = userLike;
+    public Like(int post_like_id, int user_like_id) {
+        this.post_like_id = post_like_id;
+        this.user_like_id = user_like_id;
     }
 
     public int getId() {
@@ -27,28 +27,28 @@ public class Like {
         this.id = id;
     }
 
-    public Post getPostLike() {
-        return postLike;
+    public int getPostLike() {
+        return post_like_id;
     }
 
-    public void setPostLike(Post postLike) {
-        this.postLike = postLike;
+    public void setPostLike(int post_like_id) {
+        this.post_like_id = post_like_id;
     }
 
-    public utilisateur getUserLike() {
-        return userLike;
+    public int getUserLike() {
+        return user_like_id;
     }
 
-    public void setUserLike(utilisateur userLike) {
-        this.userLike = userLike;
+    public void setUserLike(int user_like_id) {
+        this.user_like_id = user_like_id;
     }
 
     @Override
     public String toString() {
         return "Like{" +
                 "id=" + id +
-                ", postLike=" + postLike +
-                ", userLike=" + userLike +
+                ", postLike=" + post_like_id +
+                ", userLike=" + user_like_id +
                 '}';
     }
 }
