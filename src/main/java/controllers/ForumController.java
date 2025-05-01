@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import services.CommentaireService;
 import services.LikeService;
 import services.PostService;
 
@@ -38,6 +39,7 @@ public class ForumController {
 
     private final PostService postService = new PostService();
     private final LikeService likeService = new LikeService();
+    private final CommentaireService commentaireService = new CommentaireService();
     int userId = 2;
     private final List<ToggleButton> toggleButtons = new ArrayList<>();
     private final Set<String> selectedTags = new HashSet<>();
@@ -383,7 +385,7 @@ public class ForumController {
         }
 
         Label likesLabel = new Label("" +likeService.getLikesCountForPost(post.getId())); //
-        Label commentsLabel = new Label("💬 0");
+        Label commentsLabel = new Label("💬" + commentaireService.getCommentCountForPost(post.getId()));
         commentsLabel.setStyle("-fx-cursor: hand;");
         commentsLabel.setOnMouseClicked(event -> handleCommentaireClick(post));
 

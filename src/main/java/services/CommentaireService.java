@@ -107,9 +107,10 @@ public class CommentaireService {
                 if (rs.next()) {
                     user = new utilisateur();
                     user.setId(rs.getInt("id"));
-                    user.setNom_user(rs.getString("nom"));
+                    user.setNom_user(rs.getString("nom_user"));
                     user.setPrenom(rs.getString("prenom"));
                     user.setEmail(rs.getString("email"));
+                    user.setPhoto_profil(rs.getString("photo_profil"));
                 }
             }
         } catch (SQLException e) {
@@ -141,6 +142,19 @@ public class CommentaireService {
         }
         return replies;
     }
+
+    public int getCommentCountForPost(int postId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM commentaire WHERE post_com_id = ?";
+        try (PreparedStatement stmt = conx.prepareStatement(sql)) {
+            stmt.setInt(1, postId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
 
 
 
