@@ -1,5 +1,6 @@
 package controllers;
 
+import entities.Notification;
 import entities.utilisateur;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -20,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import services.FaceRecognitionService;
+import services.NotificationService;
 import services.UtilisateurService;
 import utils.WebcamUtils;
 
@@ -27,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.time.LocalDateTime;
 
 public class SignupController {
 
@@ -124,6 +127,7 @@ public class SignupController {
         String confirmerMotDePasse = confirmPasswordField.getText();
         String motDePassePro = proPasswordField.getText();
         String confirmerMotDePassePro = proConfirmField.getText();
+        NotificationService notificationService = new NotificationService();
         if (!ControleVide()){
             if (radioParticulier.isSelected()) {
                 String nom = nomField.getText();
@@ -141,6 +145,8 @@ public class SignupController {
 
                     try {
                         utilisateurService.add(new utilisateur(email, nom, prenom, "ROLE_USER", tel, motDePasse, true,faceToken));
+                        String notif = "Un nouvel utilisateur a été créé"+email;
+                        notificationService.add(new Notification(notif,false, LocalDateTime.now()));
                         clearAll();
                     } catch (SQLIntegrityConstraintViolationException e) {
 
@@ -191,6 +197,8 @@ public class SignupController {
 
                     try {
                         utilisateurService.add(new utilisateur(email, nom, "ROLE_PROFESSIONNEL", tel, motDePassePro, true, matricule,faceToken));
+                        String notif = "Un nouvel utilisateur a été créé"+email;
+                        notificationService.add(new Notification(notif,false, LocalDateTime.now()));
                         clearAll();
 
 

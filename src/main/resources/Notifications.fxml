@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.CentreNotificationsController"
+            prefWidth="1000" prefHeight="600"
+            style="-fx-background-color: #E8F5E9;">
+
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <ImageView fitHeight="24" fitWidth="24" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@notification.png"/>
+                </image>
+            </ImageView>
+            <Label text="Centre de Notifications"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+        </HBox>
+    </top>
+
+
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background: #E8F5E9;">
+        <FlowPane fx:id="notifContainer"
+                      hgap="20" vgap="20" prefWrapLength="950">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </FlowPane>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

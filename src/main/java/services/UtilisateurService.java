@@ -96,6 +96,17 @@ public class UtilisateurService implements IService<utilisateur> {
         System.out.println("Utilisateur updated successfully!");
     }
 
+    public void updatePassword(int userId, String newPassword) throws SQLException {
+
+        String hashed = BCrypt.hashpw(newPassword, BCrypt.gensalt(13));
+        hashed = hashed.replaceFirst("^\\$2a\\$", "\\$2y\\$");
+        String sql = "UPDATE utilisateur SET password = ? WHERE id = ?";
+        PreparedStatement ps = conx.prepareStatement(sql);
+        ps.setString(1, hashed);
+        ps.setInt(2, userId);
+        ps.executeUpdate();
+    }
+
     public static boolean isValidEmail(String email) {
         return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
     }

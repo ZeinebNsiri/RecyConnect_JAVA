@@ -98,6 +98,35 @@
                         <Button text="Enregistrer" onAction="#handleSave" styleClass="save-button"/>
                     </VBox>
                 </Tab>
+                <Tab text="Changer le mot de passe">
+                    <VBox spacing="15" alignment="CENTER" styleClass="vbox">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                        <Label text="Modifier votre mot de passe" styleClass="form-title"/>
+
+                        <VBox styleClass="card" alignment="CENTER">
+                            <GridPane hgap="10" vgap="10" styleClass="grid-pane">
+                                <columnConstraints>
+                                    <ColumnConstraints halignment="RIGHT"/>
+                                    <ColumnConstraints/>
+                                </columnConstraints>
+                                <children>
+                                    <Label text="Ancien mot de passe:" styleClass="bold-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                    <PasswordField fx:id="oldPasswordField" promptText="Ancien mot de passe" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                                    <Label text="Nouveau mot de passe:" styleClass="bold-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                    <PasswordField fx:id="newPasswordField" promptText="Nouveau mot de passe" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                                    <Label text="Confirmer mot de passe:" styleClass="bold-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                    <PasswordField fx:id="confirmPasswordField" promptText="Confirmer mot de passe" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                                </children>
+                            </GridPane>
+                        </VBox>
+
+                        <Button text="Changer le mot de passe" onAction="#handlePasswordChange" styleClass="save-button"/>
+                    </VBox>
+                </Tab>
+
             </TabPane>
         </VBox>
     </center>

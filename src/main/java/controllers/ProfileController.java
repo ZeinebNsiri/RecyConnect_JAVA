@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import org.mindrot.jbcrypt.BCrypt;
 import services.UtilisateurService;
 import utils.Session;
 import javafx.fxml.FXML;
@@ -34,6 +35,10 @@ public class ProfileController {
     // Formulaire
     @FXML private TextField nomField, prenomField, emailField, telField, adresseField;
     @FXML private Label fileNameLabel;
+    @FXML private PasswordField oldPasswordField;
+    @FXML private PasswordField newPasswordField;
+    @FXML private PasswordField confirmPasswordField;
+
 
     private File selectedFile;
     private utilisateur currentUser;
@@ -185,5 +190,50 @@ public class ProfileController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    @FXML
+    private void handlePasswordChange() {
+        String oldPass = oldPasswordField.getText();
+        String newPass = newPasswordField.getText();
+        String confirmPass = confirmPasswordField.getText();
+
+        utilisateur currentUser = Session.getInstance().getCurrentUser();
+        UtilisateurService service = new UtilisateurService();
+        String currPass = currentUser.getPassword();
+        currPass = currPass.replaceFirst("^\\$2y\\$", "\\$2a\\$");
+
+        try {
+            if (!BCrypt.checkpw(oldPass,currPass)) {
+                showAlertControle("L'ancien mot de passe est incorrect.");
+                return;
+            }
+
+            if (!newPass.equals(confirmPass)) {
+                showAlertControle( "Les nouveaux mots de passe ne correspondent pas.");
+                return;
+            }
+
+            if (!service.isValidPassword(newPass)) {
+                showAlertControle(service.getPasswordError(newPass));
+                return;
+            }
+            currentUser.setPassword(newPass);
+            service.updatePassword(currentUser.getId(),newPass);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Succès");
+            alert.setHeaderText(null);
+            alert.setContentText("Mot de passe mis à jour avec succès.");
+            alert.showAndWait();
+            oldPasswordField.clear();
+            newPasswordField.clear();
+            confirmPasswordField.clear();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlertControle("Erreur lors de la mise à jour du mot de passe.");
+        }
+    }
+
 
 }

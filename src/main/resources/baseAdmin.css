@@ -111,3 +111,18 @@
 .titled-pane:expanded > .title > .arrow-button > .arrow {
     -fx-background-color: #2a7f62;
 }
+.notification-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.notif-badge {
+    -fx-background-color: red;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 6;
+    -fx-background-radius: 10;
+    -fx-translate-x: 8;
+    -fx-translate-y: -8;
+}

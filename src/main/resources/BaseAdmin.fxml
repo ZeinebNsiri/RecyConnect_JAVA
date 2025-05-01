@@ -29,7 +29,14 @@
                 <Label text="RecyConnect" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
                 <TextField promptText="recherche" prefWidth="200" />
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button text="🔔" style="-fx-font-size: 16px;" />
+                <Button fx:id="notificationButton" onAction="#showNotifications" styleClass="notification-button">
+                    <graphic>
+                        <StackPane>
+                            <Label text="🔔" style="-fx-font-size: 18px;" />
+                            <Label fx:id="notifBadge" text="1" visible="false" styleClass="notif-badge" />
+                        </StackPane>
+                    </graphic>
+                </Button>
                 <MenuButton fx:id="userMenuButton">
                     <items>
                         <MenuItem fx:id="profilMenuItem" text="Profil">
