@@ -81,7 +81,6 @@ public class CommandeController {
                 // Appel réel à PaymeeService
                 String amountStr = String.format(Locale.US, "%.3f", totalPanier);
 
-
                 Map<String, String> result = PaymeeService.createPayment(
                         totalPanier,
                         "Commande #" + commande.getId(),
@@ -102,9 +101,8 @@ public class CommandeController {
                 showAlert(Alert.AlertType.INFORMATION, "Commande créée. Redirection vers le paiement Paymee...");
 
                 // Charger la vue WebView
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/PaymeeView.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Paymee.fxml"));
                 Parent root = loader.load();
-
                 // Initialiser le contrôleur avec l'URL
                 PaymeeController controller = loader.getController();
                 controller.init(urlPaiement);

@@ -77,6 +77,11 @@
             <version>9.0.10</version> <!-- selon ta version de JavaFX -->
         </dependency>
 
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>7.1.15</version>
+        </dependency>
 
     </dependencies>
 
