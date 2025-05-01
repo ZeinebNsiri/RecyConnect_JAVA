@@ -97,6 +97,9 @@ public class ForumController {
             stage.setScene(new Scene(root));
             stage.show();
 
+            Stage currentStage = (Stage) postList.getScene().getWindow();
+            currentStage.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

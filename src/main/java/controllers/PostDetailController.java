@@ -22,6 +22,7 @@ import javafx.scene.shape.Circle;
 
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -53,6 +54,10 @@ public class PostDetailController {
 
     @FXML
     private VBox commentairesVBox;
+
+    @FXML
+    private Button btnRetour;
+
 
     @FXML
     private TextField nouveauCommentaireField;
@@ -138,6 +143,53 @@ public class PostDetailController {
         contenuLabel.setWrapText(true);
         contenuLabel.setStyle("-fx-font-size: 13px;");
 
+        // 🟡 BOUTON REPLY
+        Button replyButton = new Button("Répondre");
+        replyButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #3b82f6; -fx-underline: true;");
+
+        // 🟡 CHAMP DE RÉPONSE (initialement caché)
+        TextField replyField = new TextField();
+        replyField.setPromptText("Votre réponse...");
+        replyField.setVisible(false);
+
+        Button sendReplyButton = new Button("Envoyer");
+        sendReplyButton.setVisible(false);
+
+        // Conteneur champ + bouton
+        HBox replyInputBox = new HBox(replyField, sendReplyButton);
+        replyInputBox.setSpacing(5);
+        replyInputBox.setVisible(false);
+
+        // 🟡 ACTION du bouton "Répondre"
+        replyButton.setOnAction(e -> {
+            boolean currentlyVisible = replyInputBox.isVisible();
+            replyInputBox.setVisible(!currentlyVisible);
+            replyField.setVisible(!currentlyVisible);
+            sendReplyButton.setVisible(!currentlyVisible);
+        });
+
+        // 🟡 ACTION bouton "Envoyer"
+        sendReplyButton.setOnAction(e -> {
+            String contenu = replyField.getText().trim();
+            if (contenu.isEmpty()) return;
+
+            Commentaire newReply = new Commentaire();
+            newReply.setContenuCom(contenu);
+            newReply.setParentId(commentaire.getId());
+            newReply.setPostComId(commentaire.getPostComId());
+            newReply.setUserComId(2); // adapter à ton système
+            newReply.setDateCom(LocalDateTime.now());
+
+            commentaireService.ajouter(newReply);
+
+            // 🔄 Recharger tous les commentaires (à toi d'implémenter `reloadCommentaires`)
+            chargerCommentaires();
+
+            // Reset champ
+            replyField.clear();
+            replyInputBox.setVisible(false);
+        });
+
         VBox texteBox = new VBox(auteurLabel, contenuLabel, dateLabel);
         texteBox.setSpacing(3);
         texteBox.setPadding(new Insets(5));
@@ -196,6 +248,23 @@ public class PostDetailController {
         ajoutCommentaireBox.setManaged(false);
         chargerCommentaires();
     }
+
+    @FXML
+    private void retourVersListePosts() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Forum.fxml"));
+            Parent root = loader.load();
+
+            ForumController forumController = loader.getController();
+            forumController.loadPosts(); // méthode que tu dois créer
+
+            Stage stage = (Stage) btnRetour.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 

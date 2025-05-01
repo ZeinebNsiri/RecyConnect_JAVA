@@ -13,7 +13,7 @@
         </padding>
 
         <!-- Bouton retour -->
-        <Button fx:id="btnRetour" text="← Retour"
+        <Button fx:id="btnRetour" text="← Retour" onAction="#retourVersListePosts"
                 style="-fx-background-color: transparent; -fx-text-fill: #4CAF50; -fx-font-size: 14px; -fx-cursor: hand;" />
 
         <!-- Partie Post -->
