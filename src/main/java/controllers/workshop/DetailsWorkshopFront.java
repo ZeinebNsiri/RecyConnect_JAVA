@@ -26,6 +26,9 @@ public class DetailsWorkshopFront {
     @FXML private Label titleLabel;
     @FXML private Label categoryLabel;
     @FXML private Label descriptionLabel;
+
+    @FXML private Button btnPlayPause;
+
     @FXML private Label breadcrumbLabel;
 
     @FXML private HBox starContainer;
@@ -65,13 +68,25 @@ public class DetailsWorkshopFront {
                     Media media = new Media(videoFile.toURI().toString());
                     mediaPlayer = new MediaPlayer(media);
                     mediaView.setMediaPlayer(mediaPlayer);
-                    mediaPlayer.setAutoPlay(true);
                     mediaView.setVisible(true);
+                    btnPlayPause.setVisible(true); // show the button ONLY if video exists
+                    mediaPlayer.setAutoPlay(false);
+                    mediaPlayer.play();
+                    btnPlayPause.setText("⏸ Pause");
                 } catch (MediaException e) {
                     mediaView.setVisible(false);
+                    btnPlayPause.setVisible(false); // hide if video error
                 }
+            } else {
+                btnPlayPause.setVisible(false); // hide if file missing
             }
+        } else {
+            mediaView.setVisible(false);
+            btnPlayPause.setVisible(false); // hide if no video
         }
+
+
+
     }
 
 
@@ -181,5 +196,19 @@ public class DetailsWorkshopFront {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void handlePlayPause() {
+        if (mediaPlayer == null) return;
+
+        MediaPlayer.Status status = mediaPlayer.getStatus();
+        if (status == MediaPlayer.Status.PLAYING) {
+            mediaPlayer.pause();
+            btnPlayPause.setText("▶️ Reprendre");
+        } else {
+            mediaPlayer.play();
+            btnPlayPause.setText("⏸ Pause");
+        }
+    }
+
 
 }

@@ -27,51 +27,63 @@
     <!-- Content -->
     <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;">
         <content>
-            <HBox alignment="CENTER">
-                <VBox spacing="15" alignment="CENTER" maxWidth="600"
-                      style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 5);"
-                      HBox.hgrow="NEVER">
+            <VBox spacing="30" alignment="TOP_CENTER" style="-fx-padding: 40 0 20 0;">
+                <HBox alignment="CENTER">
+                    <VBox spacing="20" alignment="CENTER_LEFT" maxWidth="700"
+                          style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 5);"
+                          HBox.hgrow="NEVER">
 
-                    <!-- Video or Image -->
-                    <MediaView fx:id="mediaView" fitWidth="500" preserveRatio="true"/>
-                    <ImageView fx:id="imageView" fitWidth="500" preserveRatio="true" visible="false"/>
-
-                    <!-- ⭐ Rating Section -->
-                    <VBox spacing="10" style="-fx-background-color: #e8f5e9; -fx-padding: 15; -fx-background-radius: 8;" alignment="CENTER_LEFT">
-                        <Label text="Donnez votre note :" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                        <!-- Vidéo ou Image -->
+                        <MediaView fx:id="mediaView" fitWidth="640" preserveRatio="true"/>
                         <HBox spacing="10" alignment="CENTER_LEFT">
-                            <HBox fx:id="starContainer" spacing="5"/>
-                            <Label fx:id="resetLabel"
-                                   text="🔄"
-                                   onMouseClicked="#handleResetStars"
-                                   style="-fx-font-size: 20px; -fx-cursor: hand;"/>
-                            <Button fx:id="btnRate"
-                                    text="Noter"
-                                    onAction="#handleRatingSubmit"
-                                    style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+                            <Button fx:id="btnPlayPause"
+                                    text="⏸ Pause"
+                                    visible="false"
+                                    onAction="#handlePlayPause"
+                                    style="-fx-background-color: #198754; -fx-text-fill: white; -fx-padding: 5 15;"/>
                         </HBox>
+                        <ImageView fx:id="imageView" fitWidth="640" preserveRatio="true" visible="false"/>
+
+                        <!-- Notation -->
+                        <VBox spacing="10" style="-fx-background-color: #e8f5e9; -fx-padding: 15; -fx-background-radius: 8;" alignment="CENTER_LEFT">
+                            <Label text="Donnez votre note :" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <HBox fx:id="starContainer" spacing="5"/>
+                                <Label fx:id="resetLabel" text="🔄"
+                                       onMouseClicked="#handleResetStars"
+                                       style="-fx-font-size: 20px; -fx-cursor: hand;"/>
+                                <Button fx:id="btnRate"
+                                        text="Noter"
+                                        onAction="#handleRatingSubmit"
+                                        style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Titre -->
+                        <Label fx:id="titleLabel"
+                               wrapText="true"
+                               style="-fx-font-size: 22px; -fx-text-fill: #014421; -fx-font-weight: bold;"/>
+
+                        <!-- Catégorie -->
+                        <Label fx:id="categoryLabel"
+                               style="-fx-font-size: 14px; -fx-text-fill: #28a745;"/>
+
+                        <!-- Description (sans scroll) -->
+                        <Label fx:id="descriptionLabel"
+                               wrapText="true"
+                               maxWidth="650"
+                               style="-fx-font-size: 14px; -fx-text-fill: #444;" />
+
+                        <!-- Retour -->
+                        <HBox alignment="CENTER">
+                            <Button text="← Retour aux Workshops"
+                                    onAction="#handleBack"
+                                    style="-fx-background-color:#28a745; -fx-text-fill:white; -fx-font-size:14px; -fx-padding: 8 16;"/>
+                        </HBox>
+
                     </VBox>
-
-
-                    <!-- Title -->
-                    <Label fx:id="titleLabel"
-                           style="-fx-font-size: 22px; -fx-text-fill: #014421; -fx-font-weight: bold;"/>
-
-                    <!-- Category -->
-                    <Label fx:id="categoryLabel"
-                           style="-fx-font-size: 14px; -fx-text-fill: #28a745;"/>
-
-                    <!-- Description -->
-                    <Label fx:id="descriptionLabel"
-                           wrapText="true"
-                           style="-fx-font-size: 14px; -fx-text-fill: #444;"/>
-
-                    <!-- Back Button -->
-                    <Button text="← Retour aux Workshops"
-                            onAction="#handleBack"
-                            style="-fx-background-color:#28a745; -fx-text-fill:white; -fx-font-size:14px; -fx-padding: 8 16;"/>
-                </VBox>
-            </HBox>
+                </HBox>
+            </VBox>
         </content>
     </ScrollPane>
 </VBox>
