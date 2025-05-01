@@ -22,7 +22,7 @@
     <Button fx:id="btnAjouter" text="+ Ajouter Workshop"
             style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
 
-    <TableView fx:id="coursTableView">
+    <TableView fx:id="coursTableView" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="colId" text="#" />
             <TableColumn fx:id="colImage" text="Image" />

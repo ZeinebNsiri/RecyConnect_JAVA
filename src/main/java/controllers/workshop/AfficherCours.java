@@ -9,8 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import services.CoursService;
 
@@ -131,19 +131,41 @@ public class AfficherCours {
 
                 btnModifier.setOnAction(event -> {
                     Cours selected = getTableView().getItems().get(getIndex());
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
-                        Parent root = loader.load();
-                        BaseAdminController shell = loader.getController();
-                        shell.showModifierCoursViewWithData(selected);
-                        Stage stage = (Stage) getTableView().getScene().getWindow();
-                        stage.setScene(new Scene(root, 1000, 600));
-                        stage.setTitle("Modifier Cours");
-                        stage.setResizable(false);
-                        stage.show();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    Stage stage = (Stage) getTableView().getScene().getWindow();
+                    boolean wasMaximized = stage.isMaximized();
+
+                    if (stage.getScene().getRoot() instanceof BorderPane) {
+                        BorderPane rootBorderPane = (BorderPane) stage.getScene().getRoot();
+                        BaseAdminController controller = (BaseAdminController) rootBorderPane.getUserData();
+                        if (controller == null) {
+                            try {
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+                                Parent root = loader.load();
+                                controller = loader.getController();
+                                rootBorderPane = (BorderPane) root;
+                                rootBorderPane.setUserData(controller);
+                                stage.setScene(new Scene(root));
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                                return;
+                            }
+                        }
+                        controller.showModifierCoursViewWithData(selected);
+                    } else {
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+                            Parent root = loader.load();
+                            BaseAdminController controller = loader.getController();
+                            controller.showModifierCoursViewWithData(selected);
+                            stage.setScene(new Scene(root));
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                            return;
+                        }
                     }
+
+                    stage.setMaximized(wasMaximized);
+                    stage.show();
                 });
 
                 btnSupprimer.setOnAction(event -> {
@@ -240,18 +262,40 @@ public class AfficherCours {
     }
 
     private void handleAjouterCours() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
-            Parent root = loader.load();
-            BaseAdminController shell = loader.getController();
-            shell.showAjouterCoursView();
-            Stage stage = (Stage) btnAjouter.getScene().getWindow();
-            stage.setScene(new Scene(root, 1000, 600));
-            stage.setTitle("Ajouter Cours");
-            stage.setResizable(false);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        Stage stage = (Stage) btnAjouter.getScene().getWindow();
+        boolean wasMaximized = stage.isMaximized();
+
+        if (stage.getScene().getRoot() instanceof BorderPane) {
+            BorderPane rootBorderPane = (BorderPane) stage.getScene().getRoot();
+            BaseAdminController controller = (BaseAdminController) rootBorderPane.getUserData();
+            if (controller == null) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+                    Parent root = loader.load();
+                    controller = loader.getController();
+                    rootBorderPane = (BorderPane) root;
+                    rootBorderPane.setUserData(controller);
+                    stage.setScene(new Scene(root));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+            controller.showAjouterCoursView();
+        } else {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+                Parent root = loader.load();
+                BaseAdminController shell = loader.getController();
+                shell.showAjouterCoursView();
+                stage.setScene(new Scene(root));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
         }
+
+        stage.setMaximized(wasMaximized);
+        stage.show();
     }
 }

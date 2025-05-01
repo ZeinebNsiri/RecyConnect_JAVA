@@ -8,8 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import services.CategorieCoursService;
 
@@ -48,6 +48,7 @@ public class AfficherCategorieCours {
                 }
             }
         });
+
         colNom.setCellValueFactory(new PropertyValueFactory<>("nomCategorie"));
         colDescription.setCellValueFactory(new PropertyValueFactory<>("descriptionCategorie"));
 
@@ -69,16 +70,41 @@ public class AfficherCategorieCours {
 
                 btnModifier.setOnAction(e -> {
                     CategorieCours selected = getTableView().getItems().get(getIndex());
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
-                        Parent root = loader.load();
-                        BaseAdminController controller = loader.getController();
+                    Stage stage = (Stage) getTableView().getScene().getWindow();
+                    boolean wasMaximized = stage.isMaximized();
+
+                    if (stage.getScene().getRoot() instanceof BorderPane) {
+                        BorderPane rootBorderPane = (BorderPane) stage.getScene().getRoot();
+                        BaseAdminController controller = (BaseAdminController) rootBorderPane.getUserData();
+                        if (controller == null) {
+                            try {
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+                                Parent root = loader.load();
+                                controller = loader.getController();
+                                rootBorderPane = (BorderPane) root;
+                                rootBorderPane.setUserData(controller);
+                                stage.setScene(new Scene(root));
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                                return;
+                            }
+                        }
                         controller.showModifierCategorieViewWithData(selected);
-                        Stage stage = (Stage) getTableView().getScene().getWindow();
-                        stage.setScene(new Scene(root, 1000, 600));
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+                    } else {
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+                            Parent root = loader.load();
+                            BaseAdminController controller = loader.getController();
+                            controller.showModifierCategorieViewWithData(selected);
+                            stage.setScene(new Scene(root));
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                            return;
+                        }
                     }
+
+                    stage.setMaximized(wasMaximized);
+                    stage.show();
                 });
 
                 btnSupprimer.setOnAction(e -> {
@@ -105,8 +131,12 @@ public class AfficherCategorieCours {
             }
         });
 
-        loadCategories();
+        colNom.setMaxWidth(Double.MAX_VALUE);
+        colDescription.setMaxWidth(Double.MAX_VALUE);
+        colDetails.setMaxWidth(Double.MAX_VALUE);
+        categorieTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 
+        loadCategories();
         btnAjouter.setOnAction(e -> handleAjouterCategorie());
     }
 
@@ -138,7 +168,6 @@ public class AfficherCategorieCours {
             updateTable();
             buildPagination();
         });
-
         paginationContainer.getChildren().add(prev);
 
         for (int i = 1; i <= totalPages; i++) {
@@ -163,20 +192,44 @@ public class AfficherCategorieCours {
             updateTable();
             buildPagination();
         });
-
         paginationContainer.getChildren().add(next);
     }
 
     private void handleAjouterCategorie() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
-            Parent root = loader.load();
-            BaseAdminController shell = loader.getController();
-            shell.showAjoutCategorieView();
-            Stage stage = (Stage) btnAjouter.getScene().getWindow();
-            stage.setScene(new Scene(root, 1000, 600));
-        } catch (IOException e) {
-            e.printStackTrace();
+        Stage stage = (Stage) btnAjouter.getScene().getWindow();
+        boolean wasMaximized = stage.isMaximized();
+
+        if (stage.getScene().getRoot() instanceof BorderPane) {
+            BorderPane rootBorderPane = (BorderPane) stage.getScene().getRoot();
+            BaseAdminController controller = (BaseAdminController) rootBorderPane.getUserData();
+            if (controller == null) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+                    Parent root = loader.load();
+                    controller = loader.getController();
+                    rootBorderPane = (BorderPane) root;
+                    rootBorderPane.setUserData(controller);
+                    stage.setScene(new Scene(root));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+            controller.showAjoutCategorieView();
+        } else {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+                Parent root = loader.load();
+                BaseAdminController shell = loader.getController();
+                shell.showAjoutCategorieView();
+                stage.setScene(new Scene(root));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
         }
+
+        stage.setMaximized(wasMaximized);
+        stage.show();
     }
 }

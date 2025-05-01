@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -23,42 +24,24 @@ import java.util.List;
 
 public class AjouterCours {
 
-    @FXML
-    private ComboBox<CategorieCours> categorieCombo;
-    @FXML
-    private Label errorCategorie;
-
-    @FXML
-    private TextField titreField;
-    @FXML
-    private Label errorTitre;
-
-    @FXML
-    private TextArea descriptionField;
-    @FXML
-    private Label errorDescription;
-
-    @FXML
-    private Label videoLabel;
-    @FXML
-    private Label errorVideo;
-
-    @FXML
-    private Label imageLabel;
-    @FXML
-    private Label errorImage;
-
-    @FXML
-    private Button browseVideoBtn;
-    @FXML
-    private Button browseImageBtn;
-    @FXML
-    private Button btnAjouterCours;
-    @FXML
-    private Button btnAnnuler;
+    @FXML private ComboBox<CategorieCours> categorieCombo;
+    @FXML private Label errorCategorie;
+    @FXML private TextField titreField;
+    @FXML private Label errorTitre;
+    @FXML private TextArea descriptionField;
+    @FXML private Label errorDescription;
+    @FXML private Label videoLabel;
+    @FXML private Label errorVideo;
+    @FXML private Label imageLabel;
+    @FXML private Label errorImage;
+    @FXML private Button browseVideoBtn;
+    @FXML private Button browseImageBtn;
+    @FXML private Button btnAjouterCours;
+    @FXML private Button btnAnnuler;
 
     private File selectedVideoFile;
     private File selectedImageFile;
+    private BaseAdminController baseAdminController; // Store the controller
 
     private final CoursService coursService = new CoursService();
     private final CategorieCoursService categorieService = new CategorieCoursService();
@@ -66,7 +49,6 @@ public class AjouterCours {
     @FXML
     private void initialize() {
         loadCategories();
-
 
         categorieCombo.setConverter(new StringConverter<CategorieCours>() {
             @Override
@@ -100,7 +82,10 @@ public class AjouterCours {
         }
     }
 
-    // Dans la classe AjouterCours.java
+    public void setBaseAdminController(BaseAdminController controller) {
+        this.baseAdminController = controller;
+        System.out.println("BaseAdminController set in AjouterCours: " + (baseAdminController != null));
+    }
 
     @FXML
     private void handleVideoBrowse() {
@@ -114,19 +99,16 @@ public class AjouterCours {
             videoLabel.setText(selectedVideoFile.getName());
             errorVideo.setText("");
 
-            // Afficher un indicateur de progression
             ProgressIndicator progressIndicator = new ProgressIndicator();
             videoLabel.setGraphic(progressIndicator);
 
-            // Générer la description en arrière-plan pour ne pas bloquer l'interface
             new Thread(() -> {
                 try {
                     String generatedDescription = VideoAnalysisService.generateVideoDescription(selectedVideoFile);
 
-                    // Mettre à jour l'UI dans le thread principal
                     javafx.application.Platform.runLater(() -> {
                         descriptionField.setText(generatedDescription);
-                        videoLabel.setGraphic(null); // Enlever l'indicateur de progression
+                        videoLabel.setGraphic(null);
                     });
                 } catch (Exception e) {
                     javafx.application.Platform.runLater(() -> {
@@ -181,15 +163,13 @@ public class AjouterCours {
             errorImage.setText("Veuillez choisir une image.");
             valid = false;
         }
-        if (!valid)
-            return;
+        if (!valid) return;
 
         try {
             String imageCours = "default.png";
             if (selectedImageFile != null) {
                 File uploadDir = new File("uploadsworkshop");
-                if (!uploadDir.exists())
-                    uploadDir.mkdirs();
+                if (!uploadDir.exists()) uploadDir.mkdirs();
                 Path destImg = Paths.get("uploadsworkshop", selectedImageFile.getName());
                 Files.copy(selectedImageFile.toPath(), destImg, StandardCopyOption.REPLACE_EXISTING);
                 imageCours = selectedImageFile.getName();
@@ -202,27 +182,17 @@ public class AjouterCours {
             String video = "";
             if (selectedVideoFile != null) {
                 File uploadDir = new File("uploadsworkshop");
-                if (!uploadDir.exists())
-                    uploadDir.mkdirs();
+                if (!uploadDir.exists()) uploadDir.mkdirs();
                 Path destVideo = Paths.get("uploadsworkshop", selectedVideoFile.getName());
                 Files.copy(selectedVideoFile.toPath(), destVideo, StandardCopyOption.REPLACE_EXISTING);
                 video = selectedVideoFile.getName();
             }
 
-
-            Cours cours = new Cours(
-                    0,
-                    imageCours,
-                    titreCours,
-                    chosenCategorie,
-                    descCours,
-                    video
-            );
-
+            Cours cours = new Cours(0, imageCours, titreCours, chosenCategorie, descCours, video);
             coursService.add(cours);
 
             showAlert("Succès", "Cours ajouté avec succès !", Alert.AlertType.CONFIRMATION);
-            retourAfficherListe();
+            retourAfficherListe(); // Navigate back after adding
 
         } catch (IOException e) {
             showAlert("Erreur Fichier", "Impossible de copier un fichier : " + e.getMessage(), Alert.AlertType.ERROR);
@@ -237,23 +207,31 @@ public class AjouterCours {
     }
 
     private void retourAfficherListe() {
+        Stage stage = (Stage) btnAnnuler.getScene().getWindow();
+        boolean wasMaximized = stage.isMaximized();
+
+        if (baseAdminController != null) {
+            System.out.println("Navigating back to AfficherCours using stored BaseAdminController...");
+            baseAdminController.showWorkshopsView();
+            stage.setMaximized(wasMaximized);
+            return;
+        }
+
+        // Fallback: Load a new BaseAdmin.fxml
+        System.out.println("BaseAdminController not set, falling back to load a new BaseAdmin.fxml...");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
             Parent root = loader.load();
-
-            // Utiliser une méthode spécifique dans BaseAdminController pour charger la vue Afficher
-            controllers.BaseAdminController controller = loader.getController();
+            BaseAdminController controller = loader.getController();
             controller.showWorkshopsView();
-
-            Stage stage = (Stage) btnAnnuler.getScene().getWindow();
             stage.setScene(new Scene(root));
+            stage.setMaximized(wasMaximized);
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            System.err.println("Error loading BaseAdmin.fxml: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
-
-
 
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);

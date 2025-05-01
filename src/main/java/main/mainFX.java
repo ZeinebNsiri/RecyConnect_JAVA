@@ -11,12 +11,12 @@ public class mainFX extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/BaseUser.fxml"));
         Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root, 1000, 600);
+        Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Gestion des Catégories de Cours");
-        stage.setResizable(false);
+        stage.setTitle("Recyconnect");
         stage.show();
     }
+
 
     public static void main(String[] args) {
         launch(args);

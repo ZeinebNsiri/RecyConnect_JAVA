@@ -9,14 +9,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import services.CategorieCoursService;
 import services.CoursService;
 
@@ -28,50 +27,28 @@ import java.util.List;
 
 public class ModifierCours {
 
-    @FXML
-    private ComboBox<CategorieCours> categorieCombo;
-    @FXML
-    private Label errorCategorie;
-
-    @FXML
-    private TextField titreField;
-    @FXML
-    private Label errorTitre;
-
-    @FXML
-    private TextArea descriptionField;
-    @FXML
-    private Label errorDescription;
-
-    // Labels servant à afficher la preview image / vidéo
-    @FXML
-    private Label imageLabel;
-    @FXML
-    private Label errorImage;
-    @FXML
-    private Label videoLabel;
-    @FXML
-    private Label errorVideo;
-
-    @FXML
-    private Button browseImageBtn;
-    @FXML
-    private Button browseVideoBtn;
-    @FXML
-    private Button btnModifier;
-    @FXML
-    private Button btnAnnuler;
+    @FXML private ComboBox<CategorieCours> categorieCombo;
+    @FXML private Label errorCategorie;
+    @FXML private TextField titreField;
+    @FXML private Label errorTitre;
+    @FXML private TextArea descriptionField;
+    @FXML private Label errorDescription;
+    @FXML private Label imageLabel;
+    @FXML private Label errorImage;
+    @FXML private Label videoLabel;
+    @FXML private Label errorVideo;
+    @FXML private Button browseImageBtn;
+    @FXML private Button browseVideoBtn;
+    @FXML private Button btnModifier;
+    @FXML private Button btnAnnuler;
 
     private File selectedImageFile;
     private File selectedVideoFile;
+    private BaseAdminController baseAdminController; // Store the controller
 
     private final CoursService coursService = new CoursService();
     private final CategorieCoursService categorieService = new CategorieCoursService();
-
-    // Le cours en cours de modification
     private Cours currentCours;
-
-    // Champs mémorisant l'état initial
     private String origTitre;
     private String origDescription;
     private CategorieCours origCategorie;
@@ -80,10 +57,8 @@ public class ModifierCours {
 
     @FXML
     private void initialize() {
-        // Charge la liste des catégories
         loadCategories();
 
-        // Affiche uniquement le nom dans le ComboBox
         categorieCombo.setConverter(new StringConverter<>() {
             @Override
             public String toString(CategorieCours object) {
@@ -112,15 +87,11 @@ public class ModifierCours {
         }
     }
 
-    /** Appelé par AfficherCours pour pré‐remplir le formulaire */
     public void setCours(Cours cours) {
         this.currentCours = cours;
-
-        // Remplissage des champs
         titreField.setText(cours.getTitreCours());
         descriptionField.setText(cours.getDescriptionCours());
 
-        // Preview image
         if (cours.getImageCours() != null && !cours.getImageCours().isEmpty()) {
             imageLabel.setText("");
             imageLabel.setGraphic(cours.getImageView());
@@ -128,7 +99,6 @@ public class ModifierCours {
             imageLabel.setText("Aucune image choisie");
         }
 
-        // Preview vidéo
         if (cours.getVideo() != null && !cours.getVideo().isEmpty()) {
             videoLabel.setText("");
             videoLabel.setGraphic(cours.getVideoView());
@@ -136,17 +106,20 @@ public class ModifierCours {
             videoLabel.setText("Aucune vidéo choisie");
         }
 
-        // Sélection de la catégorie
         if (cours.getCategorieCours() != null) {
             categorieCombo.setValue(cours.getCategorieCours());
         }
 
-        // --- Mémorisation de l'état initial ---
-        origTitre       = cours.getTitreCours();
+        origTitre = cours.getTitreCours();
         origDescription = cours.getDescriptionCours();
-        origCategorie   = cours.getCategorieCours();
-        origImage       = cours.getImageCours();
-        origVideo       = cours.getVideo();
+        origCategorie = cours.getCategorieCours();
+        origImage = cours.getImageCours();
+        origVideo = cours.getVideo();
+    }
+
+    public void setBaseAdminController(BaseAdminController controller) {
+        this.baseAdminController = controller;
+        System.out.println("BaseAdminController set in ModifierCours: " + (baseAdminController != null));
     }
 
     @FXML
@@ -154,7 +127,7 @@ public class ModifierCours {
         FileChooser fc = new FileChooser();
         fc.setTitle("Choisir une image");
         fc.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Images", "*.jpg","*.jpeg","*.png","*.webp")
+                new FileChooser.ExtensionFilter("Images", "*.jpg", "*.jpeg", "*.png", "*.webp")
         );
         File file = fc.showOpenDialog(null);
         if (file != null) {
@@ -166,7 +139,6 @@ public class ModifierCours {
             imageLabel.setGraphic(iv);
             errorImage.setText("");
         } else {
-            // Restaure preview d'origine
             if (currentCours.getImageCours() != null && !currentCours.getImageCours().isEmpty()) {
                 imageLabel.setText("");
                 imageLabel.setGraphic(currentCours.getImageView());
@@ -181,14 +153,14 @@ public class ModifierCours {
         FileChooser fc = new FileChooser();
         fc.setTitle("Choisir une vidéo");
         fc.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Vidéos", "*.mp4","*.mov","*.avi","*.mkv")
+                new FileChooser.ExtensionFilter("Vidéos", "*.mp4", "*.mov", "*.avi", "*.mkv")
         );
         File file = fc.showOpenDialog(null);
         if (file != null) {
             selectedVideoFile = file;
             try {
-                javafx.scene.media.Media media = new javafx.scene.media.Media(file.toURI().toString());
-                javafx.scene.media.MediaPlayer player = new javafx.scene.media.MediaPlayer(media);
+                Media media = new Media(file.toURI().toString());
+                MediaPlayer player = new MediaPlayer(media);
                 player.setMute(true);
                 player.setAutoPlay(true);
                 MediaView mv = new MediaView(player);
@@ -202,7 +174,6 @@ public class ModifierCours {
                 videoLabel.setText("Erreur vidéo");
             }
         } else {
-            // Restaure preview d'origine
             if (currentCours.getVideo() != null && !currentCours.getVideo().isEmpty()) {
                 videoLabel.setText("");
                 videoLabel.setGraphic(currentCours.getVideoView());
@@ -214,25 +185,22 @@ public class ModifierCours {
 
     @FXML
     private void updateCours() {
-        // Réinitialisation des erreurs
         errorCategorie.setText("");
         errorTitre.setText("");
         errorDescription.setText("");
         errorImage.setText("");
         errorVideo.setText("");
 
-        // --- Si rien n’a changé, on stoppe ---
         boolean sameTitre = titreField.getText().trim().equals(origTitre);
-        boolean sameDesc  = descriptionField.getText().trim().equals(origDescription);
-        boolean sameCat   = categorieCombo.getValue() == origCategorie;
-        boolean sameImg   = selectedImageFile == null;
-        boolean sameVid   = selectedVideoFile == null;
+        boolean sameDesc = descriptionField.getText().trim().equals(origDescription);
+        boolean sameCat = categorieCombo.getValue() == origCategorie;
+        boolean sameImg = selectedImageFile == null;
+        boolean sameVid = selectedVideoFile == null;
         if (sameTitre && sameDesc && sameCat && sameImg && sameVid) {
             new Alert(Alert.AlertType.INFORMATION, "Vous n'avez modifié aucun champ.").showAndWait();
             return;
         }
 
-        // Validation minimale
         boolean valid = true;
         if (categorieCombo.getValue() == null) {
             errorCategorie.setText("Veuillez choisir une catégorie.");
@@ -249,19 +217,17 @@ public class ModifierCours {
         if (!valid) return;
 
         try {
-            // Mise à jour de l'objet
             currentCours.setTitreCours(titreField.getText().trim());
             currentCours.setDescriptionCours(descriptionField.getText().trim());
             currentCours.setCategorieCours(categorieCombo.getValue());
 
-            // Gestion du nouveau fichier image
             if (selectedImageFile != null) {
                 Path dest = Paths.get("uploadsworkshop", selectedImageFile.getName());
                 Files.createDirectories(dest.getParent());
                 Files.copy(selectedImageFile.toPath(), dest, StandardCopyOption.REPLACE_EXISTING);
                 currentCours.setImageCours(selectedImageFile.getName());
             }
-            // Gestion du nouveau fichier vidéo
+
             if (selectedVideoFile != null) {
                 Path dest = Paths.get("uploadsworkshop", selectedVideoFile.getName());
                 Files.createDirectories(dest.getParent());
@@ -269,10 +235,9 @@ public class ModifierCours {
                 currentCours.setVideo(selectedVideoFile.getName());
             }
 
-            // Appel du service
             coursService.update(currentCours);
 
-            new Alert(Alert.AlertType.INFORMATION, "Workshop modifié avec succès !").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "Workshop modifié avec succès !").showAndWait();
             retourAfficherListe();
         } catch (IOException | SQLException ex) {
             new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
@@ -285,28 +250,29 @@ public class ModifierCours {
     }
 
     private void retourAfficherListe() {
+        Stage stage = (Stage) btnAnnuler.getScene().getWindow();
+        boolean wasMaximized = stage.isMaximized();
+
+        if (baseAdminController != null) {
+            System.out.println("Navigating back to AfficherCours using stored BaseAdminController...");
+            baseAdminController.showWorkshopsView();
+            stage.setMaximized(wasMaximized);
+            return;
+        }
+
+        // Fallback: Load a new BaseAdmin.fxml
+        System.out.println("BaseAdminController not set, falling back to load a new BaseAdmin.fxml...");
         try {
-            // 1) Charger le shell
-            FXMLLoader shellLoader = new FXMLLoader(
-                    getClass().getResource("/BaseAdmin.fxml")
-            );
-            Parent shellRoot = shellLoader.load();
-            BaseAdminController shell = shellLoader.getController();
-
-            // 2) Afficher la liste des cours (la même méthode que pour ton bouton “Afficher”)
-            shell.showWorkshopsView();
-
-            // 3) Réafficher
-            Stage stage = (Stage) btnAnnuler.getScene().getWindow();
-            stage.setScene(new Scene(shellRoot, 1000, 600));
-            stage.setTitle("Liste des Workshops");
-            stage.setResizable(false);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+            Parent root = loader.load();
+            BaseAdminController controller = loader.getController();
+            controller.showWorkshopsView();
+            stage.setScene(new Scene(root));
+            stage.setMaximized(wasMaximized);
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            System.err.println("Error loading BaseAdmin.fxml: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
-
-
-
 }

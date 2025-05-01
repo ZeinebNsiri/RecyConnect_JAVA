@@ -1,6 +1,7 @@
 // BaseAdminController.java
 package controllers;
 
+import controllers.workshop.AjouterCours;
 import controllers.workshop.ModifierCategorieCours;
 import controllers.workshop.ModifierCours;
 import entities.CategorieCours;
@@ -23,6 +24,7 @@ public class BaseAdminController {
     @FXML
     public void initialize() {
         System.out.println("✅ BaseAdminController initialized");
+        rootBorderPane.setUserData(this);
     }
 
     private void loadView(String fxmlPath) {
@@ -86,17 +88,14 @@ public class BaseAdminController {
 
     public void showModifierCategorieViewWithData(CategorieCours catcours) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/workshop/ModifierCategorieCours.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/ModifierCategorieCours.fxml"));
             Parent view = loader.load();
 
-            // pré‑remplir le formulaire
             ModifierCategorieCours ctrl = loader.getController();
             ctrl.setCategorieCours(catcours);
+            ctrl.setBaseAdminController(this);
 
-            // injecter dans le shell
-            rootBorderPane.setCenter(view);
+            contentPane.getChildren().setAll(view); // Use contentPane instead of rootBorderPane.setCenter()
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,17 +108,25 @@ public class BaseAdminController {
 
     @FXML
     public void showAjouterCoursView() {
-        loadView("/workshop/AjouterCours.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/AjouterCours.fxml"));
+            Parent view = loader.load();
+            AjouterCours ctrl = loader.getController();
+            ctrl.setBaseAdminController(this); // Set the controller
+            contentPane.getChildren().setAll(view);
+        } catch (IOException e) {
+            System.err.println("Error loading AjouterCours.fxml: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void showModifierCoursViewWithData(Cours c) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/workshop/ModifierCours.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/ModifierCours.fxml"));
             Parent content = loader.load();
             ModifierCours ctrl = loader.getController();
             ctrl.setCours(c);
+            ctrl.setBaseAdminController(this); // Already set, confirming for consistency
             contentPane.getChildren().setAll(content);
         } catch (IOException e) {
             e.printStackTrace();

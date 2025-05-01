@@ -1,5 +1,6 @@
 package controllers.workshop;
 
+import controllers.BaseAdminController;
 import entities.CategorieCours;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import services.CategorieCoursService;
 
@@ -89,15 +91,28 @@ public class AjoutCategorieCours {
 
     private void navigateToBaseAdminView() {
         try {
+            Stage stage = (Stage) btnCancelID.getScene().getWindow();
+            boolean wasMaximized = stage.isMaximized(); // Store the current maximized state
+
+            // Check if the current scene is already managed by BaseAdminController
+            if (stage.getScene().getRoot() instanceof BorderPane) {
+                BorderPane rootBorderPane = (BorderPane) stage.getScene().getRoot();
+                BaseAdminController controller = (BaseAdminController) rootBorderPane.getUserData();
+                if (controller != null) {
+                    controller.showCategorieWorkshopView();
+                    stage.setMaximized(wasMaximized);
+                    stage.show();
+                    return;
+                }
+            }
+
+            // Fallback: Load a new BaseAdmin.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
             Parent root = loader.load();
-
-            // Utiliser une méthode spécifique dans BaseAdminController pour charger la vue Afficher
-            controllers.BaseAdminController controller = loader.getController();
+            BaseAdminController controller = loader.getController();
             controller.showCategorieWorkshopView();
-
-            Stage stage = (Stage) btnCancelID.getScene().getWindow();
             stage.setScene(new Scene(root));
+            stage.setMaximized(wasMaximized);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

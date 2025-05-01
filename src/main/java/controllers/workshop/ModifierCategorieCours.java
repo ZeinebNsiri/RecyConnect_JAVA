@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import services.CategorieCoursService;
 
@@ -26,12 +27,11 @@ public class ModifierCategorieCours {
 
     private final CategorieCoursService service = new CategorieCoursService();
     private CategorieCours currentCategorie;
+    private BaseAdminController baseAdminController;
 
-    // --- état initial ---
     private String origName;
     private String origDesc;
 
-    /** Appelé par AfficherCategorieCours pour pré‑remplir */
     public void setCategorieCours(CategorieCours categorie) {
         this.currentCategorie = categorie;
         this.origName = categorie.getNomCategorie();
@@ -41,24 +41,24 @@ public class ModifierCategorieCours {
         descriptionField.setText(origDesc);
     }
 
+    public void setBaseAdminController(BaseAdminController controller) {
+        this.baseAdminController = controller;
+        System.out.println("BaseAdminController set: " + (baseAdminController != null));
+    }
+
     @FXML
     private void confirmerModification(ActionEvent event) {
-
         errorNom.setText("");
         errorDescription.setText("");
 
         String newName = nomCategorieField.getText().trim();
         String newDesc = descriptionField.getText().trim();
 
-        // --- détection “aucune modification” ---
         if (newName.equals(origName) && newDesc.equals(origDesc)) {
-            new Alert(Alert.AlertType.INFORMATION,
-                    "Vous n'avez modifié aucun champ.")
-                    .showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "Vous n'avez modifié aucun champ.").showAndWait();
             return;
         }
 
-        // --- validation des champs ---
         boolean valid = true;
         if (newName.isEmpty()) {
             errorNom.setText("Ce champ est obligatoire.");
@@ -70,7 +70,6 @@ public class ModifierCategorieCours {
         }
         if (!valid) return;
 
-        // --- unicité du nom si modifié ---
         if (!newName.equalsIgnoreCase(origName)) {
             try {
                 List<CategorieCours> liste = service.displayList();
@@ -81,52 +80,52 @@ public class ModifierCategorieCours {
                     }
                 }
             } catch (SQLException ex) {
-                showAlert("Erreur Critique",
-                        "Impossible de vérifier l'existence : " + ex.getMessage(),
-                        Alert.AlertType.ERROR);
+                showAlert("Erreur Critique", "Impossible de vérifier l'existence : " + ex.getMessage(), Alert.AlertType.ERROR);
                 return;
             }
         }
 
-        // --- application des changements ---
         currentCategorie.setNomCategorie(newName);
         currentCategorie.setDescriptionCategorie(newDesc);
 
         try {
             service.update(currentCategorie);
-            showAlert("Succès",
-                    "Catégorie modifiée avec succès.",
-                    Alert.AlertType.CONFIRMATION);
+            showAlert("Succès", "Catégorie modifiée avec succès.", Alert.AlertType.CONFIRMATION);
             retourAfficherCategorie();
         } catch (SQLException ex) {
-            showAlert("Erreur BD",
-                    "Impossible de modifier la catégorie : " + ex.getMessage(),
-                    Alert.AlertType.ERROR);
+            showAlert("Erreur BD", "Impossible de modifier la catégorie : " + ex.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
     @FXML
     private void annulerModification(ActionEvent event) {
+        System.out.println("Annuler button clicked!");
         retourAfficherCategorie();
     }
 
     private void retourAfficherCategorie() {
+        Stage stage = (Stage) btnAnnuler.getScene().getWindow();
+        boolean wasMaximized = stage.isMaximized();
+
+        if (baseAdminController != null) {
+            System.out.println("Navigating back to AfficherCategorieCours using stored BaseAdminController...");
+            baseAdminController.showCategorieWorkshopView();
+            stage.setMaximized(wasMaximized);
+            return; // Return to avoid executing the fallback
+        }
+
+        // Fallback: Load a new BaseAdmin.fxml
+        System.out.println("BaseAdminController not set, falling back to load a new BaseAdmin.fxml...");
         try {
-            FXMLLoader shellLoader = new FXMLLoader(
-                    getClass().getResource("/BaseAdmin.fxml")
-            );
-            Parent shellRoot = shellLoader.load();
-
-            BaseAdminController shell = shellLoader.getController();
-            // back to the categories list
-            shell.showCategorieWorkshopView();
-
-            Stage stage = (Stage) btnAnnuler.getScene().getWindow();
-            stage.setScene(new Scene(shellRoot, 1000, 600));
-            stage.setTitle("Liste des catégories");
-            stage.setResizable(false);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+            Parent root = loader.load();
+            BaseAdminController controller = loader.getController();
+            controller.showCategorieWorkshopView();
+            stage.setScene(new Scene(root));
+            stage.setMaximized(wasMaximized);
             stage.show();
         } catch (IOException ex) {
+            System.err.println("Error loading BaseAdmin.fxml: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
