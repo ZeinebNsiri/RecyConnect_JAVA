@@ -51,7 +51,11 @@ public class AfficherWorkshopsFront {
             videoComboBox.getItems().addAll("-- Tous --", "Avec vidéo", "Sans vidéo");
             videoComboBox.setValue("-- Tous --");
 
-            // ✨ Chat logic
+
+            searchField.textProperty().addListener((obs, oldText, newText) -> applyFilters());
+            videoComboBox.valueProperty().addListener((obs, oldVal, newVal) -> applyFilters());
+
+
             chatToggleButton.setOnAction(event -> {
                 chatWindow.setVisible(!chatWindow.isVisible());
             });
@@ -63,16 +67,16 @@ public class AfficherWorkshopsFront {
                     chatInputField.clear();
                     new Thread(() -> {
                         String botReply = ChatService.sendMessage(userInput);
-                        Platform.runLater(() -> addMessage(botReply, false)); // false = bot
+                        Platform.runLater(() -> addMessage(botReply, false));
                     }).start();
                 }
             });
-
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     private void addMessage(String message, boolean isUser) {
         Label msgLabel = new Label(message);

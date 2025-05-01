@@ -41,8 +41,7 @@
                     <Label text="Vidéo:" style="-fx-font-weight: bold; -fx-text-fill: #343a40;" />
                     <ComboBox fx:id="videoComboBox" prefWidth="120"
                               style="-fx-background-radius: 10;" />
-                    <Button text="Chercher" onAction="#applyFilters"
-                            style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" />
+
                 </HBox>
 
                 <!-- Category Filters -->
