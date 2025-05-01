@@ -4,69 +4,81 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1"
-      xmlns="http://javafx.com/javafx/17"
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controllers.Events.EventAddController"
       spacing="10" alignment="TOP_LEFT">
 
     <padding><Insets top="20" left="30" right="30" bottom="20"/></padding>
 
-    <Label text="Ajouter un événement" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+    <Label text="Ajouter un événement" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
 
+    <!-- Nom -->
     <VBox spacing="3">
         <TextField fx:id="nameField" promptText="Nom de l'événement" />
         <Label fx:id="nameErrorLabel" textFill="red" visible="false" />
     </VBox>
 
+    <!-- Lieu -->
     <VBox spacing="3">
         <TextField fx:id="locationField" promptText="Lieu" />
         <Label fx:id="locationErrorLabel" textFill="red" visible="false" />
     </VBox>
 
+    <!-- Date -->
     <VBox spacing="3">
         <DatePicker fx:id="datePicker" />
         <Label fx:id="dateErrorLabel" textFill="red" visible="false" />
     </VBox>
 
+    <!-- Heure -->
     <VBox spacing="3">
         <TextField fx:id="timeField" promptText="Heure (HH:mm)" />
         <Label fx:id="timeErrorLabel" textFill="red" visible="false" />
     </VBox>
 
+    <!-- Heure de fin -->
     <VBox spacing="3">
         <TextField fx:id="endTimeField" promptText="Heure de fin (HH:mm)" />
         <Label fx:id="endTimeErrorLabel" textFill="red" visible="false" />
     </VBox>
 
+    <!-- Description -->
     <VBox spacing="3">
         <TextField fx:id="descriptionField" promptText="Description" />
         <Label fx:id="descriptionErrorLabel" textFill="red" visible="false" />
     </VBox>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Button text="Choisir une image" onAction="#handleImageBrowse" />
-        <Label fx:id="imageLabel" text="Aucune image choisie" />
-    </HBox>
-    <Label fx:id="imageErrorLabel" textFill="red" visible="false" />
 
+
+    <!-- Capacité -->
     <VBox spacing="3">
         <TextField fx:id="capacityField" promptText="Capacité totale" />
         <Label fx:id="capacityErrorLabel" textFill="red" visible="false" />
     </VBox>
 
+    <!-- Places restantes -->
     <VBox spacing="3">
         <TextField fx:id="remainingField" promptText="Places restantes" />
         <Label fx:id="remainingErrorLabel" textFill="red" visible="false" />
     </VBox>
 
+    <!-- Lien Meet (caché mais généré automatiquement) -->
     <TextField fx:id="linkField" promptText="Lien Google Meet" visible="false" />
-    <TextField fx:id="coordinatesField" promptText="Coordonnées carte" />
 
-    <HBox spacing="10" alignment="CENTER">
+    <!-- Coordonnées -->
+    <VBox spacing="3">
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="coordinatesField" promptText="Coordonnées (lat,lon)" />
+        </HBox>
+    </VBox>
+
+    <!-- Actions -->
+    <HBox spacing="15" alignment="CENTER">
         <Button text="Ajouter" onAction="#saveEvent"
-                style="-fx-background-color: #28a745; -fx-text-fill: white;" />
+                style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;" />
         <Button text="Annuler" onAction="#cancelForm"
-                style="-fx-background-color: #dc3545; -fx-text-fill: white;" />
+                style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold;" />
     </HBox>
 
 </VBox>
