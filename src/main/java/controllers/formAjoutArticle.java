@@ -176,8 +176,24 @@ public class formAjoutArticle {
         if (file != null) {
             selectedFile = file;
             imageArticleField.setText(file.getName());
+
+            try {
+                File destinationDir = new File(article_IMAGE_DIR);
+                if (!destinationDir.exists()) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Le dossier de destination n'existe pas.");
+                    return;
+                }
+
+                File destFile = new File(destinationDir, file.getName());
+                Files.copy(file.toPath(), destFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("✅ Image copiée avec succès vers : " + destFile.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de copier l'image dans le répertoire.");
+            }
         }
     }
+
 
     private void retourListeArticles() {
         try {
