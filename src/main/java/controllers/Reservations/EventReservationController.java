@@ -148,9 +148,9 @@ public class EventReservationController {
             new EventService().decrementRemainingPlaces(event.getId(), reservation.getNbPlaces());
 
             showSuccessAlert("\u2705 Réservation enregistrée avec succès!");
-            BaseUserController.instance.loadMyReservationsView();
 
-
+            // Redirect to reservations list right after success message
+            navigateToReservationsListFront();
         } catch (Exception e) {
             showErrorAlert("\u274c Erreur: " + e.getMessage());
             e.printStackTrace();

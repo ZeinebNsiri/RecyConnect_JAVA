@@ -43,16 +43,16 @@ public class EventEditController {
 
     public void setEvent(Event event) {
         this.event = event;
-        nameField.setText(event.getName());
-        locationField.setText(event.getLocation());
+        nameField.setText(event.getName() != null ? event.getName() : "");
+        locationField.setText(event.getLocation() != null ? event.getLocation() : "");
         datePicker.setValue(event.getDate());
         timeField.setText(event.getTime() != null ? event.getTime().format(timeFormatter) : "");
         endTimeField.setText(event.getEndTime() != null ? event.getEndTime().format(timeFormatter) : "");
-        descriptionField.setText(event.getDescription());
-        capacityField.setText(String.valueOf(event.getCapacity()));
-        remainingField.setText(String.valueOf(event.getRemaining()));
-        linkField.setText(event.getMeetingLink());
-        coordinatesField.setText(event.getCoordinates());
+        descriptionField.setText(event.getDescription() != null ? event.getDescription() : "");
+        capacityField.setText(event.getCapacity() > 0 ? String.valueOf(event.getCapacity()) : "");
+        remainingField.setText(event.getRemaining() >= 0 ? String.valueOf(event.getRemaining()) : "");
+        linkField.setText(event.getMeetingLink() != null ? event.getMeetingLink() : "");
+        coordinatesField.setText(event.getCoordinates() != null ? event.getCoordinates() : "");
         imageLabel.setText(event.getImage() != null ? event.getImage() : "Aucune image");
     }
 
@@ -78,17 +78,25 @@ public class EventEditController {
         }
 
         try {
-            event.setName(nameField.getText().trim());
-            event.setLocation(locationField.getText().trim());
+            // Safe text field handling with null checks
+            event.setName(getSafeTextFieldValue(nameField));
+            event.setLocation(getSafeTextFieldValue(locationField));
             event.setDate(datePicker.getValue());
-            event.setTime(LocalTime.parse(timeField.getText().trim(), timeFormatter));
-            event.setEndTime(LocalTime.parse(endTimeField.getText().trim(), timeFormatter));
-            event.setDescription(descriptionField.getText().trim());
-            event.setCapacity(Integer.parseInt(capacityField.getText().trim()));
-            event.setRemaining(Integer.parseInt(remainingField.getText().trim()));
-            event.setMeetingLink(linkField.getText().trim());
-            event.setCoordinates(coordinatesField.getText().trim());
 
+            // Safe time parsing
+            event.setTime(parseTimeField(timeField));
+            event.setEndTime(parseTimeField(endTimeField));
+
+            event.setDescription(getSafeTextFieldValue(descriptionField));
+
+            // Safe number parsing
+            event.setCapacity(parseNumberField(capacityField));
+            event.setRemaining(parseNumberField(remainingField));
+
+            event.setMeetingLink(getSafeTextFieldValue(linkField));
+            event.setCoordinates(getSafeTextFieldValue(coordinatesField));
+
+            // Handle image
             if (selectedImageFile != null) {
                 Path dest = Paths.get("uploads", selectedImageFile.getName());
                 Files.createDirectories(dest.getParent());
@@ -103,55 +111,81 @@ public class EventEditController {
             closeForm();
         } catch (SQLException | IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la modification : " + e.getMessage());
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur inattendue", "Une erreur est survenue : " + e.getMessage());
         }
+    }
+
+    // Helper methods for safe field handling
+    private String getSafeTextFieldValue(TextField field) {
+        return field.getText() != null ? field.getText().trim() : "";
+    }
+
+    private LocalTime parseTimeField(TextField field) throws DateTimeParseException {
+        String text = field.getText();
+        return (text != null && !text.trim().isEmpty()) ?
+                LocalTime.parse(text.trim(), timeFormatter) : null;
+    }
+
+    private int parseNumberField(TextField field) throws NumberFormatException {
+        String text = field.getText();
+        return (text != null && !text.trim().isEmpty()) ?
+                Integer.parseInt(text.trim()) : 0;
     }
 
     private boolean validateInputs() {
         boolean isValid = true;
         resetErrorLabels();
 
-        if (nameField.getText().trim().isEmpty()) {
+        // Name validation
+        if (getSafeTextFieldValue(nameField).isEmpty()) {
             nameErrorLabel.setText("Le nom est requis.");
             nameErrorLabel.setVisible(true);
             isValid = false;
         }
 
-        if (locationField.getText().trim().isEmpty()) {
+        // Location validation
+        if (getSafeTextFieldValue(locationField).isEmpty()) {
             locationErrorLabel.setText("Le lieu est requis.");
             locationErrorLabel.setVisible(true);
             isValid = false;
         }
 
+        // Date validation
         if (datePicker.getValue() == null) {
             dateErrorLabel.setText("La date est requise.");
             dateErrorLabel.setVisible(true);
             isValid = false;
         }
 
+        // Time validation
         try {
-            LocalTime.parse(timeField.getText().trim(), timeFormatter);
+            parseTimeField(timeField);
         } catch (DateTimeParseException e) {
             timeErrorLabel.setText("Heure invalide (format HH:mm).");
             timeErrorLabel.setVisible(true);
             isValid = false;
         }
 
+        // End time validation
         try {
-            LocalTime.parse(endTimeField.getText().trim(), timeFormatter);
+            parseTimeField(endTimeField);
         } catch (DateTimeParseException e) {
             endTimeErrorLabel.setText("Heure de fin invalide (format HH:mm).");
             endTimeErrorLabel.setVisible(true);
             isValid = false;
         }
 
-        if (descriptionField.getText().trim().isEmpty()) {
+        // Description validation
+        if (getSafeTextFieldValue(descriptionField).isEmpty()) {
             descriptionErrorLabel.setText("La description est requise.");
             descriptionErrorLabel.setVisible(true);
             isValid = false;
         }
 
+        // Capacity validation
         try {
-            int capacity = Integer.parseInt(capacityField.getText().trim());
+            int capacity = parseNumberField(capacityField);
             if (capacity <= 0) {
                 capacityErrorLabel.setText("Capacité doit être positive.");
                 capacityErrorLabel.setVisible(true);
@@ -163,8 +197,9 @@ public class EventEditController {
             isValid = false;
         }
 
+        // Remaining validation
         try {
-            int remaining = Integer.parseInt(remainingField.getText().trim());
+            int remaining = parseNumberField(remainingField);
             if (remaining < 0) {
                 remainingErrorLabel.setText("Places restantes ne peuvent être négatives.");
                 remainingErrorLabel.setVisible(true);
@@ -176,6 +211,7 @@ public class EventEditController {
             isValid = false;
         }
 
+        // Image validation
         if (selectedImageFile == null && (event.getImage() == null || event.getImage().isEmpty())) {
             imageErrorLabel.setText("Une image doit être sélectionnée.");
             imageErrorLabel.setVisible(true);

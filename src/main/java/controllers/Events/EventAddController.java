@@ -62,13 +62,16 @@ public class EventAddController {
             event.setDescription(descriptionField.getText().trim());
             event.setCapacity(Integer.parseInt(capacityField.getText().trim()));
             event.setRemaining(Integer.parseInt(remainingField.getText().trim()));
-            String meetRoomName = event.getName().trim().replaceAll("\\s+", "-") + "-" + System.currentTimeMillis();
-            event.setMeetingLink("https://meet.jit.si/" + meetRoomName);
+            String meetRoomName = event.getName().trim()
+                    .replaceAll("[^a-zA-Z0-9\\s]", "") // Remove any non-alphanumeric characters
+                    .replaceAll("\\s+", "-")          // Replace spaces with hyphens
+                    + "-" + System.currentTimeMillis();
+            event.setMeetingLink("https://meet.jit.si/" + meetRoomName);            event.setMeetingLink("https://meet.jit.si/" + meetRoomName);
             event.setCoordinates(coordinatesField.getText().trim());
 // Image generation using Modelslab
             String prompt = "A professional event image for: " + event.getName() + ". " + event.getDescription();
             String imageFileName = "event_" + System.currentTimeMillis() + ".png";
-            String savePath = "uploads/" + imageFileName;  // This is where the image will be saved
+            String savePath = "uploads/" + imageFileName;
 
             try {
                 Files.createDirectories(Paths.get("uploads"));
