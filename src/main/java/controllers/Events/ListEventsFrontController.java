@@ -2,6 +2,9 @@ package controllers.Events;
 
 import controllers.BaseUserController;
 import entities.Event;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -31,30 +34,46 @@ public class ListEventsFrontController {
     @FXML private ComboBox<String> typeComboBox;
 
     private final EventService eventService = new EventService();
-    private List<Event> allEvents;
+    private ObservableList<Event> allEvents;
+    private ObservableList<Event> filteredEvents;
 
     @FXML
     public void initialize() {
+        // Initialize type combo box
         typeComboBox.getItems().addAll("Tous les types", "en ligne", "sur site");
         typeComboBox.setValue("Tous les types");
 
         try {
-            allEvents = eventService.displayList();
-            displayEvents(allEvents);
+            // Load events and convert to observable list
+            List<Event> events = eventService.displayList();
+            allEvents = FXCollections.observableArrayList(events);
+            filteredEvents = FXCollections.observableArrayList(allEvents);
+
+            // Setup listeners for filtered events to update UI
+            filteredEvents.addListener((ListChangeListener<Event>) change -> {
+                displayEvents(filteredEvents);
+            });
+
+            // Add change listeners to all search fields
+            setupDynamicSearchListeners();
+
+            // Initial display
+            displayEvents(filteredEvents);
         } catch (SQLException e) {
             e.printStackTrace();
+            showAlert("Error loading events", e.getMessage());
         }
     }
 
-    private void displayEvents(List<Event> events) {
-        eventFlowPane.getChildren().clear();
-        for (Event event : events) {
-            eventFlowPane.getChildren().add(createEventCard(event));
-        }
+    private void setupDynamicSearchListeners() {
+        // Add listeners to all search controls
+        searchNameField.textProperty().addListener((observable, oldValue, newValue) -> applyFilters());
+        searchLocationField.textProperty().addListener((observable, oldValue, newValue) -> applyFilters());
+        searchDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> applyFilters());
+        typeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> applyFilters());
     }
 
-    @FXML
-    private void handleSearch() {
+    private void applyFilters() {
         String nameKeyword = searchNameField.getText().toLowerCase(Locale.ROOT).trim();
         String locationKeyword = searchLocationField.getText().toLowerCase(Locale.ROOT).trim();
         LocalDate selectedDate = searchDatePicker.getValue();
@@ -72,7 +91,28 @@ public class ListEventsFrontController {
                 })
                 .collect(Collectors.toList());
 
-        displayEvents(filtered);
+        // Update filtered list
+        filteredEvents.clear();
+        filteredEvents.addAll(filtered);
+    }
+
+    private void displayEvents(List<Event> events) {
+        eventFlowPane.getChildren().clear();
+        if (events.isEmpty()) {
+            Label noResultsLabel = new Label("Aucun événement ne correspond à votre recherche");
+            noResultsLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #6c757d; -fx-padding: 20;");
+            eventFlowPane.getChildren().add(noResultsLabel);
+        } else {
+            for (Event event : events) {
+                eventFlowPane.getChildren().add(createEventCard(event));
+            }
+        }
+    }
+
+    @FXML
+    private void handleSearch() {
+        // This method is kept for backward compatibility with the button
+        applyFilters();
     }
 
     private Node createEventCard(Event event) {
@@ -113,6 +153,7 @@ public class ListEventsFrontController {
     private void handleShowMyReservations() {
         BaseUserController.instance.loadMyReservationsView();
     }
+
     @FXML
     private void handleShowRecommendations() {
         try {
@@ -123,8 +164,15 @@ public class ListEventsFrontController {
             stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
+            showAlert("Error", "Failed to load recommendations view: " + e.getMessage());
         }
     }
 
-
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 }

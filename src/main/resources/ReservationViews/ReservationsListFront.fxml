@@ -1,48 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
-<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.Reservations.ReservationsListFrontController"
-            style="-fx-background-color: #f9f9f9;">
+            style="-fx-background-color: #f8f9fa;"
+            prefWidth="1000" prefHeight="700">
 
       <top>
-            <VBox spacing="10" style="-fx-padding: 20; -fx-background-color: #eaf8ec;">
-                  <Label text="Rechercher une Réservation"
-                         style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #014421;" />
+            <VBox spacing="15" style="-fx-background-color: linear-gradient(to right, #043c1c, #198754); -fx-padding: 25 30 25 30;">
+                  <Label text="Mes Réservations"
+                         style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.2, 0, 1);"/>
 
+                  <!-- Barre de recherche -->
                   <HBox spacing="10">
-                        <TextField fx:id="searchField"
-                                   promptText="Nom de l'événement"
-                                   style="-fx-background-radius: 8; -fx-padding: 8;" />
-
-                        <ComboBox fx:id="statusComboBox"
-                                  style="-fx-background-radius: 8;">
-                              <items>
-                                    <FXCollections fx:factory="observableArrayList">
-                                          <String fx:value="Active"/>
-                                          <String fx:value="Cancelled"/>
-                                    </FXCollections>
-                              </items>
-                        </ComboBox>
-
+                        <TextField fx:id="searchField" promptText="Rechercher par événement, nom ou email"
+                                   style="-fx-background-radius: 8; -fx-padding: 8; -fx-font-size: 13px; -fx-pref-width: 300;" />
+                        <ComboBox fx:id="statusComboBox" promptText="Statut"
+                                  style="-fx-background-radius: 8; -fx-font-size: 13px;" />
+                        <!-- Search button kept for visual consistency -->
                         <Button text="Rechercher" onAction="#handleSearch"
-                                style="-fx-background-color: #198754; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                                style="-fx-background-color: #198754; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 20;"/>
                   </HBox>
             </VBox>
       </top>
 
       <center>
-            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
-                  <VBox fx:id="reservationsContainer"
-                        spacing="15" style="-fx-padding: 20;" />
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+                        style="-fx-background: #f8f9fa; -fx-border-color: transparent; -fx-padding: 0;">
+                  <VBox fx:id="reservationsContainer" spacing="15"
+                        style="-fx-background-color: #f8f9fa; -fx-padding: 20 15 20 15;">
+                        <!-- Reservation cards will be added here dynamically -->
+                  </VBox>
             </ScrollPane>
       </center>
 
       <bottom>
-            <Label fx:id="debugLabel"
-                   style="-fx-padding: 10; -fx-text-fill: gray; -fx-font-style: italic;" />
+            <HBox style="-fx-background-color: #e9ecef; -fx-padding: 10 20;" alignment="CENTER_RIGHT">
+                  <Label text="© 2023 Événements App" style="-fx-text-fill: #6c757d; -fx-font-size: 12px;"/>
+            </HBox>
       </bottom>
 </BorderPane>

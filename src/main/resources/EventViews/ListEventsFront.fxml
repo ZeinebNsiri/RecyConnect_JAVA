@@ -26,6 +26,7 @@
                             style="-fx-background-radius: 8; -fx-font-size: 13px;" />
                 <ComboBox fx:id="typeComboBox" promptText="Tous les types"
                           style="-fx-background-radius: 8; -fx-font-size: 13px;" />
+                <!-- Search button kept for visual consistency but not necessary for functionality -->
                 <Button text="Rechercher" onAction="#handleSearch"
                         style="-fx-background-color: #198754; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 20;"/>
             </HBox>
@@ -38,8 +39,6 @@
                 <Button text="Événements Recommandés"
                         onAction="#handleShowRecommendations"
                         style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 20;"/>
-
-
             </HBox>
         </VBox>
     </top>

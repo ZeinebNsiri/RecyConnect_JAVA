@@ -2,6 +2,9 @@ package controllers.Reservations;
 
 import entities.Reservation;
 import entities.Event;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,8 +18,10 @@ import services.EventService;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ReservationsListFrontController {
@@ -27,55 +32,105 @@ public class ReservationsListFrontController {
 
     private final ReservationService reservationService = new ReservationService();
     private final EventService eventService = new EventService();
-    private List<Reservation> allReservations;
+    private ObservableList<Reservation> allReservations;
+    private ObservableList<Reservation> filteredReservations;
+    private Map<Integer, Event> eventsCache = new HashMap<>();
 
-    @FXML private void initialize() {
-        statusComboBox.getItems().setAll("Active", "Cancelled");
+    @FXML
+    private void initialize() {
+        // Setup status filter options
+        statusComboBox.getItems().setAll("Active", "Cancelled", "All");
         statusComboBox.setValue("Active");
-        loadReservations();
-    }
 
-    private void displayFilteredReservations() {
-        String keyword = searchField.getText() != null ? searchField.getText().toLowerCase(Locale.ROOT).trim() : "";
-        String statusFilter = statusComboBox.getValue();
-
-        reservationsContainer.getChildren().clear();
-
-        allReservations.stream()
-                .filter(r -> {
-                    try {
-                        Event event = eventService.getEventById(r.getEventId());
-                        return event != null && event.getName().toLowerCase().contains(keyword);
-                    } catch (SQLException e) {
-                        return false;
-                    }
-                })
-                .filter(r -> r.getStatus() != null && r.getStatus().equalsIgnoreCase(statusFilter))
-                .forEach(r -> {
-                    try {
-                        Event e = eventService.getEventById(r.getEventId());
-                        if (e != null) {
-                            reservationsContainer.getChildren().add(createReservationCard(r, e));
-                        }
-                    } catch (SQLException ex) {
-                        showError("Erreur lors de la récupération de l'événement: " + ex.getMessage());
-                    }
-                });
-    }
-
-
-    private void loadReservations() {
         try {
-            allReservations = reservationService.getAllReservations();
-            displayFilteredReservations();
+            // Load reservations
+            List<Reservation> reservations = reservationService.getAllReservations();
+            allReservations = FXCollections.observableArrayList(reservations);
+            filteredReservations = FXCollections.observableArrayList(allReservations);
+
+            // Cache events to avoid repeated database calls
+            cacheEvents();
+
+            // Add listener to update UI when filtered list changes
+            filteredReservations.addListener((ListChangeListener<Reservation>) change -> {
+                displayReservations(filteredReservations);
+            });
+
+            // Set up dynamic search listeners
+            setupDynamicSearchListeners();
+
+            // Initial filter application
+            applyFilters();
         } catch (SQLException e) {
             showError("Erreur lors du chargement des réservations: " + e.getMessage());
         }
     }
 
+    private void cacheEvents() {
+        try {
+            List<Event> events = eventService.getAllEvents();
+            for (Event event : events) {
+                eventsCache.put(event.getId(), event);
+            }
+        } catch (SQLException e) {
+            showError("Erreur lors du chargement des événements: " + e.getMessage());
+        }
+    }
+
+    private void setupDynamicSearchListeners() {
+        // Add search field listener
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> applyFilters());
+
+        // Add status combo box listener
+        statusComboBox.valueProperty().addListener((observable, oldValue, newValue) -> applyFilters());
+    }
+
+    private void applyFilters() {
+        String keyword = searchField.getText() != null ? searchField.getText().toLowerCase(Locale.ROOT).trim() : "";
+        String statusFilter = statusComboBox.getValue();
+
+        List<Reservation> filtered = allReservations.stream()
+                .filter(r -> {
+                    Event event = eventsCache.get(r.getEventId());
+                    if (event == null) return false;
+
+                    // Search in event name, user name, and email
+                    return event.getName().toLowerCase().contains(keyword) ||
+                            r.getNom().toLowerCase().contains(keyword) ||
+                            r.getEmail().toLowerCase().contains(keyword);
+                })
+                .filter(r -> {
+                    if ("All".equalsIgnoreCase(statusFilter)) return true;
+                    return r.getStatus() != null && r.getStatus().equalsIgnoreCase(statusFilter);
+                })
+                .collect(Collectors.toList());
+
+        // Update filtered list
+        filteredReservations.clear();
+        filteredReservations.addAll(filtered);
+    }
+
+    private void displayReservations(List<Reservation> reservations) {
+        reservationsContainer.getChildren().clear();
+
+        if (reservations.isEmpty()) {
+            Label noResultsLabel = new Label("Aucune réservation ne correspond à votre recherche");
+            noResultsLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #6c757d; -fx-padding: 20;");
+            reservationsContainer.getChildren().add(noResultsLabel);
+        } else {
+            for (Reservation reservation : reservations) {
+                Event event = eventsCache.get(reservation.getEventId());
+                if (event != null) {
+                    reservationsContainer.getChildren().add(createReservationCard(reservation, event));
+                }
+            }
+        }
+    }
+
     @FXML
     private void handleSearch() {
-        displayFilteredReservations();
+        // Method kept for backward compatibility with the search button
+        applyFilters();
     }
 
     private VBox createReservationCard(Reservation reservation, Event event) {
@@ -86,28 +141,31 @@ public class ReservationsListFrontController {
         Label title = new Label("📌 " + event.getName());
         title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
+        Label userInfo = new Label("👤 " + reservation.getNom() + " (" + reservation.getEmail() + ")");
         Label date = new Label("📅 Date : " + event.getDate());
         Label places = new Label("📦 Places réservées : " + reservation.getNbPlaces());
         places.setStyle("-fx-text-fill: green;");
 
         Label status = new Label("Statut : " + reservation.getStatus());
         status.setStyle("-fx-text-fill: " +
-                (reservation.getStatus().equalsIgnoreCase("annulée") ? "red" : "green") + ";");
+                (reservation.getStatus().equalsIgnoreCase("cancelled") ? "red" : "green") + ";");
 
         HBox buttons = new HBox(10);
         Button modifyBtn = new Button("✏️ Modifier");
+        modifyBtn.setStyle("-fx-background-color: #0d6efd; -fx-text-fill: white;");
         modifyBtn.setOnAction(e -> handleEdit(reservation));
 
         Button cancelBtn = new Button("❌ Annuler");
+        cancelBtn.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white;");
 
-        if (reservation.getStatus().equalsIgnoreCase("annulée")) {
+        if (reservation.getStatus().equalsIgnoreCase("cancelled")) {
             cancelBtn.setDisable(true);
         } else {
             cancelBtn.setOnAction(e -> handleCancel(reservation));
         }
 
         buttons.getChildren().addAll(modifyBtn, cancelBtn);
-        card.getChildren().addAll(title, date, places, status, buttons);
+        card.getChildren().addAll(title, userInfo, date, places, status, buttons);
 
         return card;
     }
@@ -122,7 +180,12 @@ public class ReservationsListFrontController {
                 try {
                     reservationService.cancelReservation(reservation.getId());
                     showSuccess("Réservation annulée !");
-                    loadReservations();
+
+                    // Update the reservation status in our lists
+                    reservation.setStatus("cancelled");
+
+                    // Refresh the display
+                    applyFilters();
                 } catch (SQLException e) {
                     showError("Erreur: " + e.getMessage());
                 }
@@ -141,14 +204,27 @@ public class ReservationsListFrontController {
             Stage stage = new Stage();
             stage.setTitle("Modifier la réservation");
             stage.setScene(new Scene(root));
+
+            // Add listener to detect when edit window is closed
+            stage.setOnHidden(event -> {
+                reloadReservations(); // Refresh data after edit
+            });
+
             stage.showAndWait();
-
-            // Reload reservations after closing edit window
-            loadReservations();
-
         } catch (IOException e) {
             e.printStackTrace();
             showError("Erreur lors de l'ouverture du formulaire d'édition : " + e.getMessage());
+        }
+    }
+
+    private void reloadReservations() {
+        try {
+            allReservations.clear();
+            allReservations.addAll(reservationService.getAllReservations());
+            cacheEvents(); // Refresh events cache
+            applyFilters(); // Reapply current filters
+        } catch (SQLException e) {
+            showError("Erreur lors du rechargement des réservations: " + e.getMessage());
         }
     }
 
