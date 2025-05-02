@@ -29,16 +29,8 @@
                    style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-padding: 8; -fx-font-size: 13px;"/>
         <ComboBox fx:id="statusFilterCombo" promptText="Tous les statuts"
                   style="-fx-background-radius: 8; -fx-font-size: 13px;">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Tous les statuts" />
-                    <String fx:value="Active" />
-                    <String fx:value="Annulée" />
-                </FXCollections>
-            </items>
+            <!-- Removed static items - will be populated dynamically in controller -->
         </ComboBox>
-        <Button text="🔍 Rechercher" onAction="#handleSearch"
-                style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 8;" />
     </HBox>
 
     <!-- Table Section -->

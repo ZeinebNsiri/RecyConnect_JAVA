@@ -3,9 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
+
 <VBox xmlns:fx="http://javafx.com/fxml/1"
       xmlns="http://javafx.com/javafx/17"
       fx:controller="controllers.Events.EventListController"
@@ -28,13 +28,10 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <Button text="🔍 Rechercher" onAction="#handleSearch"
-                style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;" />
 
         <Button text="Ajouter un événement" onAction="#handleAddEvent"
                 style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;" />
     </HBox>
-
 
     <TableView fx:id="eventTable" prefWidth="1140"
                style="-fx-background-color: white; -fx-border-color: lightgray;">
@@ -48,5 +45,4 @@
             <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="200"/>
         </columns>
     </TableView>
-
 </VBox>

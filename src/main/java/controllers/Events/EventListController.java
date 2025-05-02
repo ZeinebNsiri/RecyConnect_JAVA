@@ -4,6 +4,7 @@ import entities.Event;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,8 +19,10 @@ import services.EventService;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class EventListController {
 
@@ -38,16 +41,23 @@ public class EventListController {
 
     private final EventService eventService = new EventService();
     private final ObservableList<Event> events = FXCollections.observableArrayList();
+    private FilteredList<Event> filteredEvents;
 
     @FXML
     public void initialize() {
+        // Set up table columns
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        searchTypeCombo.setItems(FXCollections.observableArrayList("en ligne", "sur site"));
 
+        // Initialize FilteredList
+        filteredEvents = new FilteredList<>(events, p -> true);
 
+        // Set up search field listeners
+        setupSearchListeners();
+
+        // Image column configuration
         imageColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(ImageView item, boolean empty) {
@@ -61,6 +71,7 @@ public class EventListController {
             }
         });
 
+        // Time column configuration
         timeColumn.setCellValueFactory(cellData -> {
             LocalTime time = cellData.getValue().getTime();
             return new SimpleStringProperty(time != null ? time.toString() : "");
@@ -74,8 +85,53 @@ public class EventListController {
             }
         });
 
+        // Add action buttons to table
         addActionsToTable();
+
+        // Load events and set filtered list to table
         loadEvents();
+        eventTable.setItems(filteredEvents);
+    }
+
+    private void setupSearchListeners() {
+        // Add listeners to search fields for real-time filtering
+        searchNameField.textProperty().addListener((observable, oldValue, newValue) -> updateFilter());
+        searchLocationField.textProperty().addListener((observable, oldValue, newValue) -> updateFilter());
+        searchDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateFilter());
+        searchTypeCombo.valueProperty().addListener((observable, oldValue, newValue) -> updateFilter());
+    }
+
+    private void updateFilter() {
+        filteredEvents.setPredicate(createFilterPredicate());
+    }
+
+    private Predicate<Event> createFilterPredicate() {
+        return event -> {
+            String nameFilter = searchNameField.getText().toLowerCase().trim();
+            String locationFilter = searchLocationField.getText().toLowerCase().trim();
+            LocalDate dateFilter = searchDatePicker.getValue();
+            String typeFilter = searchTypeCombo.getValue();
+
+            // Check if name matches filter
+            boolean matchName = nameFilter.isEmpty() ||
+                    event.getName().toLowerCase().contains(nameFilter);
+
+            // Check if location matches filter
+            boolean matchLocation = locationFilter.isEmpty() ||
+                    event.getLocation().toLowerCase().contains(locationFilter);
+
+            // Check if date matches filter
+            boolean matchDate = dateFilter == null ||
+                    event.getDate().equals(dateFilter);
+
+            // Check if type matches filter (assuming online events contain "en ligne" in location)
+            boolean matchType = typeFilter == null || typeFilter.isEmpty() ||
+                    (typeFilter.equals("en ligne") && event.getLocation().toLowerCase().contains("en ligne")) ||
+                    (typeFilter.equals("sur site") && !event.getLocation().toLowerCase().contains("en ligne"));
+
+            // Return true only if all conditions match
+            return matchName && matchLocation && matchDate && matchType;
+        };
     }
 
     private void addActionsToTable() {
@@ -111,7 +167,7 @@ public class EventListController {
         try {
             List<Event> eventList = eventService.displayList();
             events.setAll(eventList);
-            eventTable.setItems(events);
+            updateFilter(); // Apply current filters to the new data
         } catch (SQLException e) {
             showAlert("Erreur", "Chargement échoué: " + e.getMessage());
         }
@@ -184,27 +240,8 @@ public class EventListController {
 
     @FXML
     private void handleSearch() {
-        String nameFilter = searchNameField.getText().toLowerCase();
-        String locationFilter = searchLocationField.getText().toLowerCase();
-        String typeFilter = searchTypeCombo.getValue(); // "en ligne" ou "sur site"
-        String dateFilter = searchDatePicker.getValue() != null
-                ? searchDatePicker.getValue().toString()
-                : "";
-
-        ObservableList<Event> filtered = events.filtered(event -> {
-            boolean matchName = nameFilter.isEmpty() || event.getName().toLowerCase().contains(nameFilter);
-            boolean matchLocation = locationFilter.isEmpty() || event.getLocation().toLowerCase().contains(locationFilter);
-
-            // ⚠️ ici on "devine" le type
-            String type = event.getLocation().toLowerCase().contains("en ligne") ? "en ligne" : "sur site";
-            boolean matchType = typeFilter == null || typeFilter.isEmpty() || type.equals(typeFilter);
-
-            boolean matchDate = dateFilter.isEmpty() || event.getDate().toString().equals(dateFilter);
-
-            return matchName && matchLocation && matchType && matchDate;
-        });
-
-        eventTable.setItems(filtered);
+        // This method is kept for backward compatibility with the button
+        // But filtering is now handled automatically by the listeners
+        updateFilter();
     }
-
 }
