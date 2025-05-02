@@ -42,8 +42,9 @@ public class BaseAdminController {
 
     @FXML
     public void showDashboardView() {
-        loadView("/AdminViews/Dashboard.fxml"); // You can create this later
+        loadView("/EventViews/dashboardEvents.fxml");  // Ensure the correct FXML file path
     }
+
 
     @FXML
     public void showUsersView() {

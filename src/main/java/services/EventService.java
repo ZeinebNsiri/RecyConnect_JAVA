@@ -143,4 +143,64 @@ public class EventService implements IService<Event> {
         }
         return null;
     }
+
+    // Fetch popular events based on the number of reservations
+    public List<Event> getPopularEvents() throws SQLException {
+        String query = "SELECT e.id, e.nom_event, e.description_event, e.lieu_event, e.date_event, " +
+                "e.heure_event, e.image_event, e.capacite, e.nb_restant, " +
+                "e.google_meet_link, e.map_coordinates, e.end_time, " +  // Added missing columns
+                "COUNT(r.id) as reservations_count " +
+                "FROM evenement e " +
+                "LEFT JOIN reservation r ON e.id = r.event_id " +
+                "GROUP BY e.id " +
+                "ORDER BY reservations_count DESC";
+
+        List<Event> popularEvents = new ArrayList<>();
+        try (PreparedStatement stmt = cnx.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                popularEvents.add(new Event(
+                        rs.getInt("id"),
+                        rs.getString("nom_event"),
+                        rs.getString("description_event"),
+                        rs.getString("lieu_event"),
+                        rs.getDate("date_event").toLocalDate(),
+                        rs.getTime("heure_event").toLocalTime(),
+                        rs.getString("image_event"),
+                        rs.getInt("capacite"),
+                        rs.getInt("nb_restant"),
+                        rs.getString("google_meet_link"),  // This matches the database column name
+                        rs.getString("map_coordinates"),
+                        rs.getTime("end_time").toLocalTime()
+                ));
+            }
+        }
+        return popularEvents;
+    }
+
+    // Fetch the event utilization (reservations vs capacity)
+    public List<Event> getEventsCapacityUtilization() throws SQLException {
+        String query = "SELECT e.id, e.nom_event, e.capacite, " +
+                "SUM(CASE WHEN r.status = 'active' THEN r.nb_places ELSE 0 END) AS utilized_capacity " +
+                "FROM evenement e " +
+                "LEFT JOIN reservation r ON e.id = r.event_id " +
+                "GROUP BY e.id";
+
+        List<Event> eventsUtilization = new ArrayList<>();
+        try (PreparedStatement stmt = cnx.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Event event = new Event();
+                event.setId(rs.getInt("id"));
+                event.setName(rs.getString("nom_event"));
+                event.setCapacity(rs.getInt("capacite"));
+                event.setRemaining(event.getCapacity() - rs.getInt("utilized_capacity"));
+                eventsUtilization.add(event);
+            }
+        }
+        return eventsUtilization;
+    }
 }
+
