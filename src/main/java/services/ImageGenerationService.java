@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 public class ImageGenerationService {
 
     private static final String API_URL = "https://modelslab.com/api/v6/realtime/text2img";
-    private static final String API_KEY = "tWK2m7OkAivKfq4Hl0JEbsli5qNA77rgLnx0p1hr7ioz80Qwj0u2FkZzg8I8"; // Replace with your real key
+    private static final String API_KEY = "E20Xb60nC5F92uDkpM7aBoKjrRNp5DSksgTATfRJqjqP6U8M7rFvL7HhLMpt";
 
     public static String generateImage(String prompt, String savePath) {
         try {
