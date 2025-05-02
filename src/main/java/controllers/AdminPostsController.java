@@ -4,19 +4,38 @@ import entities.Post;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import services.PostService;
 
+import javafx.scene.chart.PieChart.Data;
+
+
 import java.sql.SQLException;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 public class AdminPostsController {
 
     @FXML
     private TableView<Post> postsTable;
+
+    @FXML
+    private PieChart statusPieChart;
+
+
+    @FXML
+    private LineChart<String, Number> postsLineChart;
+
+    @FXML
+    private CategoryAxis monthsAxis;
+
+    @FXML
+    private NumberAxis countAxis;
 
     private PostService postService = new PostService();
     private ObservableList<Post> postList = FXCollections.observableArrayList();
@@ -25,6 +44,8 @@ public class AdminPostsController {
     public void initialize() {
         setupTableColumns();
         loadPosts();
+        updatePostStatusChart();
+        loadPostStatistics();
     }
 
     private void setupTableColumns() {
@@ -60,8 +81,8 @@ public class AdminPostsController {
 
             {
                 approveBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-                rejectBtn.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
-                deleteBtn.setStyle("-fx-background-color: #d9534f; -fx-text-fill: white;");
+                rejectBtn.setStyle("-fx-background-color: #e48f59; -fx-text-fill: white;");
+                deleteBtn.setStyle("-fx-background-color: #a32c2b; -fx-text-fill: white;");
 
                 approveBtn.setOnAction(e -> {
                     Post post = getTableView().getItems().get(getIndex());
@@ -136,5 +157,47 @@ public class AdminPostsController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void updatePostStatusChart() {
+        int approvedCount = 0;
+        int rejectedCount = 0;
+
+        for (Post post : postList) {
+            if (post.isStatus_post()) {
+                approvedCount++;
+            } else {
+                rejectedCount++;
+            }
+        }
+
+        // Create pie chart data
+        PieChart.Data approvedData = new PieChart.Data("Approuvé", approvedCount);
+        PieChart.Data rejectedData = new PieChart.Data("Rejeté", rejectedCount);
+
+        // Set the chart data
+        statusPieChart.setData(FXCollections.observableArrayList(approvedData, rejectedData));
+    }
+
+    private void loadPostStatistics() {
+        // Récupérer les données des posts par mois (c'est une Map avec YearMonth comme clé et nombre de posts comme valeur)
+        Map<YearMonth, Integer> postCountByMonth = postService.getPostCountByMonth();
+
+        // Créer une série pour le graphique
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Nombre de posts par mois");
+
+        // Ajouter les données au graphique
+        postCountByMonth.forEach((month, count) ->
+                series.getData().add(new XYChart.Data<>(month.toString(), count))
+        );
+
+        // Ajouter la série au graphique
+        postsLineChart.getData().clear();  // On vide les anciennes données du graphique
+        postsLineChart.getData().add(series);
+
+        // Configuration des axes
+        monthsAxis.setLabel("Mois");
+        countAxis.setLabel("Nombre de posts");
     }
 }

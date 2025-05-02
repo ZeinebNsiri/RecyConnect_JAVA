@@ -4,12 +4,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.CategoryAxis?>
 
-<?import java.net.URL?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.AdminPostsController" stylesheets="@styles/adminPost.css" >
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.AdminPostsController" stylesheets="@styles/adminPost.css">
     <left>
         <VBox spacing="10" styleClass="sidebar">
-
             <Label text="Dashboard"/>
             <Label text="Utilisateurs"/>
             <Label text="Ventes"/>
@@ -20,23 +22,48 @@
     </left>
 
     <center>
-        <VBox spacing="15">
+        <VBox spacing="20">
             <padding>
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
 
             <Label text="Gestion des Posts" styleClass="header"/>
 
-            <TableView fx:id="postsTable" prefHeight="500">
-                <columns>
-                    <TableColumn text="ID" prefWidth="40"/>
-                    <TableColumn text="Auteur" prefWidth="150"/>
-                    <TableColumn text="Contenu" prefWidth="400"/>
-                    <TableColumn text="Créé le" prefWidth="150"/>
-                    <TableColumn text="Statut" prefWidth="100"/>
-                    <TableColumn text="Actions" prefWidth="200"/>
-                </columns>
-            </TableView>
+            <!-- HBox for pie chart and line chart side by side -->
+            <HBox spacing="20">
+                <!-- Card for PieChart -->
+                <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #f0f0f0; -fx-border-radius: 10px; -fx-padding: 15;">
+                    <Label text="Distribution des Statuts" styleClass="card-header"/>
+                    <PieChart fx:id="statusPieChart" prefWidth="250" prefHeight="250"/>
+                </VBox>
+
+                <!-- Card for LineChart -->
+                <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #f0f0f0; -fx-border-radius: 10px; -fx-padding: 15;">
+                    <Label text="Nombre de Posts par Mois" styleClass="card-header"/>
+                    <LineChart fx:id="postsLineChart" prefWidth="250" prefHeight="250">
+                        <xAxis>
+                            <CategoryAxis fx:id="monthsAxis"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis fx:id="countAxis"/>
+                        </yAxis>
+                    </LineChart>
+                </VBox>
+            </HBox>
+
+            <!-- TableView for posts -->
+            <VBox style="-fx-background-color: #f0f0f0; -fx-border-radius: 10px; -fx-padding: 15;">
+                <TableView fx:id="postsTable" prefHeight="500">
+                    <columns>
+                        <TableColumn text="ID" prefWidth="40"/>
+                        <TableColumn text="Auteur" prefWidth="150"/>
+                        <TableColumn text="Contenu" prefWidth="400"/>
+                        <TableColumn text="Créé le" prefWidth="150"/>
+                        <TableColumn text="Statut" prefWidth="100"/>
+                        <TableColumn text="Actions" prefWidth="200"/>
+                    </columns>
+                </TableView>
+            </VBox>
         </VBox>
     </center>
 

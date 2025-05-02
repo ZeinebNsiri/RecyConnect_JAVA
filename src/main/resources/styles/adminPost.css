@@ -41,7 +41,7 @@
 }
 
 .button-reject {
-    -fx-background-color: #f1c40f;
+    -fx-background-color: #9a8208;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-padding: 5px 10px;
@@ -53,3 +53,35 @@
     -fx-font-weight: bold;
     -fx-text-fill: #34495e;
 }
+
+/* Card Styling for PieChart and LineChart */
+.card-header {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495e;
+    -fx-alignment: center;
+    -fx-padding: 10px 0;
+}
+
+.VBox {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.2, 0, 0);
+}
+
+.VBox:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0.2, 0, 0);
+}
+
+.PieChart {
+    -fx-border-radius: 10px;
+}
+
+.LineChart {
+    -fx-border-radius: 10px;
+}
+
+
+
+

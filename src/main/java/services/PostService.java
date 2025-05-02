@@ -15,6 +15,8 @@ import kong.unirest.UnirestException;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 
@@ -366,7 +368,7 @@ public class PostService implements IService<Post>{
                         + "<h1>Alerte de Contenu Inapproprié 🚨</h1>"
                         + "</div>"
                         + "<div style='padding: 20px; text-align: center;'>"
-                        + "<img src='/images/mainlogo.png' alt='Logo' width='100' style='margin-bottom: 20px;'/>"
+                        + "<img src='src/main/resources/images/mainlogo.png' alt='Logo' width='100' style='margin-bottom: 20px;'/>"
                         + "<p>Bonjour Admin,</p>"
                         + "<p>Un contenu potentiellement <strong>violent, raciste ou haineux</strong> a été détecté sur la plateforme.</p>"
                         + "<div style='margin-top: 20px; padding: 10px; background-color: #eee; border-radius: 5px;'>"
@@ -401,6 +403,55 @@ public class PostService implements IService<Post>{
                 .replace("\"", "&quot;")
                 .replace("'", "&#x27;");
     }
+
+
+
+
+    public Map<YearMonth, Integer> getPostCountByMonth() {
+        Map<YearMonth, Integer> postCountByMonth = new HashMap<>();
+        String sql = "SELECT date_publication FROM post";
+
+        try (Statement stmt = conx.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Timestamp datePublication = rs.getTimestamp("date_publication");
+                LocalDate localDate = datePublication.toLocalDateTime().toLocalDate();
+                YearMonth yearMonth = YearMonth.from(localDate);  // Extrait l'année et le mois
+
+                // Comptabilise le nombre de posts pour chaque mois
+                postCountByMonth.put(yearMonth, postCountByMonth.getOrDefault(yearMonth, 0) + 1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return postCountByMonth;
+    }
+
+
+
+    public List<Post> getTop5PostsByLikes() {
+        List<Post> topPosts = new ArrayList<>();
+        String sql = "SELECT * FROM post ORDER BY nbr_jaime DESC LIMIT 5";  // Récupérer les 5 posts les plus likés
+
+        try (Statement stmt = conx.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Post p = new Post();
+                p.setId(rs.getInt("id"));
+                p.setUser_p_id(rs.getInt("user_p_id"));
+                p.setContenu(rs.getString("contenu"));
+                p.setDate_publication(rs.getTimestamp("date_publication").toLocalDateTime());
+                p.setNbr_jaime(rs.getInt("nbr_jaime"));
+                p.setStatus_post(rs.getBoolean("status_post"));
+                // Ajoute à la liste
+                topPosts.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return topPosts;
+    }
+
 
 
 

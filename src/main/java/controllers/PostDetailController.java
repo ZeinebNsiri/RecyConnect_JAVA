@@ -5,6 +5,8 @@ import enums.PostTag;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -121,18 +123,20 @@ public class PostDetailController {
 
         utilisateur userC = commentaireService.getUserComById(commentaire.getUserComId());
 
+        // Avatar
         ImageView imageView = new ImageView();
         try {
-            Image image = new Image(getClass().getResourceAsStream("/images/avatar-15.png")); // Chemin ou URL
+            Image image = new Image(getClass().getResourceAsStream("/images/avatar-15.png"));
             imageView.setImage(image);
         } catch (Exception e) {
-            imageView.setImage(new Image(getClass().getResourceAsStream("/images/avatar-15.png"))); // image par défaut si erreur
+            imageView.setImage(new Image(getClass().getResourceAsStream("/images/avatar-15.png")));
         }
         imageView.setFitHeight(40);
         imageView.setFitWidth(40);
         imageView.setPreserveRatio(true);
         imageView.setClip(new Circle(20, 20, 20));
 
+        // Labels
         Label auteurLabel = new Label(userC.getPrenom() + " " + userC.getNom_user());
         auteurLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 13px;");
 
@@ -143,11 +147,7 @@ public class PostDetailController {
         contenuLabel.setWrapText(true);
         contenuLabel.setStyle("-fx-font-size: 13px;");
 
-        // 🟡 BOUTON REPLY
-        Button replyButton = new Button("Répondre");
-        replyButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #3b82f6; -fx-underline: true;");
-
-        // 🟡 CHAMP DE RÉPONSE (initialement caché)
+        // Zone de texte et bouton "Envoyer"
         TextField replyField = new TextField();
         replyField.setPromptText("Votre réponse...");
         replyField.setVisible(false);
@@ -155,20 +155,11 @@ public class PostDetailController {
         Button sendReplyButton = new Button("Envoyer");
         sendReplyButton.setVisible(false);
 
-        // Conteneur champ + bouton
         HBox replyInputBox = new HBox(replyField, sendReplyButton);
         replyInputBox.setSpacing(5);
         replyInputBox.setVisible(false);
 
-        // 🟡 ACTION du bouton "Répondre"
-        replyButton.setOnAction(e -> {
-            boolean currentlyVisible = replyInputBox.isVisible();
-            replyInputBox.setVisible(!currentlyVisible);
-            replyField.setVisible(!currentlyVisible);
-            sendReplyButton.setVisible(!currentlyVisible);
-        });
-
-        // 🟡 ACTION bouton "Envoyer"
+        // Action bouton "Envoyer"
         sendReplyButton.setOnAction(e -> {
             String contenu = replyField.getText().trim();
             if (contenu.isEmpty()) return;
@@ -177,30 +168,49 @@ public class PostDetailController {
             newReply.setContenuCom(contenu);
             newReply.setParentId(commentaire.getId());
             newReply.setPostComId(commentaire.getPostComId());
-            newReply.setUserComId(2); // adapter à ton système
+            newReply.setUserComId(2); // À adapter selon l'utilisateur connecté
             newReply.setDateCom(LocalDateTime.now());
 
             commentaireService.ajouter(newReply);
-
-            // 🔄 Recharger tous les commentaires (à toi d'implémenter `reloadCommentaires`)
-            chargerCommentaires();
-
-            // Reset champ
+            chargerCommentaires(); // Recharge la liste
             replyField.clear();
             replyInputBox.setVisible(false);
+        });
+
+        // Bouton "Répondre"
+        ImageView replyIcon = new ImageView(new Image(getClass().getResourceAsStream("/images/icons/reply-solid.png")));
+        replyIcon.setFitWidth(16);
+        replyIcon.setFitHeight(16);
+        replyIcon.setPreserveRatio(true);
+
+        Button replyButton = new Button();
+        replyButton.setGraphic(replyIcon);
+        replyButton.setStyle("-fx-background-color: transparent;");
+        replyButton.setCursor(Cursor.HAND);
+
+        replyButton.setOnAction(e -> {
+            boolean visible = replyInputBox.isVisible();
+            replyInputBox.setVisible(!visible);
+            replyField.setVisible(!visible);
+            sendReplyButton.setVisible(!visible);
         });
 
         VBox texteBox = new VBox(auteurLabel, contenuLabel, dateLabel);
         texteBox.setSpacing(3);
         texteBox.setPadding(new Insets(5));
 
-        HBox bloc = new HBox(imageView, texteBox);
-        bloc.setSpacing(10);
-        bloc.setStyle("-fx-background-color: #ffffff; -fx-padding: 10; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);");
+        HBox mainContent = new HBox(imageView, texteBox);
+        mainContent.setSpacing(10);
+        mainContent.setAlignment(Pos.TOP_LEFT);
+        mainContent.setStyle("-fx-background-color: #ffffff; -fx-padding: 10; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);");
 
-        container.getChildren().add(bloc);
+        HBox topRow = new HBox(mainContent, replyButton);
+        topRow.setSpacing(10);
+        topRow.setAlignment(Pos.TOP_LEFT);
 
-        // Chargement récursif des replies
+        container.getChildren().addAll(topRow, replyInputBox);
+
+        // Récursivement ajouter les réponses
         List<Commentaire> replies = commentaireService.getReplies(commentaire.getId());
         for (Commentaire reply : replies) {
             VBox blocReply = creerBlocCommentaire(reply, indentLevel + 1);
