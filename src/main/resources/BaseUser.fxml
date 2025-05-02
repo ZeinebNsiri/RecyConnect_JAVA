@@ -4,6 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
+<?import com.jfoenix.controls.*?>
+
 
 <BorderPane fx:id="rootBorderPane"
             xmlns="http://javafx.com/javafx"
@@ -39,14 +41,14 @@
                 <Pane HBox.hgrow="ALWAYS"/>
 
                 <!-- Icons -->
-                <Label text="🔔" styleClass="icon"/>
+                <Label fx:id="notificationIcon" text="🔔" styleClass="icon"/>
                 <Label text="🛒" styleClass="icon"/>
 
                 <!-- Profile Dropdown -->
                 <MenuButton styleClass="user-menu">
                     <graphic>
                         <HBox spacing="10" alignment="CENTER">
-                            <ImageView fitWidth="30" fitHeight="30">
+                            <ImageView fitWidth="30" fitHeight="30" style="-fx-clip-shape: circle; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0, 0, 1); -fx-border-radius: 15; -fx-background-radius: 15;">
                                 <Image url="mainlogo.png" />
                             </ImageView>
                             <Label text="Mohamed Aziz Zouari" styleClass="profile-name"/>

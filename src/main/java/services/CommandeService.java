@@ -141,6 +141,28 @@ public class CommandeService {
         }
 
     }
+    public List<Commande> getAllCommandes() {
+        List<Commande> commandes = new ArrayList<>();
+
+        String sql = "SELECT * FROM commande";
+        try (PreparedStatement ps = conx.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Commande cmd = new Commande();
+                cmd.setId(rs.getInt("id"));
+                cmd.setDateCommande(rs.getTimestamp("date_commande").toLocalDateTime());
+                cmd.setPrixTotal(rs.getDouble("prix_total"));
+                cmd.setStatut(rs.getString("statut"));
+                commandes.add(cmd);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return commandes;
+    }
+
 
 
 

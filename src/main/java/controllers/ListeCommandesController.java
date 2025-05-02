@@ -119,7 +119,7 @@ public class ListeCommandesController {
             if (selected.equals("Payées")) {
                 filteredList = allCommandes.filtered(ligne -> "Payé par VISA".equalsIgnoreCase(ligne.getEtat()));
             } else if (selected.equals("Non payées")) {
-                filteredList = allCommandes.filtered(ligne -> "Paiement à la livraison".equalsIgnoreCase(ligne.getEtat()));
+                filteredList = allCommandes.filtered(ligne -> "Payé par livraison".equalsIgnoreCase(ligne.getEtat()));
             } else {
                 filteredList = new ArrayList<>(allCommandes);
             }
