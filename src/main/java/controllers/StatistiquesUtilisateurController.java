@@ -42,16 +42,16 @@ public class StatistiquesUtilisateurController {
     // Charger les statistiques des rôles
     private void loadRoleStatistics() {
         try {
-            // Obtenir les données des utilisateurs
+
             int particuliers = utilisateurService.getCountByRole("ROLE_USER");
             int professionnels = utilisateurService.getCountByRole("ROLE_PROFESSIONNEL");
 
-            // Remplir les graphiques
+
             PieChart.Data particulierData = new PieChart.Data("Particuliers", particuliers);
             PieChart.Data professionnelData = new PieChart.Data("Professionnels", professionnels);
             rolePieChart.getData().addAll(particulierData, professionnelData);
 
-            // Afficher les chiffres totaux
+
             totalRoleCount.setText(String.valueOf(particuliers + professionnels));
             particulierCount.setText(String.valueOf(particuliers));
             professionnelCount.setText(String.valueOf(professionnels));
@@ -60,19 +60,19 @@ public class StatistiquesUtilisateurController {
         }
     }
 
-    // Charger les statistiques de statut
+
     private void loadStatusStatistics() {
         try {
-            // Obtenir les données des utilisateurs
+
             int actifs = utilisateurService.getCountByStatus(true);
             int desactives = utilisateurService.getCountByStatus(false);
 
-            // Remplir les graphiques
+
             PieChart.Data actifData = new PieChart.Data("Actifs", actifs);
             PieChart.Data desactiveData = new PieChart.Data("Désactivés", desactives);
             statusPieChart.getData().addAll(actifData, desactiveData);
 
-            // Afficher les chiffres totaux
+
             totalStatusCount.setText(String.valueOf(actifs + desactives));
             actifCount.setText(String.valueOf(actifs));
             desactiveCount.setText(String.valueOf(desactives));
@@ -81,9 +81,9 @@ public class StatistiquesUtilisateurController {
         }
     }
 
-    // Méthode pour afficher un message d'erreur
+
     private void showError(String title, String message) {
-        // Afficher une alerte avec l'erreur
+
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -92,17 +92,5 @@ public class StatistiquesUtilisateurController {
     }
 
 
-    @FXML
-    public void back() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
-            Parent root = loader.load();
-            BaseAdminController baseAdminController = loader.getController();
-            baseAdminController.showUsersView();
-            rolePieChart.getScene().setRoot(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-    }
 }

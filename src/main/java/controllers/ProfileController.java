@@ -121,7 +121,7 @@ public class ProfileController {
             currentUser.setRoles("ROLE_ADMIN");
         }
 
-        // Sauvegarde image si une a été choisie
+
         if (selectedFile != null) {
             try {
                 File destDir = new File(PROFILE_IMAGE_DIR);

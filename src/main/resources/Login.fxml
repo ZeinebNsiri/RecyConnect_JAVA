@@ -14,7 +14,7 @@
            fx:controller="controllers.LoginController">
 
 
-    <ImageView fx:id="backgroundImage" fitHeight="800" fitWidth="1200" preserveRatio="false"/>
+    <ImageView fx:id="backgroundImage" fitHeight="800" fitWidth="1550" preserveRatio="false"/>
     <stylesheets>
         <URL value="@login_signup.css"/>
     </stylesheets>
