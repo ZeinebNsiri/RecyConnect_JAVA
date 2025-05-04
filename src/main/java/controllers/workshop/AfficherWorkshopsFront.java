@@ -13,7 +13,6 @@ import services.CoursService;
 
 import java.sql.SQLException;
 import java.util.List;
-
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
@@ -28,12 +27,12 @@ public class AfficherWorkshopsFront {
     @FXML private TextField searchField;
     @FXML private ComboBox<String> videoComboBox;
 
-    @FXML private VBox chatContainer;
     @FXML private VBox chatWindow;
     @FXML private Button chatToggleButton;
     @FXML private VBox chatMessagesContainer;
     @FXML private TextField chatInputField;
     @FXML private Button sendButton;
+    @FXML private ScrollPane chatScrollPane;
 
 
     private final CoursService coursService = new CoursService();
@@ -81,16 +80,23 @@ public class AfficherWorkshopsFront {
     private void addMessage(String message, boolean isUser) {
         Label msgLabel = new Label(message);
         msgLabel.setWrapText(true);
-        msgLabel.setMaxWidth(200);
+        msgLabel.setMaxWidth(500); // Largeur max pour le texte (ajuste si besoin)
+
         msgLabel.setStyle(
                 isUser ?
                         "-fx-background-color: #2c7a4b; -fx-text-fill: white; -fx-padding: 10 15; -fx-background-radius: 18 2 18 18;" :
                         "-fx-background-color: #e4e6eb; -fx-text-fill: black; -fx-padding: 10 15; -fx-background-radius: 2 18 18 18;"
         );
+
         HBox wrapper = new HBox(msgLabel);
         wrapper.setAlignment(isUser ? javafx.geometry.Pos.CENTER_RIGHT : javafx.geometry.Pos.CENTER_LEFT);
+        wrapper.setPrefWidth(300); // Fixe la largeur de chaque ligne de message
         chatMessagesContainer.getChildren().add(wrapper);
+
+        // Scroll vers le bas automatiquement
+        Platform.runLater(() -> chatScrollPane.setVvalue(1.0));
     }
+
 
 
     private void buildCategoryFilters() {
