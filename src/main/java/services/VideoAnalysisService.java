@@ -40,7 +40,7 @@ public class VideoAnalysisService {
     private static final String SCENE_CLASSIFICATION_API_URL = "https://api-inference.huggingface.co/models/microsoft/resnet-50";
 
     // Your Hugging Face API key
-    private static final String API_KEY = "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";
+    private static final String API_KEY = "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";
 
     // Increased to 15 frames for more detailed video analysis
     private static final int DEFAULT_MAX_FRAMES = 15;
