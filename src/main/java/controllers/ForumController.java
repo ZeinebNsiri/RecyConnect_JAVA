@@ -21,8 +21,11 @@ import services.CommentaireService;
 import services.LikeService;
 import services.PostService;
 
+
+
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,6 +40,12 @@ public class ForumController {
 
     @FXML private FlowPane filterTagsPane;
 
+    @FXML private StackPane modalOverlay;
+    @FXML private ImageView modalImageView;
+    @FXML private Button btnPrevImage;
+    @FXML private Button btnNextImage;
+
+
     private final PostService postService = new PostService();
     private final LikeService likeService = new LikeService();
     private final CommentaireService commentaireService = new CommentaireService();
@@ -49,6 +58,11 @@ public class ForumController {
     private int currentPage = 1;
     private List<Post> allPosts = new ArrayList<>();
     private Map<Integer, List<String>> postMediaMap = new HashMap<>();
+
+
+    private List<String> mediaUrls;
+    private int currentImageIndex = 0;
+
 
     @FXML
     public void initialize() {
@@ -77,6 +91,18 @@ public class ForumController {
         savedToggle.setOnAction(event -> {
             selectToggle(savedToggle);
         });
+
+        btnPrevImage.setOnAction(e -> {
+            currentImageIndex = (currentImageIndex - 1 + mediaUrls.size()) % mediaUrls.size();
+            updateModalImage();
+        });
+
+        btnNextImage.setOnAction(e -> {
+            currentImageIndex = (currentImageIndex + 1) % mediaUrls.size();
+            updateModalImage();
+        });
+
+        modalOverlay.setOnMouseClicked(e -> modalOverlay.setVisible(false));
 
         selectToggle(recentToggle);
         loadPosts();
@@ -263,52 +289,22 @@ public class ForumController {
         }
     }
 
-    private void openImageModal(List<String> mediaUrls, int startIndex) {
-        Stage modalStage = new Stage();
-        modalStage.initModality(Modality.APPLICATION_MODAL);
-        modalStage.setTitle("Voir les images");
+    public void showImageModal(List<String> urls, int startIndex) {
+        this.mediaUrls = urls;
+        this.currentImageIndex = startIndex;
 
-        VBox modalRoot = new VBox();
-        modalRoot.setSpacing(10);
-        modalRoot.setAlignment(Pos.CENTER);
-        modalRoot.setPadding(new Insets(10));
+        if (mediaUrls.isEmpty()) return;
 
-        ImageView bigImageView = new ImageView();
-        bigImageView.setFitWidth(600);
-        bigImageView.setPreserveRatio(true);
-
-        Button prevButton = new Button("<");
-        Button nextButton = new Button(">");
-
-        HBox navigation = new HBox(10, prevButton, nextButton);
-        navigation.setAlignment(Pos.CENTER);
-
-        modalRoot.getChildren().addAll(bigImageView, navigation);
-
-        Scene modalScene = new Scene(modalRoot, 1000, 700);
-        modalStage.setScene(modalScene);
-
-        final int[] currentIndex = {startIndex};
-        modalStage.setResizable(true);
-
-        // Fonction pour mettre à jour l'image
-        Runnable updateImage = () -> {
-            bigImageView.setImage(new Image("file:" + mediaUrls.get(currentIndex[0])));
-        };
-        updateImage.run();
-
-        prevButton.setOnAction(e -> {
-            currentIndex[0] = (currentIndex[0] - 1 + mediaUrls.size()) % mediaUrls.size();
-            updateImage.run();
-        });
-
-        nextButton.setOnAction(e -> {
-            currentIndex[0] = (currentIndex[0] + 1) % mediaUrls.size();
-            updateImage.run();
-        });
-
-        modalStage.showAndWait();
+        updateModalImage();
+        modalOverlay.setVisible(true);
     }
+
+    private void updateModalImage() {
+        if (mediaUrls != null && !mediaUrls.isEmpty()) {
+            modalImageView.setImage(new Image("file:" + mediaUrls.get(currentImageIndex)));
+        }
+    }
+
 
 
     private VBox createPostCard(Post post, List<String> mediaUrls, boolean isMyPost) throws SQLException {
@@ -327,8 +323,8 @@ public class ForumController {
         utilisateur user = postService.getUserPById(post.getUser_p_id());
 
         VBox userInfo = new VBox();
-        Label usernameLabel = new Label(user.getPrenom());
-        Label timestampLabel = new Label(post.getDate_publication().toString());
+        Label usernameLabel = new Label(user.getPrenom() + " " + user.getNom_user());
+        Label timestampLabel = new Label(post.getDate_publication().format(DateTimeFormatter.ofPattern("MMMM d, yyyy, h:mm a")));
         usernameLabel.getStyleClass().add("username");
         timestampLabel.getStyleClass().add("timestamp");
         userInfo.getChildren().addAll(usernameLabel, timestampLabel);
@@ -370,7 +366,7 @@ public class ForumController {
             }
 
             final int index = i;
-            imageView.setOnMouseClicked(e -> openImageModal(mediaUrls, index));
+            imageView.setOnMouseClicked(e -> showImageModal(mediaUrls, index));
 
             mediaContainer.getChildren().add(imageWrapper);
         }

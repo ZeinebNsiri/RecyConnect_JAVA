@@ -10,9 +10,12 @@
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.image.Image?>
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            prefWidth="1200" prefHeight="800" stylesheets="@styles/forum.css"
-            fx:controller="controllers.ForumController">
+
+<StackPane fx:id="rootStackPane" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ForumController"
+           prefWidth="1200" prefHeight="800" stylesheets="@styles/forum.css">
+
+<BorderPane fx:id="mainContent"
+            prefWidth="1200" prefHeight="800">
 
     <!-- Header -->
     <top>
@@ -72,3 +75,16 @@
         </HBox>
     </center>
 </BorderPane>
+
+    <StackPane fx:id="modalOverlay" visible="false" styleClass="modal-overlay" alignment="CENTER">
+        <VBox fx:id="modalContent" alignment="CENTER" spacing="10">
+            <ImageView fx:id="modalImageView" fitWidth="600" preserveRatio="true"/>
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnPrevImage" text="⟨"/>
+                <Button fx:id="btnNextImage" text="⟩"/>
+            </HBox>
+        </VBox>
+    </StackPane>
+
+
+</StackPane>

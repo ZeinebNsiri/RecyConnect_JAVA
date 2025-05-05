@@ -1,8 +1,15 @@
 package services;
 
+import jakarta.activation.DataHandler;
+import jakarta.activation.DataSource;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
+import jakarta.mail.util.ByteArrayDataSource;
+
+import java.io.InputStream;
 import java.util.Properties;
 
 public class MailService {
@@ -29,19 +36,44 @@ public class MailService {
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    InternetAddress.parse(toEmail)
-            );
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
             message.setSubject(subject);
-            message.setContent(bodyHtml, "text/html; charset=utf-8");
+
+            // Prepare multipart email (HTML + Image)
+            MimeMultipart multipart = new MimeMultipart("related");
+
+            // 1. HTML Part (replace image src with cid)
+            BodyPart htmlPart = new MimeBodyPart();
+            String modifiedHtml = bodyHtml.replace("src='src/main/resources/images/mainlogo.png'", "src='cid:logo'");
+            htmlPart.setContent(modifiedHtml, "text/html; charset=utf-8");
+            multipart.addBodyPart(htmlPart);
+
+            // 2. Image Part
+            MimeBodyPart imagePart = new MimeBodyPart();
+            InputStream logoStream = MailService.class.getResourceAsStream("/images/mainlogo.png"); // Make sure image is in `resources`
+            if (logoStream == null) {
+                System.out.println("❌ Logo introuvable !");
+                return;
+            }
+
+            DataSource fds = new ByteArrayDataSource(logoStream, "image/png");
+            imagePart.setDataHandler(new DataHandler(fds));
+            imagePart.setHeader("Content-ID", "<logo>");
+            imagePart.setDisposition(MimeBodyPart.INLINE);
+            multipart.addBodyPart(imagePart);
+
+            // Attach the multipart content to the message
+            message.setContent(multipart);
 
             Transport.send(message);
 
-            System.out.println("Email envoyé avec succès !");
+            System.out.println("✅ Email envoyé avec succès !");
         } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }
 

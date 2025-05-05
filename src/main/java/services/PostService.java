@@ -368,7 +368,7 @@ public class PostService implements IService<Post>{
                         + "<h1>Alerte de Contenu Inapproprié 🚨</h1>"
                         + "</div>"
                         + "<div style='padding: 20px; text-align: center;'>"
-                        + "<img src='src/main/resources/images/mainlogo.png' alt='Logo' width='100' style='margin-bottom: 20px;'/>"
+                        + "<img src='cid:logo' alt='Logo' width='100' style='margin-bottom: 20px;'/>\n"
                         + "<p>Bonjour Admin,</p>"
                         + "<p>Un contenu potentiellement <strong>violent, raciste ou haineux</strong> a été détecté sur la plateforme.</p>"
                         + "<div style='margin-top: 20px; padding: 10px; background-color: #eee; border-radius: 5px;'>"
