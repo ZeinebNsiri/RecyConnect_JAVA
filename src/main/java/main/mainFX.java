@@ -16,7 +16,7 @@ public class mainFX extends Application {
 
     // --- Choix manuel du rôle à démarrage ---
     // Change cette variable ici pour choisir la vue à ouvrir :
-    private static final String ROLE = "USER"; // mettre "ADMIN" ou "USER"
+    private static final String ROLE = "ADMIN"; // mettre "ADMIN" ou "USER"
 
     @Override
     public void start(Stage stage) throws Exception {

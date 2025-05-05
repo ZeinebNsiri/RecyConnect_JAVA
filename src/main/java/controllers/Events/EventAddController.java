@@ -7,13 +7,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import services.EventService;
 import services.ImageGenerationService;
 
-import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -45,6 +44,7 @@ public class EventAddController {
 
     private final EventService eventService = new EventService();
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    private Stage mapStage; // Reference to keep track of the map window
 
     @FXML
     private void saveEvent() {
@@ -62,13 +62,11 @@ public class EventAddController {
             event.setDescription(descriptionField.getText().trim());
             event.setCapacity(Integer.parseInt(capacityField.getText().trim()));
             event.setRemaining(Integer.parseInt(remainingField.getText().trim()));
-            String meetRoomName = event.getName().trim()
-                    .replaceAll("[^a-zA-Z0-9\\s]", "") // Remove any non-alphanumeric characters
-                    .replaceAll("\\s+", "-")          // Replace spaces with hyphens
-                    + "-" + System.currentTimeMillis();
-            event.setMeetingLink("https://meet.jit.si/" + meetRoomName);            event.setMeetingLink("https://meet.jit.si/" + meetRoomName);
+            String meetRoomName = event.getName().trim().replaceAll("[^a-zA-Z0-9\\s]", "").replaceAll("\\s+", "-") + "-" + System.currentTimeMillis();
+            event.setMeetingLink("https://meet.jit.si/" + meetRoomName);
             event.setCoordinates(coordinatesField.getText().trim());
-// Image generation using Modelslab
+
+            // Generate image
             String prompt = "A professional event image for: " + event.getName() + ". " + event.getDescription();
             String imageFileName = "event_" + System.currentTimeMillis() + ".png";
             String savePath = "uploads/" + imageFileName;
@@ -77,35 +75,30 @@ public class EventAddController {
                 Files.createDirectories(Paths.get("uploads"));
                 String generatedFile = ImageGenerationService.generateImage(prompt, savePath);
                 if (Files.exists(Paths.get(generatedFile))) {
-                    event.setImage(imageFileName);  // Store only the filename in the database
+                    event.setImage(imageFileName);
                 } else {
-                    event.setImage("default.png");  // Default image if generation fails
+                    event.setImage("default.png");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 if (e.getMessage() != null) {
                     if (e.getMessage().contains("403")) {
-                        showAlert(Alert.AlertType.ERROR, "Access Denied",
-                                "Your API key might be invalid or expired.");
+                        showAlert(Alert.AlertType.ERROR, "Access Denied", "Your API key might be invalid or expired.");
                     } else if (e.getMessage().contains("429")) {
-                        showAlert(Alert.AlertType.WARNING, "Rate Limit Reached",
-                                "Too many requests. Please wait and try again.");
+                        showAlert(Alert.AlertType.WARNING, "Rate Limit Reached", "Too many requests. Please wait and try again.");
                     } else if (e.getMessage().contains("503")) {
-                        showAlert(Alert.AlertType.WARNING, "Service Unavailable",
-                                "The image generation service is temporarily unavailable.");
+                        showAlert(Alert.AlertType.WARNING, "Service Unavailable", "The image generation service is temporarily unavailable.");
                     } else {
-                        showAlert(Alert.AlertType.WARNING, "Image Generation",
-                                "Could not generate custom image. Using default image instead.");
+                        showAlert(Alert.AlertType.WARNING, "Image Generation", "Could not generate custom image. Using default image instead.");
                     }
                 }
                 event.setImage("default.png");
             }
 
-
-
             eventService.add(event);
             showAlert(Alert.AlertType.INFORMATION, "Success", "Event added successfully!");
             closeForm();
+
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to add event: " + e.getMessage());
         }
@@ -209,25 +202,56 @@ public class EventAddController {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setContentText(message);
+
+        // Set owner to ensure proper window stacking
+        Stage currentStage = (Stage) nameField.getScene().getWindow();
+        alert.initOwner(currentStage);
+
         alert.showAndWait();
     }
 
     @FXML
     private void handleOpenMap() {
         try {
+            // Close existing map window if it's open
+            if (mapStage != null) {
+                mapStage.close();
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventViews/MapPicker.fxml"));
             Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Choose a location");
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
 
-            if (!MapPickerResult.selectedCoordinates.isEmpty()) {
-                coordinatesField.setText(MapPickerResult.selectedCoordinates);
-            }
+            mapStage = new Stage(StageStyle.DECORATED);
+            mapStage.setTitle("Choose Event Location");
+            mapStage.setScene(new Scene(root, 800, 600));
+            mapStage.initModality(Modality.APPLICATION_MODAL);
+
+            // Set the owner to ensure proper window stacking
+            Stage currentStage = (Stage) coordinatesField.getScene().getWindow();
+            mapStage.initOwner(currentStage);
+
+            // Center the map window relative to the main window
+            mapStage.setX(currentStage.getX() + (currentStage.getWidth() - 800) / 2);
+            mapStage.setY(currentStage.getY() + (currentStage.getHeight() - 600) / 2);
+
+            MapPickerResult.selectedCoordinates = "";
+            MapPickerResult.selectedAddress = "";
+
+            // Set handler for when the window is closed
+            mapStage.setOnHidden(event -> {
+                if (!MapPickerResult.selectedCoordinates.isEmpty()) {
+                    coordinatesField.setText(MapPickerResult.selectedCoordinates);
+                    if (locationField.getText().trim().isEmpty() && !MapPickerResult.selectedAddress.isEmpty()) {
+                        locationField.setText(MapPickerResult.selectedAddress);
+                    }
+                }
+            });
+
+            mapStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open map selector: " + e.getMessage());
         }
     }
 }

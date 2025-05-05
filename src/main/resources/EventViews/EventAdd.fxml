@@ -69,7 +69,9 @@
     <!-- Coordonnées -->
     <VBox spacing="3">
         <HBox spacing="10" alignment="CENTER_LEFT">
-            <TextField fx:id="coordinatesField" promptText="Coordonnées (lat,lon)" />
+            <TextField fx:id="coordinatesField" promptText="Coordonnées (lat,lon)" HBox.hgrow="ALWAYS" editable="false" />
+            <Button text="Choisir sur la carte" onAction="#handleOpenMap"
+                    style="-fx-background-color: #007bff; -fx-text-fill: white;" />
         </HBox>
     </VBox>
 
