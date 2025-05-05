@@ -30,17 +30,17 @@
             <Label text="Gestion des Posts" styleClass="header"/>
 
             <!-- HBox for pie chart and line chart side by side -->
-            <HBox spacing="20">
+            <HBox spacing="20" alignment="CENTER">
                 <!-- Card for PieChart -->
-                <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #f0f0f0; -fx-border-radius: 10px; -fx-padding: 15;">
+                <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #f0f0f0; -fx-border-radius: 10px; -fx-padding: 15;" maxWidth="400">
                     <Label text="Distribution des Statuts" styleClass="card-header"/>
-                    <PieChart fx:id="statusPieChart" prefWidth="250" prefHeight="250"/>
+                    <PieChart fx:id="statusPieChart" prefWidth="350" prefHeight="350"/>
                 </VBox>
 
                 <!-- Card for LineChart -->
-                <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #f0f0f0; -fx-border-radius: 10px; -fx-padding: 15;">
+                <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #f0f0f0; -fx-border-radius: 10px; -fx-padding: 15;" maxWidth="400">
                     <Label text="Nombre de Posts par Mois" styleClass="card-header"/>
-                    <LineChart fx:id="postsLineChart" prefWidth="250" prefHeight="250">
+                    <LineChart fx:id="postsLineChart" prefWidth="350" prefHeight="350">
                         <xAxis>
                             <CategoryAxis fx:id="monthsAxis"/>
                         </xAxis>
@@ -66,5 +66,4 @@
             </VBox>
         </VBox>
     </center>
-
 </BorderPane>

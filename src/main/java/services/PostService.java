@@ -30,7 +30,7 @@ import java.util.*;
 
 public class PostService implements IService<Post>{
     Connection conx;
-    private String currentRole = "USER";
+    private String currentRole = "ADMIN";
     public PostService() {conx = MyDataBase.getInstance().getConx();}
 
 

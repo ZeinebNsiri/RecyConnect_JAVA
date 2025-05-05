@@ -54,9 +54,8 @@
     -fx-text-fill: #34495e;
 }
 
-/* Card Styling for PieChart and LineChart */
 .card-header {
-    -fx-font-size: 16px;
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-text-fill: #34495e;
     -fx-alignment: center;
@@ -81,7 +80,3 @@
 .LineChart {
     -fx-border-radius: 10px;
 }
-
-
-
-
