@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.workshop.AfficherCategorieCours"
+      alignment="TOP_LEFT" spacing="15"
+      style="-fx-background-color: #f0f8f2;">
+
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+
+    <!-- TITRE -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Liste des Catégories"
+               style="-fx-font-size:18px; -fx-font-weight:bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <!-- BOUTON AJOUTER -->
+    <Button fx:id="btnAjouter"
+            text="+ Ajouter catégorie"
+            style="-fx-background-color:#28a745; -fx-text-fill:white;"/>
+
+    <!-- TABLEAU -->
+    <TableView fx:id="categorieTableView"
+               VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId" text="#"/>
+            <TableColumn fx:id="colNom" text="Nom de la Catégorie"/>
+            <TableColumn fx:id="colDescription" text="Description"/>
+            <TableColumn fx:id="colDetails" text="Détails"/>
+        </columns>
+    </TableView>
+
+    <!-- PAGINATION -->
+    <HBox fx:id="paginationContainer"
+          alignment="CENTER"
+          spacing="8"
+          style="-fx-padding: 20 0 0 0;"/>
+</VBox>

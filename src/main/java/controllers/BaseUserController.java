@@ -1,5 +1,6 @@
 package controllers;
 
+import controllers.workshop.DetailsWorkshopFront;
 import entities.utilisateur;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +27,8 @@ public class BaseUserController {
     private MenuItem logoutItem;
     @FXML
     private Label sceneReference;
+    public static BaseUserController instance;
+
 
     @FXML
     public void initialize() {
@@ -42,7 +45,7 @@ public class BaseUserController {
                 throw new RuntimeException(ex);
             }
         });
-
+        instance = this;
     }
 
     @FXML
@@ -82,4 +85,31 @@ public class BaseUserController {
         currentStage.setTitle("Connexion");
         currentStage.show();
     }
+
+    @FXML
+    public void showWorkshopsView() {
+        loadView("/workshop/AfficherWorkshopsFront.fxml");
+    }
+
+
+    public void showWorkshopDetails(entities.Cours cours) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/workshop/DetailsWorkshopFront.fxml")
+            );
+            Parent view = loader.load();
+
+
+            // configure le controller avec le cours
+            DetailsWorkshopFront ctrl = loader.getController();
+            ctrl.setCours(cours);
+
+
+            // injecte dans le centre
+            rootBorderPane.setCenter(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

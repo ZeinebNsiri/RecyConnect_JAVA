@@ -1,9 +1,10 @@
 
 package controllers;
 
-import entities.CategorieArticle;
-import entities.Notification;
-import entities.utilisateur;
+import controllers.workshop.AjouterCours;
+import controllers.workshop.ModifierCategorieCours;
+import controllers.workshop.ModifierCours;
+import entities.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,6 +47,9 @@ public class BaseAdminController {
     @FXML private Button notificationButton;
     @FXML private Label notifBadge;
 
+    @FXML
+    private StackPane contentPane;
+
     private final NotificationService notifService = new NotificationService();
     private Popup notifPopup = new Popup();
 
@@ -68,6 +72,7 @@ public class BaseAdminController {
             }
         });
         updateNotifBadge();
+        rootBorderPane.setUserData(this);
 
 
     }
@@ -221,17 +226,15 @@ public class BaseAdminController {
 
     @FXML
     public void showCategorieWorkshopView() {
-        Label categorieWorkshopLabel = new Label("📈 Catégories des workshops");
-        categorieWorkshopLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        rootBorderPane.setCenter(categorieWorkshopLabel);
+        loadView("/workshop/AfficherCategorieCours.fxml");
     }
+
 
     @FXML
     public void showWorkshopsView() {
-        Label workshopsLabel = new Label("📊 Liste des workshops");
-        workshopsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        rootBorderPane.setCenter(workshopsLabel);
+        loadView("/workshop/AfficherCours.fxml");
     }
+
 
     @FXML
     public void showPostsView() {
@@ -288,6 +291,59 @@ public class BaseAdminController {
             e.printStackTrace();
         }
     }
+
+    public void showModifierCategorieViewWithData(CategorieCours catcours) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/ModifierCategorieCours.fxml"));
+            Parent view = loader.load();
+
+
+            ModifierCategorieCours ctrl = loader.getController();
+            ctrl.setCategorieCours(catcours);
+            ctrl.setBaseAdminController(this);
+
+
+            contentPane.getChildren().setAll(view); // Use contentPane instead of rootBorderPane.setCenter()
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    public void showAjoutCategorieView2() {
+        loadView("/workshop/AjoutCategorieCours.fxml");
+    }
+
+
+    @FXML
+    public void showAjouterCoursView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/AjouterCours.fxml"));
+            Parent view = loader.load();
+            AjouterCours ctrl = loader.getController();
+            ctrl.setBaseAdminController(this); // Set the controller
+            contentPane.getChildren().setAll(view);
+        } catch (IOException e) {
+            System.err.println("Error loading AjouterCours.fxml: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    public void showModifierCoursViewWithData(Cours c) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/ModifierCours.fxml"));
+            Parent content = loader.load();
+            ModifierCours ctrl = loader.getController();
+            ctrl.setCours(c);
+            ctrl.setBaseAdminController(this); // Already set, confirming for consistency
+            contentPane.getChildren().setAll(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

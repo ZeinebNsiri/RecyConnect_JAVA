@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.workshop.AfficherWorkshopsFront"
+      spacing="0"
+      prefWidth="1000" prefHeight="700"
+      style="-fx-background-color: #f8f9fa;">
+
+    <!-- Header -->
+    <StackPane prefHeight="180" style="-fx-background-color: linear-gradient(to right, #043c1c, #198754); -fx-padding: 25 30 25 30;">
+        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20;">
+            <Label text="Workshops" style="-fx-font-size: 32px; -fx-text-fill: white; -fx-font-weight: bold;" />
+            <Label text="Accueil  /  Workshops" style="-fx-text-fill: white; -fx-font-size: 14px;" />
+        </VBox>
+    </StackPane>
+
+    <!-- Scrollable Content -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color:transparent;">
+        <content>
+            <VBox spacing="30" alignment="TOP_CENTER" style="-fx-padding: 40;">
+
+                <!-- Title -->
+                <VBox alignment="CENTER" spacing="6">
+                    <Label text="Nos workshops proposent"
+                           style="-fx-font-size: 14px; -fx-text-fill: #28a745;" />
+                    <Label text="Vidéos et guides pour redonner vie à vos produits"
+                           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #014421;" />
+                </VBox>
+
+                <!-- Search & Filters -->
+                <HBox spacing="10" alignment="CENTER"
+                      style="-fx-padding: 15; -fx-background-radius: 10;">
+                    <Label text="Rechercher par Titre:" style="-fx-font-weight: bold; -fx-text-fill: #343a40;"/>
+                    <TextField fx:id="searchField"
+                               promptText="Titre du cours..."
+                               style="-fx-background-radius: 10; -fx-border-color: #cce3de; -fx-border-radius: 10; -fx-padding: 6;" />
+                    <Label text="Vidéo:" style="-fx-font-weight: bold; -fx-text-fill: #343a40;" />
+                    <ComboBox fx:id="videoComboBox" prefWidth="120"
+                              style="-fx-background-radius: 10;" />
+
+                </HBox>
+
+                <!-- Category Filters -->
+                <HBox alignment="CENTER">
+                    <ScrollPane hbarPolicy="AS_NEEDED" vbarPolicy="NEVER"
+                                fitToHeight="true" prefHeight="60" maxHeight="60"
+                                style="-fx-background-color: transparent;">
+                        <HBox fx:id="filterButtonsContainer" spacing="20" alignment="CENTER_LEFT"
+                              style="-fx-background-color: #e8f5e9; -fx-padding: 10 20; -fx-background-radius: 10;" />
+                    </ScrollPane>
+                </HBox>
+
+                <!-- Workshops Cards -->
+                <FlowPane fx:id="workshopsContainer"
+                          hgap="30" vgap="30"
+                          alignment="CENTER"
+                          style="-fx-padding: 20;" />
+
+                <!-- 🌟 Floating Chat Bubble and Window -->
+                <StackPane alignment="BOTTOM_RIGHT" style="-fx-padding: 30;">
+                    <VBox fx:id="chatContainer" alignment="BOTTOM_RIGHT" spacing="10">
+
+                        <!-- Chat Button -->
+                        <Button fx:id="chatToggleButton"
+                                text="💬 Chat"
+                                style="-fx-background-color: #2c7a4b; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 50;"/>
+
+                        <!-- Chat Window -->
+                        <VBox fx:id="chatWindow"
+                              spacing="10"
+                              visible="false"
+                              style="-fx-background-color: #f9f9f9; -fx-padding: 20; -fx-background-radius: 10; -fx-border-color: #ccc; -fx-border-radius: 10; -fx-pref-width: 350;">
+
+                            <Label text="Discuter avec Chatbot"
+                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #014421;" />
+
+                            <ScrollPane fx:id="chatScrollPane"
+                                        fitToWidth="true"
+                                        hbarPolicy="NEVER"
+                                        vbarPolicy="ALWAYS"
+                                        prefHeight="350"
+                                        maxHeight="350"
+                                        style="-fx-background-color: transparent;">
+                                <content>
+                                    <VBox fx:id="chatMessagesContainer"
+                                          spacing="8"
+                                          prefWidth="300"
+                                          style="-fx-padding: 5;" />
+                                </content>
+                            </ScrollPane>
+
+
+                            <HBox spacing="5">
+                                <TextField fx:id="chatInputField"
+                                           promptText="Posez votre question ici..."
+                                           prefWidth="730"
+                                style="-fx-background-radius: 8; -fx-border-radius: 8;" />
+                                <Button fx:id="sendButton"
+                                        text="Envoyer"
+                                        style="-fx-background-color: #2c7a4b; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" />
+                            </HBox>
+
+                        </VBox>
+
+                    </VBox>
+                </StackPane>
+
+            </VBox>
+        </content>
+    </ScrollPane>
+</VBox>
