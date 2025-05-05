@@ -74,5 +74,6 @@
 
     <center>
         <StackPane fx:id="contentPane" />
+
     </center>
 </BorderPane>

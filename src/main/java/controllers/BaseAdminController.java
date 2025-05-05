@@ -1,6 +1,8 @@
 // BaseAdminController.java
 package controllers;
 
+import controllers.Events.EventEditController;
+import entities.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,6 +31,20 @@ public class BaseAdminController {
             e.printStackTrace();
         }
     }
+    public void showEditEventView(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventViews/EventEdit.fxml"));
+            Parent view = loader.load();
+
+            EventEditController editController = loader.getController();
+            editController.setEvent(event);
+
+            contentPane.getChildren().setAll(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     public void showEvenementView() {
@@ -80,5 +96,11 @@ public class BaseAdminController {
     public void showPostsView() {
         loadView("/AdminViews/PostsList.fxml");
     }
+
+    public void showAddEventView() {
+        loadView("/EventViews/EventAdd.fxml");
+    }
+
+
 
 }

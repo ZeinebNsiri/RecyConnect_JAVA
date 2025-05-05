@@ -2,7 +2,11 @@ package controllers.Events;
 
 import entities.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import services.EventService;
@@ -235,8 +239,25 @@ public class EventEditController {
 
     @FXML
     private void cancelEdit() {
-        closeForm();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventViews/EventList.fxml"));
+            Parent listView = loader.load();
+
+            // Get the current root and traverse up to find the BaseAdminController's contentPane
+            Scene currentScene = nameField.getScene();
+            StackPane contentPane = (StackPane) currentScene.lookup("#contentPane");
+
+            if (contentPane != null) {
+                contentPane.getChildren().setAll(listView);
+            } else {
+                System.err.println("❌ contentPane not found");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de revenir à la liste des événements.");
+        }
     }
+
 
     private void closeForm() {
         Stage stage = (Stage) nameField.getScene().getWindow();

@@ -1,5 +1,6 @@
 package controllers.Events;
 
+import controllers.BaseAdminController;
 import entities.Event;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -175,37 +176,45 @@ public class EventListController {
 
     @FXML
     private void handleAddEvent() {
+        Stage stage = (Stage) eventTable.getScene().getWindow();
+        boolean wasMaximized = stage.isMaximized();
+
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventViews/EventAdd.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
             Parent root = loader.load();
-            Stage stage = new Stage();
+            BaseAdminController controller = loader.getController();
+
+            controller.showAddEventView(); // you’ll add this method
+
             stage.setScene(new Scene(root));
-            stage.setTitle("Ajouter un événement");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-            loadEvents();
+            stage.setMaximized(wasMaximized);
+            stage.show();
         } catch (IOException e) {
-            showAlert("Erreur", "Chargement du formulaire échoué: " + e.getMessage());
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger la vue d'ajout.");
         }
     }
 
     private void openEditForm(Event event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventViews/EventEdit.fxml"));
-            Parent root = loader.load();
-            EventEditController controller = loader.getController();
-            controller.setEvent(event);
+        Stage stage = (Stage) eventTable.getScene().getWindow();
+        boolean wasMaximized = stage.isMaximized();
 
-            Stage stage = new Stage();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+            Parent root = loader.load();
+
+            BaseAdminController controller = loader.getController();
+            controller.showEditEventView(event);  // Call method to inject event into edit view
+
             stage.setScene(new Scene(root));
-            stage.setTitle("Modifier l'événement");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-            loadEvents();
+            stage.setMaximized(wasMaximized);
+            stage.show();
         } catch (IOException e) {
-            showAlert("Erreur", "Chargement du formulaire échoué: " + e.getMessage());
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger la vue de modification.");
         }
     }
+
 
     private void openDeleteConfirmationDialog(Event event) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
