@@ -47,8 +47,9 @@ public class BaseUserController {
 
     @FXML
     public void showArticleView() {
-        //loadView("/listeArticlesUser.fxml");
+        loadView("/listeArticlesUser.fxml");
     }
+
 
     public void loadView(String fxmlPath) {
         try {

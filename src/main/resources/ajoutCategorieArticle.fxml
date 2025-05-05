@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.ajoutCategorieArticle"
+            style="-fx-background-color: #edf7ef;"
+            prefWidth="1000.0" prefHeight="600.0">
+
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20">
+            <padding>
+                <Insets top="40" left="40" right="40" bottom="40"/>
+            </padding>
+
+            <VBox spacing="15" prefWidth="600"
+                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4);">
+
+                <Label text="Ajouter une nouvelle catégorie"
+                       style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+                <TextField fx:id="nomCategorieField" promptText="Nom de la catégorie"/>
+                <TextArea fx:id="descriptionCategorieField" prefRowCount="4" wrapText="true" promptText="Description"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button text="Choisir une image"
+                            onAction="#choisirImageCategorie"/>
+                    <Label fx:id="nomImagecatField" text="Aucune image sélectionnée"
+                           style="-fx-text-fill: #666666;" />
+                </HBox>
+                <TextField fx:id="idCategorieField" visible="false"/>
+
+                <HBox alignment="CENTER" spacing="10">
+                    <Button fx:id="confirmAddCatBtn" text="Confirmer"
+                            onAction="#ajouterCategorieArticleAction"
+                            style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+                    <Button fx:id="cancelCatBtn" text="Annuler"
+                            onAction="#annulerAction"
+                            style="-fx-background-color: #6c757d; -fx-text-fill: white;"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>

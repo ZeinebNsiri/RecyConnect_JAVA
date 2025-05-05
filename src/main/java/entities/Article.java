@@ -2,8 +2,8 @@ package entities;
 
 public class Article {
     private int id;
-    private CategorieArticle categorie;
-    private utilisateur utilisateur_id;
+    private int categorie_id;
+    private int utilisateur_id;
     private String nom_article;
     private String description_article;
     private int quantite_article;
@@ -11,9 +11,9 @@ public class Article {
     private String image_article;
     private String localisation_article;
 
-    public Article(int id, CategorieArticle categorie, utilisateur utilisateur_id, String nom_article, String description_article, int quantite_article, double prix, String image_article, String localisation_article) {
+    public Article(int id, int categorie_id, int utilisateur_id, String nom_article, String description_article, int quantite_article, double prix, String image_article, String localisation_article) {
         this.id = id;
-        this.categorie = categorie;
+        this.categorie_id = categorie_id;
         this.utilisateur_id = utilisateur_id;
         this.nom_article = nom_article;
         this.description_article = description_article;
@@ -26,8 +26,8 @@ public class Article {
     //const sans id
 
 
-    public Article(CategorieArticle categorie, utilisateur utilisateur_id, String nom_article, String description_article, int quantite_article, double prix, String image_article, String localisation_article) {
-        this.categorie = categorie;
+    public Article(int categorie_id, int utilisateur_id, String nom_article, String description_article, int quantite_article, double prix, String image_article, String localisation_article) {
+        this.categorie_id = categorie_id;
         this.utilisateur_id = utilisateur_id;
         this.nom_article = nom_article;
         this.description_article = description_article;
@@ -95,20 +95,20 @@ public class Article {
         this.localisation_article = localisation_article;
     }
 
-    public utilisateur getUtilisateur_id() {
+    public int getUtilisateur_id() {
         return utilisateur_id;
     }
 
-    public void setUtilisateur_id(utilisateur utilisateur_id) {
+    public void setUtilisateur_id(int utilisateur_id) {
         this.utilisateur_id = utilisateur_id;
     }
 
-    public CategorieArticle getCategorie() {
-        return categorie;
+    public int getCategorie_id() {
+        return categorie_id;
     }
 
-    public void setCategorie(CategorieArticle categorie) {
-        this.categorie = categorie;
+    public void setCategorie_id(int categorie_id) {
+        this.categorie_id = categorie_id;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class Article {
                 ", image_article='" + image_article + '\'' +
                 ", localisation_article='" + localisation_article + '\'' +
                 ", utilisateur_id=" + utilisateur_id +
-                ", categorie=" + categorie +
+                ", categorie=" + categorie_id +
                 '}';
     }
 

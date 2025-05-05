@@ -1,6 +1,7 @@
 
 package controllers;
 
+import entities.CategorieArticle;
 import entities.Notification;
 import entities.utilisateur;
 import javafx.event.ActionEvent;
@@ -52,6 +53,7 @@ public class BaseAdminController {
 
     @FXML
     public void initialize() {
+
         utilisateur user = Session.getInstance().getCurrentUser();
         if (user != null) {
             String fullName = user.getPrenom() + " " + user.getNom_user();
@@ -157,10 +159,7 @@ public class BaseAdminController {
     }
 
 
-    @FXML
-    public void showCategorieView() {
-        loadView("/categorie.fxml");
-    }
+
 
     public void showStatistiquesUserView() {
         loadView("/StatistiquesUtilisateur.fxml");
@@ -179,11 +178,25 @@ public class BaseAdminController {
     }
 
     @FXML
-    public void showArticlesView() {
-        Label articlesLabel = new Label("🛒 Gestion des articles");
-        articlesLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        rootBorderPane.setCenter(articlesLabel);
+    public void showCategorieView() {
+        loadView("/affichageCategorieArticle.fxml");
     }
+
+
+    @FXML
+    public void showArticlesView() {
+        loadView("/ListeArticleAdmin.fxml");
+    }
+
+
+    public void showStatistiquesView() {
+        loadView("/StatistiquesArticle.fxml");
+    }
+
+    public void showAjoutCategorieView() {
+        loadView("/ajoutCategorieArticle.fxml");
+    }
+
 
     @FXML
     public void showCommandesView() {
@@ -259,5 +272,22 @@ public class BaseAdminController {
         currentStage.setTitle("Connexion");
         currentStage.show();
     }
+    public void showAjoutCategorieViewWithData(CategorieArticle cat) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ajoutCategorieArticle.fxml"));
+            Parent view = loader.load();
+
+
+            // Appel du contrôleur d'ajout pour pré-remplir le formulaire
+            ajoutCategorieArticle controller = loader.getController();
+            controller.loadCategorieData(cat);
+
+
+            rootBorderPane.setCenter(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

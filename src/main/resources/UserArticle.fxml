@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="rootBorderPane"
+            fx:controller="controllers.UserArticle">
+
+    <center>
+        <ScrollPane fitToWidth="true" pannable="true" style="-fx-background-color: transparent;">
+            <VBox spacing="30" style="-fx-padding: 0; -fx-background-color: white;">
+
+                <!-- BANNIÈRE -->
+                <StackPane prefHeight="300" style="-fx-background-color: white; -fx-padding: 40;">
+                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: white; -fx-padding: 20;">
+                        <Label text="CHEZ RECYCONNECT"
+                               style="-fx-text-fill: #28a745; -fx-font-size: 30px; -fx-font-weight: bold;" />
+
+                        <!-- Text wrapping into 3 lines, larger size, dark green color -->
+                        <Label text="Vous trouverez l’historique de tous vos articles déjà proposés"
+                               wrapText="true"
+                               textAlignment="CENTER"
+                               style="-fx-text-fill: #004d00; -fx-font-size: 26px; -fx-font-weight: bold; -fx-pref-width: 500;" />
+                    </VBox>
+                </StackPane>
+
+                <!-- BOUTONS -->
+                <HBox spacing="30" alignment="CENTER">
+                    <Button fx:id="proposerArticleBtn" text="Proposez un article" prefWidth="220"
+                            style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12 0;" />
+                </HBox>
+
+                <!-- CATÉGORIES -->
+                <FlowPane fx:id="categoryBar" hgap="15" vgap="10" alignment="CENTER"
+                          style="-fx-background-color: #eafae8; -fx-padding: 15;" />
+
+                <!-- ARTICLES EN GRILLE (plus de marges latérales) -->
+                <HBox alignment="CENTER" style="-fx-padding: 0 10 30 10;">
+                    <GridPane fx:id="articleGrid" hgap="20" vgap="30" />
+                </HBox>
+
+                <!-- FOOTER  -->
+                <VBox spacing="0">
+                    <HBox alignment="CENTER" spacing="80" style="-fx-background-color: #064d2d; -fx-padding: 30;">
+                        <VBox spacing="8">
+                            <Label style="-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 18px;" text="Nos contacts" />
+                            <Label style="-fx-text-fill: white;" text="📍 Esprit Ariana" />
+                            <Label style="-fx-text-fill: white;" text="📞 +216 95 123 742" />
+                            <Label style="-fx-text-fill: white;" text="✉ RecyConnect@gmail.com" />
+                            <HBox spacing="10">
+                                <Label style="-fx-text-fill: white; -fx-font-size: 18px;" text="" />
+                                <Label style="-fx-text-fill: white; -fx-font-size: 18px;" text="" />
+                                <Label style="-fx-text-fill: white; -fx-font-size: 18px;" text="" />
+                            </HBox>
+                        </VBox>
+
+                        <VBox spacing="8">
+                            <Label style="-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 18px;" text="Services" />
+                            <Label style="-fx-text-fill: white;" text="› Vente De Produits À Recyclés" />
+                            <Label style="-fx-text-fill: white;" text="› Organisation Des Évènements" />
+                            <Label style="-fx-text-fill: white;" text="› Prossition De Workshops" />
+                            <Label style="-fx-text-fill: white;" text="› Forum Et Communauté" />
+                            <Label style="-fx-text-fill: white;" text="› Green Technology" />
+                        </VBox>
+
+                        <VBox spacing="8">
+                            <Label style="-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 18px;" text="Liens Utiles" />
+                            <Label style="-fx-text-fill: white;" text="› À Propos De Nous" />
+                            <Label style="-fx-text-fill: white;" text="› Nos Services" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignment="CENTER" style="-fx-background-color: #02351e; -fx-padding: 10;">
+                        <Label style="-fx-text-fill: white;" text="© RecyConnect, Tous droits réservés." />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label style="-fx-text-fill: white;" text="Développé par TechSquad" />
+                    </HBox>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
