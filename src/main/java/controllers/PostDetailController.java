@@ -198,11 +198,13 @@ public class PostDetailController {
         VBox texteBox = new VBox(auteurLabel, contenuLabel, dateLabel);
         texteBox.setSpacing(3);
         texteBox.setPadding(new Insets(5));
+        texteBox.setPrefWidth(600);
 
         HBox mainContent = new HBox(imageView, texteBox);
         mainContent.setSpacing(10);
         mainContent.setAlignment(Pos.TOP_LEFT);
         mainContent.setStyle("-fx-background-color: #ffffff; -fx-padding: 10; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);");
+        mainContent.setPrefWidth(700);
 
         HBox topRow = new HBox(mainContent, replyButton);
         topRow.setSpacing(10);
