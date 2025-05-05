@@ -34,13 +34,16 @@
             }
         }
         public void loadMyReservationsView() {
+
+
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReservationViews/ReservationsListFront.fxml"));
-                Parent view = loader.load();
+                Parent view = FXMLLoader.load(getClass().getResource("/ReservationViews/ReservationsListFront.fxml"));
                 rootBorderPane.setCenter(view);
+
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
+
         }
 
         public void showEventDetails(Event event) {

@@ -5,6 +5,7 @@ import entities.Event;
 import entities.Reservation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
@@ -204,9 +205,16 @@ public class EventReservationController {
     }
 
     private void navigateToReservationsListFront() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReservationViews/ReservationsListFront.fxml"));
-        Stage stage = (Stage) titleLabel.getScene().getWindow();
-        stage.setScene(new Scene(loader.load()));
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseUser.fxml"));
+            Parent root = loader.load();
+            BaseUserController baseuserController = loader.getController();
+            baseuserController.loadMyReservationsView();
+            phoneField.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showSuccessAlert(String message) {
