@@ -194,28 +194,9 @@ public class ReservationsListFrontController {
     }
 
     private void handleEdit(Reservation reservation) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReservationViews/ReservationEdit.fxml"));
-            Parent root = loader.load();
-
-            ReservationEditController controller = loader.getController();
-            controller.setReservation(reservation);
-
-            Stage stage = new Stage();
-            stage.setTitle("Modifier la réservation");
-            stage.setScene(new Scene(root));
-
-            // Add listener to detect when edit window is closed
-            stage.setOnHidden(event -> {
-                reloadReservations(); // Refresh data after edit
-            });
-
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-            showError("Erreur lors de l'ouverture du formulaire d'édition : " + e.getMessage());
-        }
+        controllers.BaseUserController.instance.showEditReservation(reservation);
     }
+
 
     private void reloadReservations() {
         try {

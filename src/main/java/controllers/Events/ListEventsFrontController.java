@@ -153,18 +153,12 @@ public class ListEventsFrontController {
     private void handleShowMyReservations() {
         BaseUserController.instance.loadMyReservationsView();
     }
-
     @FXML
     private void handleShowRecommendations() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventViews/RecommendationView.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) eventFlowPane.getScene().getWindow();
-            stage.setScene(new Scene(root));
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Error", "Failed to load recommendations view: " + e.getMessage());
+            BaseUserController.instance.showRecommendationsView();
+        } catch (Exception e) {
+            showAlert("Error", "Failed to show recommendations: " + e.getMessage());
         }
     }
 
@@ -175,4 +169,5 @@ public class ListEventsFrontController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
 }

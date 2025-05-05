@@ -1,8 +1,12 @@
 // ReservationAddController.java
 package controllers.Reservations;
 
+import controllers.BaseAdminController;
 import entities.Reservation;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import services.ReservationService;
@@ -107,8 +111,20 @@ public class ReservationAddController {
     }
 
     private void closeWindow() {
-        Stage stage = (Stage) nameField.getScene().getWindow();
-        stage.close();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseUser.fxml"));
+            Parent root = loader.load();
+            BaseAdminController controller = loader.getController();
+            controller.showReservationsView(); // Load reservation list
+
+            Stage stage = (Stage) nameField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Erreur lors du retour à la liste : " + e.getMessage());
+        }
     }
 
     private void showSuccess(String msg) {

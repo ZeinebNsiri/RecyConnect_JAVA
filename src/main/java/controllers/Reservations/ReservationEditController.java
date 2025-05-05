@@ -103,9 +103,9 @@
         }
 
         private void closeWindow() {
-            Stage stage = (Stage) nameField.getScene().getWindow();
-            stage.close();
+            controllers.BaseUserController.instance.loadMyReservationsView();
         }
+
 
         private void showSuccess(String msg) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
