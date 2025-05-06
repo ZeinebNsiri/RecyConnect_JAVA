@@ -31,7 +31,7 @@
                 </ImageView>
                 <Label text="Accueil" styleClass="nav-link"/>
                 <Label text="Nos produits" onMouseClicked="#showArticleView" styleClass="nav-link"/>
-                <Label text="Évènements" styleClass="nav-link"/>
+                <Label text="Évènements" onMouseClicked="#showEventsView" styleClass="nav-link"/>
                 <Label text="Workshops" onMouseClicked="#showWorkshopsView" styleClass="nav-link"/>
                 <Label text="Forum" styleClass="nav-link"/>
                 <Pane HBox.hgrow="ALWAYS"/>

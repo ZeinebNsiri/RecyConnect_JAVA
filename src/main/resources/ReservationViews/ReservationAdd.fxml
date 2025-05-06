@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/17"
+            fx:controller="controllers.Reservations.ReservationAddController"
+            fitToWidth="true"
+            style="-fx-background-color: transparent;">
+
+    <content>
+        <VBox alignment="TOP_CENTER" spacing="20"
+              style="-fx-padding: 30; -fx-background-color: #f9f9f9;">
+
+            <Label text="Nouvelle Réservation"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+            <VBox spacing="15" alignment="TOP_LEFT"
+                  style="-fx-background-color: white; -fx-padding: 20; -fx-border-color: #ddd; -fx-background-radius: 8; -fx-border-radius: 8;">
+
+                <VBox spacing="5">
+                    <Label text="Nom"/>
+                    <TextField fx:id="nameField" promptText="Nom"/>
+                    <Label fx:id="nameError" textFill="red" visible="false"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Email"/>
+                    <TextField fx:id="emailField" promptText="Email"/>
+                    <Label fx:id="emailError" textFill="red" visible="false"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Téléphone"/>
+                    <TextField fx:id="phoneField" promptText="Téléphone"/>
+                    <Label fx:id="phoneError" textFill="red" visible="false"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Nombre de places"/>
+                    <Spinner fx:id="placesSpinner"/>
+                    <Label fx:id="placesError" textFill="red" visible="false"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Statut"/>
+                    <ComboBox fx:id="statusCombo" promptText="Statut"/>
+                    <Label fx:id="statusError" textFill="red" visible="false"/>
+                </VBox>
+            </VBox>
+
+            <HBox spacing="20" alignment="CENTER">
+                <Button text="Enregistrer" onAction="#handleSave"
+                        style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"/>
+                <Button text="Annuler" onAction="#handleCancel"
+                        style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"/>
+            </HBox>
+
+        </VBox>
+    </content>
+</ScrollPane>

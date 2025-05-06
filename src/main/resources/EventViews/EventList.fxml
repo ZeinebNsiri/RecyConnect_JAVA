@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/17"
+      fx:controller="controllers.Events.EventListController"
+      spacing="20.0" alignment="TOP_LEFT">
+
+    <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+
+    <Label text="Gestion des Événements"
+           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchNameField" promptText="Rechercher un événement" />
+        <TextField fx:id="searchLocationField" promptText="Lieu" />
+        <DatePicker fx:id="searchDatePicker" promptText="jj/mm/aaaa" />
+        <ComboBox fx:id="searchTypeCombo" promptText="Tous les types">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="en ligne"/>
+                    <String fx:value="sur site"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <Button text="Ajouter un événement" onAction="#handleAddEvent"
+                style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;" />
+    </HBox>
+
+    <TableView fx:id="eventTable" prefWidth="1140"
+               style="-fx-background-color: white; -fx-border-color: lightgray;">
+        <columns>
+            <TableColumn fx:id="idColumn" text="#" prefWidth="40"/>
+            <TableColumn fx:id="imageColumn" text="Image" prefWidth="80"/>
+            <TableColumn fx:id="nameColumn" text="Nom" prefWidth="250"/>
+            <TableColumn fx:id="locationColumn" text="Lieu" prefWidth="250"/>
+            <TableColumn fx:id="dateColumn" text="Date" prefWidth="120"/>
+            <TableColumn fx:id="timeColumn" text="Heure" prefWidth="100"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="200"/>
+        </columns>
+    </TableView>
+</VBox>

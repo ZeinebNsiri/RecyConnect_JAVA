@@ -1,0 +1,32 @@
+.header {
+    -fx-font-size: 24px;
+    -fx-padding: 20;
+    -fx-alignment: center;
+}
+
+.btn-primary {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+
+.btn-danger {
+    -fx-background-color: #f44336;
+    -fx-text-fill: white;
+}
+
+.table-view {
+    -fx-padding: 5;
+}
+.table-view .column-header-background {
+    -fx-background-color: #f1f1f1;
+}
+
+.button {
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 5;
+}
+
+.button:hover {
+    -fx-opacity: 0.85;
+}

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Events.DashboardEventsController">
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: #3498db;" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Events Analytics Dashboard" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+            </children>
+            <padding>
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            </padding>
+        </HBox>
+    </top>
+    <center>
+        <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
+            <content>
+                <VBox spacing="20.0">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                    <children>
+                        <GridPane fx:id="statsGrid" hgap="20.0" vgap="10.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <VBox alignment="CENTER" style="-fx-background-color: #3498db; -fx-background-radius: 5;">
+                                    <children>
+                                        <Label text="Total Events" textFill="WHITE">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                </VBox>
+                                <VBox alignment="CENTER" style="-fx-background-color: #2ecc71; -fx-background-radius: 5;" GridPane.columnIndex="1">
+                                    <children>
+                                        <Label text="Total Capacity" textFill="WHITE">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                </VBox>
+                                <VBox alignment="CENTER" style="-fx-background-color: #e74c3c; -fx-background-radius: 5;" GridPane.columnIndex="2">
+                                    <children>
+                                        <Label text="Total Reservations" textFill="WHITE">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                </VBox>
+                                <VBox alignment="CENTER" style="-fx-background-color: #f39c12; -fx-background-radius: 5;" GridPane.columnIndex="3">
+                                    <children>
+                                        <Label text="Avg. Utilization" textFill="WHITE">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                </VBox>
+                                <VBox alignment="CENTER" style="-fx-background-color: #ecf0f1; -fx-background-radius: 5;" GridPane.rowIndex="1">
+                                    <children>
+                                        <Label fx:id="totalEventsLabel" text="0" textFill="#3498db">
+                                            <font>
+                                                <Font name="System Bold" size="24.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                </VBox>
+                                <VBox alignment="CENTER" style="-fx-background-color: #ecf0f1; -fx-background-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <children>
+                                        <Label fx:id="totalCapacityLabel" text="0" textFill="#2ecc71">
+                                            <font>
+                                                <Font name="System Bold" size="24.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                </VBox>
+                                <VBox alignment="CENTER" style="-fx-background-color: #ecf0f1; -fx-background-radius: 5;" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                    <children>
+                                        <Label fx:id="totalReservationsLabel" text="0" textFill="#e74c3c">
+                                            <font>
+                                                <Font name="System Bold" size="24.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                </VBox>
+                                <VBox alignment="CENTER" style="-fx-background-color: #ecf0f1; -fx-background-radius: 5;" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                    <children>
+                                        <Label fx:id="avgUtilizationLabel" text="0%" textFill="#f39c12">
+                                            <font>
+                                                <Font name="System Bold" size="24.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                </VBox>
+                            </children>
+                        </GridPane>
+                        <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <VBox style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0); -fx-background-radius: 5;" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <PieChart fx:id="pieChartCapacity" legendSide="BOTTOM" title="Event Capacity Utilization" VBox.vgrow="ALWAYS" />
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                </VBox>
+                                <VBox style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0); -fx-background-radius: 5;" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <BarChart fx:id="barChartPopular" legendSide="BOTTOM" title="Most Popular Events" VBox.vgrow="ALWAYS">
+                                            <xAxis>
+                                                <CategoryAxis label="Event Name" side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                                <NumberAxis label="Reservations" side="LEFT" />
+                                            </yAxis>
+                                        </BarChart>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

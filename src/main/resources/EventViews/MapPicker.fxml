@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.Events.MapPickerController"
+            prefWidth="800" prefHeight="600">
+
+    <top>
+        <VBox spacing="5" style="-fx-background-color: #f8f9fa; -fx-padding: 10px;">
+            <Label text="Sélectionner l'emplacement de l'événement"
+                   style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <Label text="Cliquez sur la carte pour choisir l'emplacement exact"
+                   style="-fx-font-size: 12px;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <WebView fx:id="mapView" VBox.vgrow="ALWAYS"/>
+    </center>
+
+    <bottom>
+        <VBox spacing="8" style="-fx-background-color: #f8f9fa; -fx-padding: 10px;">
+            <Label fx:id="selectedLocationLabel" text="Pas d'emplacement sélectionné" />
+            <Label fx:id="addressLabel" text="Adresse: Non disponible" wrapText="true" />
+
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button fx:id="confirmButton" text="Confirmer" onAction="#handleConfirmLocation"
+                        style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+                <Button text="Annuler" onAction="#handleCancel"
+                        style="-fx-background-color: #dc3545; -fx-text-fill: white;"/>
+            </HBox>
+
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+        </VBox>
+    </bottom>
+</BorderPane>

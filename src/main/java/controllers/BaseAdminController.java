@@ -1,6 +1,8 @@
 
 package controllers;
 
+import controllers.Events.EventAddController;
+import controllers.Events.EventEditController;
 import controllers.workshop.AjouterCours;
 import controllers.workshop.ModifierCategorieCours;
 import controllers.workshop.ModifierCours;
@@ -172,10 +174,23 @@ public class BaseAdminController {
 
     @FXML
     public void showDashboardView() {
-        Label dashboardLabel = new Label("📊 Tableau de bord");
-        dashboardLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        rootBorderPane.setCenter(dashboardLabel);
+        loadView("/EventViews/dashboardEvents.fxml");  // Ensure the correct FXML file path
     }
+
+    public void showAddEventView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventViews/EventAdd.fxml"));
+            Parent view = loader.load();
+
+            EventAddController controller = loader.getController();
+            controller.setContentPane(contentPane); // Pass the reference
+
+            contentPane.getChildren().setAll(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     public void showUsersView() {
@@ -212,17 +227,14 @@ public class BaseAdminController {
 
     @FXML
     public void showEvenementView() {
-        Label evenementLabel = new Label("🗓️ Gestion des événements");
-        evenementLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        rootBorderPane.setCenter(evenementLabel);
+        loadView("/EventViews/EventList.fxml");
     }
 
     @FXML
     public void showReservationsView() {
-        Label reservationsLabel = new Label("📋 Gestion des réservations");
-        reservationsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        rootBorderPane.setCenter(reservationsLabel);
+        loadView("/ReservationViews/ReservationList.fxml");
     }
+
 
     @FXML
     public void showCategorieWorkshopView() {
@@ -343,6 +355,21 @@ public class BaseAdminController {
             e.printStackTrace();
         }
     }
+
+    public void showEditEventView(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventViews/EventEdit.fxml"));
+            Parent view = loader.load();
+
+            EventEditController editController = loader.getController();
+            editController.setEvent(event);
+
+            contentPane.getChildren().setAll(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 
