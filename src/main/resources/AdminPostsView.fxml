@@ -10,16 +10,7 @@
 <?import javafx.scene.chart.CategoryAxis?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.AdminPostsController" stylesheets="@styles/adminPost.css">
-    <left>
-        <VBox spacing="10" styleClass="sidebar">
-            <Label text="Dashboard"/>
-            <Label text="Utilisateurs"/>
-            <Label text="Ventes"/>
-            <Label text="Événement"/>
-            <Label text="Workshops"/>
-            <Label text="Posts"/>
-        </VBox>
-    </left>
+
 
     <center>
         <VBox spacing="20">

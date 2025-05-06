@@ -250,6 +250,11 @@ public class PostService implements IService<Post>{
         psMedia.executeUpdate();
 
 
+        String deleteComments = "DELETE FROM commentaire WHERE post_com_id = ?";
+        PreparedStatement psComments = conx.prepareStatement(deleteComments);
+        psComments.setInt(1, post.getId());
+        psComments.executeUpdate();
+
         String deletePostSQL = "DELETE FROM post WHERE id = ?";
         PreparedStatement psPost = conx.prepareStatement(deletePostSQL);
         psPost.setInt(1, post.getId());

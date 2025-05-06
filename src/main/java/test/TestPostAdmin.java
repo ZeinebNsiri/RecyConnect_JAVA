@@ -10,16 +10,14 @@ import javafx.scene.Parent;
 public class TestPostAdmin extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/AdminPostsView.fxml"));
-        Parent root = loader.load();
+    public void start(Stage stage) throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/baseAdmin.fxml"));
+        Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
+        stage.setScene(scene);
+        stage.setTitle("ajouter personne");
+        stage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+
 }
