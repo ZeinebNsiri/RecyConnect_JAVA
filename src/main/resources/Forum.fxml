@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.image.Image?>
+
+<StackPane fx:id="rootStackPane" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ForumController"
+           prefWidth="1200" prefHeight="800" stylesheets="@styles/forum.css">
+
+<BorderPane fx:id="mainContent"
+            prefWidth="1200" prefHeight="800">
+
+    <!-- Header -->
+    <top>
+        <StackPane prefHeight="150">
+            <ImageView fitWidth="1200" fitHeight="150"  preserveRatio="false"
+                       style="-fx-opacity: 0.7;"
+                       fx:id="headerImage">
+                <image>
+                    <Image url="@images/team-2.jpg" />
+                </image>
+            </ImageView>
+            <Rectangle width="1200" height="150">
+                <fill>
+                    <LinearGradient startX="0" startY="0" endX="0" endY="1">
+                        <stops>
+                            <Stop offset="0.0" color="rgba(15,66,41,0.6)" />
+                            <Stop offset="1.0" color="rgba(15,66,41,0.6)" />
+                        </stops>
+                    </LinearGradient>
+                </fill>
+            </Rectangle>
+            <Label text="RecyConnect Forum" styleClass="header-title"/>
+        </StackPane>
+    </top>
+
+
+
+    <!-- Main content -->
+    <center>
+        <HBox alignment="CENTER">
+
+        <VBox spacing="20" maxWidth="900" VBox.vgrow="ALWAYS" prefHeight="Infinity" >
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <!-- Tabs and Button -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <ToggleButton text="Post Récents" fx:id="recentToggle" />
+                <ToggleButton text="Les Posts Les Plus Likés" fx:id="likedToggle" />
+                <ToggleButton text="Mes Posts" fx:id="myPostsToggle" />
+                <ToggleButton text="Enregistrés" fx:id="savedToggle" />
+                <Button fx:id="btnCreerPublication" text="Créer Une Publication" onAction="#handleCreerPublication"/>
+            </HBox>
+
+            <!-- Post List -->
+            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;">
+                <VBox spacing="20" fx:id="postList" styleClass="post-container">
+                    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+
+                </VBox>
+            </ScrollPane>
+
+
+        </VBox>
+            <VBox fx:id="tagListBox" spacing="10" prefWidth="250" alignment="TOP_LEFT">
+
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>
+
+    <StackPane fx:id="modalOverlay" visible="false" styleClass="modal-overlay" alignment="CENTER">
+        <VBox fx:id="modalContent" alignment="CENTER" spacing="10">
+            <ImageView fx:id="modalImageView" fitWidth="600" preserveRatio="true"/>
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnPrevImage" text="⟨"/>
+                <Button fx:id="btnNextImage" text="⟩"/>
+            </HBox>
+        </VBox>
+    </StackPane>
+
+
+</StackPane>

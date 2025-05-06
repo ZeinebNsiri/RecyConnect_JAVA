@@ -1,30 +1,24 @@
 package entities;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Commentaire {
     private int id;
     private String contenuCom;
-    private utilisateur userCom;
+    private int userComId;
     private LocalDateTime dateCom;
-    private Post postCom;
-    private Commentaire parent;
-    private List<Commentaire> replies;
+    private int postComId;
+    private Integer parentId; // Peut être null si c'est un commentaire principal
 
-    public Commentaire() {
-        this.replies = new ArrayList<>();
-    }
+    public Commentaire() {}
 
-    public Commentaire(int id, String contenuCom, utilisateur userCom, LocalDateTime dateCom, Post postCom, Commentaire parent) {
+    public Commentaire(int id, String contenuCom, int userComId, LocalDateTime dateCom, int postComId, Integer parentId) {
         this.id = id;
         this.contenuCom = contenuCom;
-        this.userCom = userCom;
+        this.userComId = userComId;
         this.dateCom = dateCom;
-        this.postCom = postCom;
-        this.parent = parent;
-        this.replies = new ArrayList<>();
+        this.postComId = postComId;
+        this.parentId = parentId;
     }
 
     public int getId() {
@@ -43,12 +37,12 @@ public class Commentaire {
         this.contenuCom = contenuCom;
     }
 
-    public utilisateur getUserCom() {
-        return userCom;
+    public int getUserComId() {
+        return userComId;
     }
 
-    public void setUserCom(utilisateur userCom) {
-        this.userCom = userCom;
+    public void setUserComId(int userComId) {
+        this.userComId = userComId;
     }
 
     public LocalDateTime getDateCom() {
@@ -59,40 +53,20 @@ public class Commentaire {
         this.dateCom = dateCom;
     }
 
-    public Post getPostCom() {
-        return postCom;
+    public int getPostComId() {
+        return postComId;
     }
 
-    public void setPostCom(Post postCom) {
-        this.postCom = postCom;
+    public void setPostComId(int postComId) {
+        this.postComId = postComId;
     }
 
-    public Commentaire getParent() {
-        return parent;
+    public Integer getParentId() {
+        return parentId;
     }
 
-    public void setParent(Commentaire parent) {
-        this.parent = parent;
-    }
-
-    public List<Commentaire> getReplies() {
-        return replies;
-    }
-
-    public void setReplies(List<Commentaire> replies) {
-        this.replies = replies;
-    }
-
-    public void addReply(Commentaire reply) {
-        this.replies.add(reply);
-        reply.setParent(this);
-    }
-
-    public void removeReply(Commentaire reply) {
-        this.replies.remove(reply);
-        if (reply.getParent() == this) {
-            reply.setParent(null);
-        }
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     @Override
@@ -100,11 +74,10 @@ public class Commentaire {
         return "Commentaire{" +
                 "id=" + id +
                 ", contenuCom='" + contenuCom + '\'' +
-                ", userCom=" + (userCom != null ? userCom.getPrenom() : "null") +
+                ", userComId=" + userComId +
                 ", dateCom=" + dateCom +
-                ", postCom=" + (postCom != null ? postCom.getId() : "null") +
-                ", parentId=" + (parent != null ? parent.getId() : "null") +
-                ", repliesCount=" + replies.size() +
+                ", postComId=" + postComId +
+                ", parentId=" + (parentId != null ? parentId : "null") +
                 '}';
     }
 }

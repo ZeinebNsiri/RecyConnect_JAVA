@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      alignment="TOP_CENTER"
+      spacing="20"
+      stylesheets="@styles/addPost.css"
+      style="-fx-background-color: #ffffff;"
+      fx:controller="controllers.AddPostController"
+      >
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+
+    <Label text="Créer un Post" styleClass="subtitle" />
+    <Label text="Publier un Nouveau Post" styleClass="title" />
+
+    <VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #e8f5e9; -fx-padding: 30; -fx-background-radius: 10;">
+
+        <TextArea fx:id="postContent" promptText="Contenu du post" prefRowCount="4" prefWidth="400"/>
+        <Label text="Tags" style="-fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+        <FlowPane fx:id="tagsPane" hgap="10" vgap="10" prefWrapLength="400" />
+
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Média (images)" style="-fx-text-fill: gray;" />
+            <Button fx:id="chooseFileButton" text="Choisir des fichiers" />
+            <Label fx:id="fileChosenLabel" text="Aucun fichier sélectionné" />
+        </HBox>
+
+        <HBox spacing="20" alignment="CENTER">
+            <Button fx:id="publishButton" text="Publier" styleClass="green-button"/>
+            <Button fx:id="backButton" text="Retour" styleClass="gray-button"/>
+        </HBox>
+    </VBox>
+</VBox>

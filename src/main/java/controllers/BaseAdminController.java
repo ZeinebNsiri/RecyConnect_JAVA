@@ -249,10 +249,8 @@ public class BaseAdminController {
 
 
     @FXML
-    public void showPostsView() {
-        Label postsLabel = new Label("📝 Gestion des posts");
-        postsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        rootBorderPane.setCenter(postsLabel);
+    private void showPostsView() {
+        loadView("/AdminPostsView.fxml");
     }
 
     public void loadView(String fxmlPath) {

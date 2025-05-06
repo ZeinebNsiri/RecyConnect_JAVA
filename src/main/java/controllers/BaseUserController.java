@@ -173,5 +173,21 @@ public class BaseUserController {
         }
     }
 
+    @FXML
+    public void showPostsView() {
+        loadView("/Forum.fxml");
+    }
+    public void AddPosts() {
+        loadView("/AddPost.fxml");
+    }
+    public void Addcomment() {
+        loadView("/PostDetail.fxml");
+    }
+    public void setCenterContent(Parent content) {
+        // Assuming you're using a BorderPane or similar layout
+        rootBorderPane.setCenter(content);
+    }
+
+
 
 }

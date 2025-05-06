@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.image.ImageView?>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.PostDetailController" prefWidth="1000" prefHeight="800">
+    <VBox spacing="20" >
+        <padding>
+            <Insets top="30" right="40" bottom="30" left="40"/>
+        </padding>
+
+        <!-- Bouton retour -->
+        <Button fx:id="btnRetour" text="← Retour" onAction="#retourVersListePosts"
+                style="-fx-background-color: transparent; -fx-text-fill: #4CAF50; -fx-font-size: 14px; -fx-cursor: hand;" />
+
+        <!-- Partie Post -->
+        <VBox style="-fx-background-color: white;
+             -fx-padding: 20;
+             -fx-background-radius: 12;
+             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);">
+            <HBox spacing="10">
+
+                <StackPane>
+                    <ImageView fx:id="postProfileImage" fitWidth="50" fitHeight="50" preserveRatio="true">
+                        <clip>
+                            <Circle centerX="25" centerY="25" radius="25"/>
+                        </clip>
+                    </ImageView>
+                </StackPane>
+
+                <VBox>
+                    <Label fx:id="auteurPostLabel" style="-fx-font-weight: bold;" />
+                    <Label fx:id="datePostLabel" style="-fx-font-size: 12;" />
+                </VBox>
+            </HBox>
+
+            <Label fx:id="contenuPostText" wrapText="true" />
+            <FlowPane fx:id="hashtagsPane" hgap="10" vgap="5" />
+        </VBox>
+
+        <!-- Partie Commentaires -->
+        <VBox spacing="10">
+            <Label text="Les Commentaires" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+            <Button fx:id="btnAjouterCommentaire" text="+ Ajouter un Commentaire" onAction="#afficherChampCommentaire"
+                    style="-fx-background-color: #67a9c5; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8; -fx-cursor: hand;" />
+            <HBox fx:id="ajoutCommentaireBox" spacing="10" visible="false" managed="false">
+                <TextField fx:id="champCommentaire" promptText="Écrivez votre commentaire ici..." HBox.hgrow="ALWAYS"/>
+                <Button text="Envoyer" onAction="#envoyerCommentaire"/>
+            </HBox>
+
+            <VBox fx:id="commentairesVBox" spacing="10" />
+        </VBox>
+
+
+    </VBox>
+</StackPane>
