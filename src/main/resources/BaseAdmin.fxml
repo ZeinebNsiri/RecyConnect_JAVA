@@ -10,7 +10,7 @@
 <?import javafx.scene.image.Image?>
 <BorderPane fx:id="rootBorderPane" fx:controller="controllers.BaseAdminController"
             xmlns:fx="http://javafx.com/fxml"
-            prefWidth="1000.0" prefHeight="600.0"
+            prefWidth="1550.0" prefHeight="795.0"
             styleClass="root">
 
     <stylesheets>

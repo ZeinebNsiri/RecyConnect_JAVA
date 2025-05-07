@@ -20,6 +20,7 @@ public class mainFX extends Application {
         stage.setScene(scene);
         stage.setTitle("Recyconnect");
         stage.show();
+
     }
     // --- Permet aux autres classes d'accéder à HostServices ---
     public static HostServices getHostServicesInstance() {

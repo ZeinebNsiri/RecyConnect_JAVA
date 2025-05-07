@@ -167,17 +167,22 @@ public class LoginController {
                     // Redirection
                     Parent page;
                     if (role.contains("ROLE_ADMIN")) {
-                        page = FXMLLoader.load(getClass().getResource("/BaseAdmin.fxml"));
-                        Scene scene = new Scene(page);
-                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                        stage.setScene(scene);
-                        stage.show();
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseAdmin.fxml"));
+                        Parent root = loader.load();
+                        BaseAdminController baseAdminController = loader.getController();
+                        baseAdminController.showDashboardView();
+
+                        togglePasswordVisibility.getScene().setRoot(root);
+
+
                     } else {
-                        page = FXMLLoader.load(getClass().getResource("/BaseUser.fxml"));
-                        Scene scene = new Scene(page);
-                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                        stage.setScene(scene);
-                        stage.show();
+
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseUser.fxml"));
+                        Parent root = loader.load();
+                        BaseUserController baseUserController = loader.getController();
+                        baseUserController.home();
+
+                        togglePasswordVisibility.getScene().setRoot(root);
                     }
 
 

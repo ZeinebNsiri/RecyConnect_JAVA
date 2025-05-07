@@ -327,15 +327,13 @@ public class BaseAdminController {
     @FXML
     public void showAjouterCoursView() {
         try {
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/AjouterCours.fxml"));
             Parent view = loader.load();
             AjouterCours ctrl = loader.getController();
-            ctrl.setBaseAdminController(this);
-
-            Stage stage = (Stage) rootBorderPane.getScene().getWindow();
-            stage.setMaximized(true);  // This will maximize the window
-            stage.setFullScreen(true);
+            ctrl.setBaseAdminController(this); // Set the controller
             rootBorderPane.setCenter(view);
+
 
         } catch (IOException e) {
             System.err.println("Error loading AjouterCours.fxml: " + e.getMessage());

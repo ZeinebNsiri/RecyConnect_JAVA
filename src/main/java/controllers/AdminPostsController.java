@@ -41,9 +41,12 @@ public class AdminPostsController {
 
     private XYChart.Series<String, Number> postCountSeries = new XYChart.Series<>();
 
+
+
     @FXML
     public void initialize() {
         setupTableColumns();
+        postsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         postsLineChart.getData().add(postCountSeries);
         postCountSeries.setName("Nombre de posts par mois");
         loadPosts();
