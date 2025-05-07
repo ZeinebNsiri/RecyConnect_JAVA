@@ -220,9 +220,7 @@ public class BaseAdminController {
 
     @FXML
     public void showCommandesView() {
-        Label commandesLabel = new Label("📦 Gestion des commandes");
-        commandesLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        rootBorderPane.setCenter(commandesLabel);
+        loadView("/ListeCommandes.fxml");
     }
 
     @FXML
@@ -332,8 +330,13 @@ public class BaseAdminController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/workshop/AjouterCours.fxml"));
             Parent view = loader.load();
             AjouterCours ctrl = loader.getController();
-            ctrl.setBaseAdminController(this); // Set the controller
-            contentPane.getChildren().setAll(view);
+            ctrl.setBaseAdminController(this);
+
+            Stage stage = (Stage) rootBorderPane.getScene().getWindow();
+            stage.setMaximized(true);  // This will maximize the window
+            stage.setFullScreen(true);
+            rootBorderPane.setCenter(view);
+
         } catch (IOException e) {
             System.err.println("Error loading AjouterCours.fxml: " + e.getMessage());
             e.printStackTrace();

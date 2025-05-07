@@ -183,6 +183,13 @@ public class BaseUserController {
     public void Addcomment() {
         loadView("/PostDetail.fxml");
     }
+    public void panier() {
+        loadView("/Panier.fxml");
+    }
+
+    public void commande() {
+        loadView("/commande.fxml");
+    }
     public void setCenterContent(Parent content) {
         // Assuming you're using a BorderPane or similar layout
         rootBorderPane.setCenter(content);

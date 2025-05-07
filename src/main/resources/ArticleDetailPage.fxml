@@ -39,7 +39,7 @@
                             <Label fx:id="articleCategory" styleClass="normal-label" />
                             <Label text="Localisation:" styleClass="subtitle-label"/>
                             <Label fx:id="articleLocation" styleClass="normal-label" />
-                            <Button fx:id="orderButton" text="Ajouter au panier" onAction="#addToCart" styleClass="green-button"/>
+                            <Button fx:id="commanderButton" text="Ajouter au panier" onAction="#addToCart" styleClass="green-button"/>
                         </VBox>
 
                         <!-- Colonne prix/quantité -->

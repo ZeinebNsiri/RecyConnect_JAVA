@@ -1,23 +1,34 @@
 package controllers;
 
 import entities.Article;
+import entities.LigneCommande;
+import entities.utilisateur;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import services.ArticleService;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import services.LigneCommandeService;
+import utils.SessionPanier;
 
 import javax.swing.*;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.SQLException;
 
 public class ArticleDetailController {
 
@@ -28,11 +39,11 @@ public class ArticleDetailController {
     @FXML private Label priceLabel;
     @FXML private Label quantityLabel;
     @FXML private Text articleDescription;
-    @FXML private Button orderButton;
+    @FXML private Button commanderButton;
     @FXML private AnchorPane mapContainer;
 
     private final ArticleService articleService = new ArticleService();
-
+    private LigneCommandeService ligneCommandeService = new LigneCommandeService();
     public void loadArticleData(int articleId) {
         try {
             Article article = articleService.getArticleById(articleId);
@@ -44,6 +55,51 @@ public class ArticleDetailController {
             articleDescription.setText(article.getDescription_article());
             priceLabel.setText(article.getPrix() + " TN/Kg");
             quantityLabel.setText(article.getQuantite_article() + " Kg");
+
+            int ownerId = article.getUtilisateur_id();
+            utilisateur user = utils.Session.getInstance().getCurrentUser();
+            int currentUserId = utils.Session.getInstance().getCurrentUser().getId(); // à adapter si nom de méthode
+
+            if (ownerId == currentUserId) {
+                commanderButton.setText("Liste des commandes");
+                commanderButton.setOnAction(e -> showOrders());
+            } else {
+                commanderButton.setText("Commander");
+                commanderButton.setOnAction(event -> {
+                    // Création de la ligne de commande avec l'article sélectionné
+                    LigneCommande ligne = new LigneCommande();
+                    ligne.setArticle(article);
+                    ligne.setQuantite(1);  // Quantité par défaut
+                    ligne.setPrix(ligne.getArticle().getPrix());
+                    ligne.setEtat("En attente"); // Par exemple, "En attente" ou un autre état selon ta logique
+                    ligne.setUtilisateur(user); // L'utilisateur actuel
+
+                    // Ajouter la ligne de commande dans la base de données
+                    try {
+                        ligneCommandeService.addLigneCommande(ligne);
+                        System.out.println("Ligne de commande ajoutée pour l'article : " + ligne.getArticle().getNom_article());
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        // Gérer l'exception (par exemple afficher un message d'erreur)
+                    }
+                    // Ajouter l'article au panier (SessionPanier)
+                    SessionPanier.ajouterArticle(ligne);
+                    System.out.println("Article ajouté au panier : " + article.getNom_article());
+
+                    // Redirection vers la page Panier
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseUser.fxml"));
+                        Parent root = loader.load();
+                        BaseUserController baseUserController = loader.getController();
+                        baseUserController.panier();
+                        priceLabel.getScene().setRoot(root);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                });
+            }
+
 
             String imagePath = "file:/C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/photo_dir/" + article.getImage_article();
             articleImage.setImage(new Image(imagePath));
@@ -104,4 +160,9 @@ public class ArticleDetailController {
     private void addToCart() {
         System.out.println("Article ajouté au panier.");
     }
+    private void showOrders() {
+        System.out.println("Redirection vers la liste des commandes...");
+        // Tu peux ici charger une nouvelle vue FXML ou afficher une liste contextuelle
+    }
+
 }

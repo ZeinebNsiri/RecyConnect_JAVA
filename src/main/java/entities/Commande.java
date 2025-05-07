@@ -7,6 +7,13 @@ import java.util.List;
 public class Commande {
 
     private int id;
+
+    public Commande(double prixTotal, String statut, LocalDateTime dateCommande) {
+        this.prixTotal = prixTotal;
+        this.statut = statut;
+        this.dateCommande = dateCommande;
+    }
+
     private double prixTotal;
     private String statut;
     private LocalDateTime dateCommande;
