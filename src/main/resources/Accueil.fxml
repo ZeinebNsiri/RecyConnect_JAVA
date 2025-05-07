@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane fx:id="scrollPane" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.AcceuilController"
+            stylesheets="@styles/acceuil.css"
+            fitToWidth="true"
+            prefHeight="600.0" prefWidth="800.0"
+            pannable="true"
+>
+
+    <VBox fx:id="mainContainer" spacing="40" alignment="TOP_CENTER" prefWidth="800" maxWidth="Infinity">
+
+        <!-- Carousel Section -->
+        <StackPane fx:id="carouselPane" prefHeight="500" maxHeight="500" minHeight="500" alignment="CENTER">
+            <ImageView fx:id="imageView" styleClass="image-view" preserveRatio="true"/>
+
+            <Rectangle fx:id="overlay"
+                       fill="rgba(15, 66, 41, 0.6)"
+                       mouseTransparent="true"
+                       StackPane.alignment="CENTER"/>
+
+            <Label fx:id="descriptionLabel"
+                   text="Texte descriptif"
+                   styleClass="carousel-description"
+                   wrapText="true"
+                   alignment="CENTER"
+                   StackPane.alignment="CENTER"
+                   maxWidth="700"/>
+        </StackPane>
+
+        <!-- Navigation buttons -->
+        <HBox spacing="20" alignment="CENTER">
+            <Button fx:id="prevButton" text="⟨" onAction="#showPreviousImage"/>
+            <Button fx:id="nextButton" text="⟩" onAction="#showNextImage"/>
+        </HBox>
+
+        <!-- Services Section -->
+        <VBox spacing="30.0" styleClass="services-section" alignment="CENTER">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label styleClass="section-label" text="Nos Services" />
+            <Label styleClass="section-title" text="Services Que Nous Offrons" />
+
+            <HBox alignment="CENTER" spacing="40.0" styleClass="services-container">
+                <!-- Card 1 -->
+                <VBox alignment="TOP_CENTER" spacing="15.0" styleClass="service-card" maxWidth="300" minWidth="300">
+                    <StackPane styleClass="icon-container">
+                        <Label styleClass="service-icon" text="♻" />
+                    </StackPane>
+                    <Label styleClass="service-title" text="Recyclage des Déchets" />
+                    <Label styleClass="service-description" wrapText="true"
+                           text="Nous offrons des solutions de recyclage pour les déchets ménagers et industriels." />
+                </VBox>
+
+                <!-- Card 2 -->
+                <VBox alignment="TOP_CENTER" spacing="15.0" styleClass="service-card" maxWidth="300" minWidth="300">
+                    <StackPane styleClass="icon-container">
+                        <Label styleClass="service-icon" text="📅" />
+                    </StackPane>
+                    <Label styleClass="service-title" text="Évènements Écologiques" />
+                    <Label styleClass="service-description" wrapText="true"
+                           text="Organisation d'évènements pour sensibiliser à l'écologie et au recyclage." />
+                </VBox>
+
+                <!-- Card 3 -->
+                <VBox alignment="TOP_CENTER" spacing="15.0" styleClass="service-card" maxWidth="300" minWidth="300">
+                    <StackPane styleClass="icon-container">
+                        <Label styleClass="service-icon" text="👥" />
+                    </StackPane>
+                    <Label styleClass="service-title" text="Formations et Ateliers" />
+                    <Label styleClass="service-description" wrapText="true"
+                           text="Apprenez les meilleures pratiques de recyclage grâce à nos formations." />
+                </VBox>
+            </HBox>
+        </VBox>
+
+    </VBox>
+</ScrollPane>
