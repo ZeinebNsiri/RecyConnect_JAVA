@@ -5,25 +5,39 @@
 }
 
 /* ===== TAB HEADER ===== */
-.tab-pane .tab-header-area {
-    -fx-background-color: #ffffff;
-    -fx-padding: 5 0 5 0;
-    -fx-border-color: transparent transparent #c8e6c9 transparent;
-    -fx-border-width: 0 0 2px 0;
-}
-.tab-pane .tab {
-    -fx-padding: 8 20;
-    -fx-background-color: transparent;
-    -fx-text-fill: #2e7d32;
-    -fx-font-size: 15px;
-    -fx-font-weight: bold;
-}
-.tab-pane .tab:selected {
-    -fx-border-color: #2e7d32;
-    -fx-border-width: 0 0 2px 0;
-    -fx-background-color: #ffffff;
+.tab-pane {
+    -fx-tab-min-width: 160px;
+    -fx-tab-max-width: 160px;
+    -fx-tab-min-height: 40px;
+    -fx-tab-max-height: 40px;
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: transparent;
+    -fx-padding: 10px;
 }
 
+.tab {
+    -fx-background-insets: 0;
+    -fx-padding: 0 10px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-color: #ffffff; /* vert élégant */
+    -fx-text-base-color: white;
+    -fx-border-radius: 8px 8px 0 0;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.tab:selected {
+    -fx-background-color: #b1c3b8;
+    -fx-text-fill: #000000;
+}
+
+.tab-label {
+    -fx-text-fill: #000000;
+}
+
+.tab-header-background {
+    -fx-background-color: transparent;
+}
 /* ===== IMAGE CIRCULAIRE ===== */
 #profileImage {
     -fx-border-radius: 100;

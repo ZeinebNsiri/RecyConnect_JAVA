@@ -120,7 +120,7 @@ public class LoginController {
                         utilisateurService.banUser(id);
                         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
                         String tel = "+216"+emailResult.getString("num_tel");
-                        String Content = "Votre compte a été banni pendant 2 heures et 15 minutes . Vous serez réactivé à la fin de cette période.";
+                        String Content = "Votre compte Recyconnect a été banni pendant 2 heures et 15 minutes . Vous serez réactivé à la fin de cette période.";
                         Message message = Message.creator(
                                 new com.twilio.type.PhoneNumber(tel),
                                 new com.twilio.type.PhoneNumber("+12293480582"),

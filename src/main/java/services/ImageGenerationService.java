@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 public class ImageGenerationService {
 
     private static final String API_URL = "https://modelslab.com/api/v6/realtime/text2img";
-    //    private static final String API_KEY = "KTTjl9EdaZEq1uv4jrdIJ6nl9ujFCfvEeALRDHgUwSLdXASyclel90zzPO5o";
+    private static final String API_KEY = "KTTjl9EdaZEq1uv4jrdIJ6nl9ujFCfvEeALRDHgUwSLdXASyclel90zzPO5o";
 
     public static String generateImage(String prompt, String savePath) {
         try {
@@ -29,7 +29,7 @@ public class ImageGenerationService {
             // Construct the request body as a JSON object
             MediaType mediaType = MediaType.parse("application/json");
             String requestBodyContent = "{\n" +
-                    //"  \"key\": \"" + API_KEY + "\",\n" +
+                    "  \"key\": \"" + API_KEY + "\",\n" +
                     "  \"prompt\": \"" + prompt + "\",\n" +
                     "  \"negative_prompt\": \"bad quality\",\n" +
                     "  \"width\": \"512\",\n" +
