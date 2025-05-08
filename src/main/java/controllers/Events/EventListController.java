@@ -46,6 +46,7 @@ public class EventListController {
 
     @FXML
     public void initialize() {
+        eventTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         // Set up table columns
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));

@@ -259,10 +259,12 @@ public class LoginController {
                             // Redirection
                             String role = matchedUser.getRoles();
                             String fxml = role.contains("ADMIN") ? "/BaseAdmin.fxml" : "/BaseUser.fxml";
-                            Parent page = FXMLLoader.load(getClass().getResource(fxml));
-                            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                            stage.setScene(new Scene(page));
-                            stage.show();
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
+                            Parent root = loader.load();
+                            BaseUserController baseUserController = loader.getController();
+                            baseUserController.home();
+                            togglePasswordVisibility.getScene().setRoot(root);
+
                         } else {
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("Échec de l'authentification");

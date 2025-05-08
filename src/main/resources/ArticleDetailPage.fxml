@@ -34,6 +34,7 @@
 
                         <!-- Colonne texte -->
                         <VBox spacing="15" alignment="TOP_LEFT">
+                            <Label  text="Catégorie:" styleClass="title-label" visible="false" />
                             <Label fx:id="articleName" styleClass="title-label" />
                             <Label text="Catégorie:" styleClass="subtitle-label"/>
                             <Label fx:id="articleCategory" styleClass="normal-label" />
@@ -54,6 +55,12 @@
                                 <Label text="🛒" styleClass="icon-label"/>
                                 <Label text="La quantité proposée" styleClass="small-label"/>
                                 <Label fx:id="quantityLabel" styleClass="bold-label"/>
+                            </VBox>
+
+                            <VBox spacing="5" alignment="CENTER">
+                                <Label text="🏠" styleClass="icon-label"/>
+                                <Label text="Propriétaire:" styleClass="small-label"/>
+                                <Label  fx:id="articleProp" styleClass="bold-label" />
                             </VBox>
                         </VBox>
                     </HBox>

@@ -1,5 +1,6 @@
 package controllers;
 
+import entities.Notification;
 import entities.Post;
 import entities.utilisateur;
 import enums.PostTag;
@@ -7,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.FlowPane;
+import services.NotificationService;
 import services.PostService;
 
 import javafx.fxml.FXML;
@@ -74,6 +76,7 @@ public class AddPostController {
     }
 
     private void handleBack() {
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/BaseUser.fxml"));
             Parent root = loader.load();
@@ -113,6 +116,7 @@ public class AddPostController {
     }
 
     private void handlePublish() {
+        NotificationService notificationService = new NotificationService();
         String content = postContent.getText().trim();
 
         if (content.isEmpty()) {
@@ -147,6 +151,8 @@ public class AddPostController {
 
 
             postService.addWithMedia(newPost, selectedImagePaths);
+            String notif = "Un nouveau Post a été ajouté par :"+user.getNom_user()+" "+user.getPrenom();
+            notificationService.add(new Notification(notif,false, LocalDateTime.now()));
             Alert success = new Alert(Alert.AlertType.INFORMATION);
             success.setTitle("Succès");
             success.setHeaderText(null);

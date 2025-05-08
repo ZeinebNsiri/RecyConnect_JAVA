@@ -20,14 +20,14 @@
     <!-- Header -->
     <top>
         <StackPane prefHeight="150">
-            <ImageView fitWidth="1200" fitHeight="150"  preserveRatio="false"
+            <ImageView fitWidth="1600" fitHeight="150"  preserveRatio="false"
                        style="-fx-opacity: 0.7;"
                        fx:id="headerImage">
                 <image>
                     <Image url="@images/team-2.jpg" />
                 </image>
             </ImageView>
-            <Rectangle width="1200" height="150">
+            <Rectangle width="1600" height="150">
                 <fill>
                     <LinearGradient startX="0" startY="0" endX="0" endY="1">
                         <stops>

@@ -259,6 +259,11 @@ public class PostService implements IService<Post>{
         psComments.setInt(1, post.getId());
         psComments.executeUpdate();
 
+        String deletelIKE = "DELETE FROM `like` WHERE post_like_id = ?";
+        PreparedStatement psLike = conx.prepareStatement(deletelIKE);
+        psLike.setInt(1, post.getId());
+        psLike.executeUpdate();
+
         String deletePostSQL = "DELETE FROM post WHERE id = ?";
         PreparedStatement psPost = conx.prepareStatement(deletePostSQL);
         psPost.setInt(1, post.getId());

@@ -56,6 +56,7 @@ public class ListeCommandesController {
 
     @FXML
     public void initialize() {
+        commandesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         prixColumn.setCellValueFactory(new PropertyValueFactory<>("prix"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("dateCommandeFormatted"));

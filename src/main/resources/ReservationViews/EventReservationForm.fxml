@@ -5,7 +5,8 @@
 
 <StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="controllers.Reservations.EventReservationController"
-           style="-fx-background-color: #e6f3ec; -fx-padding: 50;">
+           style="-fx-background-color: #e6f3ec; -fx-padding: 50;"
+           prefWidth="1550.0" prefHeight="795.0">
 
     <VBox spacing="25" alignment="CENTER"
           style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,100,0,0.08), 10, 0, 0, 4);"

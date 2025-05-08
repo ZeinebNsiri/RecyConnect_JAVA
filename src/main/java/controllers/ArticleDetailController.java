@@ -34,6 +34,7 @@ public class ArticleDetailController {
 
     @FXML private ImageView articleImage;
     @FXML private Label articleName;
+    @FXML private Label articleProp;
     @FXML private Label articleCategory;
     @FXML private Label articleLocation;
     @FXML private Label priceLabel;
@@ -42,13 +43,16 @@ public class ArticleDetailController {
     @FXML private Button commanderButton;
     @FXML private AnchorPane mapContainer;
 
+
+
     private final ArticleService articleService = new ArticleService();
     private LigneCommandeService ligneCommandeService = new LigneCommandeService();
     public void loadArticleData(int articleId) {
         try {
             Article article = articleService.getArticleById(articleId);
+            String userar = articleService.getNomUtilisateurById(article.getUtilisateur_id());
             if (article == null) return;
-
+            articleProp.setText(userar);
             articleName.setText(article.getNom_article());
             articleCategory.setText(articleService.getCategorieById(article.getCategorie_id()).getNom_categorie());
             articleLocation.setText(article.getLocalisation_article());

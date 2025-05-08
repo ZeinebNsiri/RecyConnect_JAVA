@@ -40,6 +40,7 @@ public class AfficherCours {
 
     @FXML
     private void initialize() {
+        coursTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         setupColumns();
         try {
             allCourses = coursService.displayList();

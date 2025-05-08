@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.net.URL?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
@@ -65,43 +65,102 @@
 
     <!-- ======= SIDEBAR ======= -->
     <left>
-        <VBox spacing="10" styleClass="sidebar" alignment="TOP_LEFT" prefWidth="230">
+        <VBox spacing="20" styleClass="sidebar" alignment="TOP_LEFT" prefWidth="300">
             <children>
-                <Hyperlink text="📊 Dashboard" onAction="#showDashboardView" styleClass="sidebar-link"/>
-                <Hyperlink text="👤 Utilisateurs" onAction="#showUsersView" styleClass="sidebar-link"/>
+                <Hyperlink onAction="#showDashboardView" styleClass="sidebar-link">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="DASHBOARD" size="18" fill="#4CAF50" />
+                    </graphic>
+                    <text>Dashboard</text>
+                </Hyperlink>
 
-                <!-- VENTES -->
-                <TitledPane text="🏬 Ventes" expanded="false" collapsible="true" animated="true" styleClass="menu-toggle">
+                <Hyperlink onAction="#showUsersView" styleClass="sidebar-link">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="USERS" size="18" fill="#2196F3" />
+                    </graphic>
+                    <text>Utilisateurs</text>
+                </Hyperlink>
+
+                <TitledPane expanded="false" collapsible="true" animated="true" styleClass="menu-toggle">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontAwesomeIconView glyphName="SHOPPING_CART" size="18" fill="#FF9800" />
+                            <Label text="Ventes" styleClass="menu-title" />
+                        </HBox>
+                    </graphic>
                     <content>
                         <VBox spacing="5">
-                            <Hyperlink text="• Catégories articles" onAction="#showCategorieView" styleClass="sidebar-link"/>
-                            <Hyperlink text="• Articles" onAction="#showArticlesView" styleClass="sidebar-link"/>
-                            <Hyperlink text="• Commandes" onAction="#showCommandesView" styleClass="sidebar-link"/>
+                            <Hyperlink text="Catégories articles" onAction="#showCategorieView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="TAGS" size="14" fill="#FF9800" />
+                                </graphic>
+                            </Hyperlink>
+                            <Hyperlink text="Articles" onAction="#showArticlesView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="ARCHIVE" size="14" fill="#FF9800" />
+                                </graphic>
+                            </Hyperlink>
+                            <Hyperlink text="Commandes" onAction="#showCommandesView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="LIST_ALT" size="14" fill="#FF9800" />
+                                </graphic>
+                            </Hyperlink>
                         </VBox>
                     </content>
                 </TitledPane>
 
-                <!-- EVENEMENT -->
-                <TitledPane text="🗓️ Événement" expanded="false" collapsible="true" animated="true" styleClass="menu-toggle">
+                <TitledPane expanded="false" collapsible="true" animated="true" styleClass="menu-toggle">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontAwesomeIconView glyphName="CALENDAR" size="18" fill="#E91E63" />
+                            <Label text="Événement" styleClass="menu-title" />
+                        </HBox>
+                    </graphic>
                     <content>
                         <VBox spacing="5">
-                            <Hyperlink text="• Gestion Événement" onAction="#showEvenementView" styleClass="sidebar-link"/>
-                            <Hyperlink text="• Gestion Réservations" onAction="#showReservationsView" styleClass="sidebar-link"/>
+                            <Hyperlink text="Gestion Événement" onAction="#showEvenementView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="CALENDAR_CHECK_O" size="14" fill="#E91E63" />
+                                </graphic>
+                            </Hyperlink>
+                            <Hyperlink text="Gestion Réservations" onAction="#showReservationsView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="TICKET" size="14" fill="#E91E63" />
+                                </graphic>
+                            </Hyperlink>
                         </VBox>
                     </content>
                 </TitledPane>
 
-                <!-- WORKSHOPS -->
-                <TitledPane text="📈 Workshops" expanded="false" collapsible="true" animated="true" styleClass="menu-toggle">
+                <TitledPane expanded="false" collapsible="true" animated="true" styleClass="menu-toggle">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontAwesomeIconView glyphName="LINE_CHART" size="18" fill="#9C27B0" />
+                            <Label text="Workshops" styleClass="menu-title" />
+                        </HBox>
+                    </graphic>
                     <content>
                         <VBox spacing="5">
-                            <Hyperlink text="• Catégories workshops" onAction="#showCategorieWorkshopView" styleClass="sidebar-link"/>
-                            <Hyperlink text="• Workshops" onAction="#showWorkshopsView" styleClass="sidebar-link"/>
+                            <Hyperlink text="Catégories workshops" onAction="#showCategorieWorkshopView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="TH_LARGE" size="14" fill="#9C27B0" />
+                                </graphic>
+                            </Hyperlink>
+                            <Hyperlink text="Workshops" onAction="#showWorkshopsView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="GRADUATION_CAP" size="14" fill="#9C27B0" />
+                                </graphic>
+                            </Hyperlink>
                         </VBox>
                     </content>
                 </TitledPane>
 
-                <Hyperlink text="📝 Posts" onAction="#showPostsView" styleClass="sidebar-link"/>
+                <Hyperlink onAction="#showPostsView" styleClass="sidebar-link">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="PENCIL_SQUARE" size="18" fill="#00BCD4" />
+                    </graphic>
+                    <text>Posts</text>
+                </Hyperlink>
             </children>
         </VBox>
     </left>
