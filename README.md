@@ -97,14 +97,6 @@ RecyConnect s’inscrit pleinement dans une démarche éco-responsable en répon
 
 ---
 
-## 🏁 Lancement du projet
-
-1. **Cloner le dépôt**
-   ```bash
-   git clone https://github.com/ZeinebNsiri/RecyConnect_JAVA.git
-   ```
-
----
 
 ## 📚 Projet académique
 
@@ -126,3 +118,11 @@ Ce projet a été réalisé dans le cadre d’un projet académique à l’écol
 
 Nous avons collaboré sur toutes les étapes du projet : conception, développement, intégration d'API et documentation. Ce travail reflète notre engagement pour un avenir plus vert et plus intelligent 🌍🤖.
 
+## 🏁 Lancement du projet
+
+1. **Cloner le dépôt**
+   ```bash
+   git clone https://github.com/ZeinebNsiri/RecyConnect_JAVA.git
+   ```
+
+---
