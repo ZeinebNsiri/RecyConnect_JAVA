@@ -1,26 +1,40 @@
-# ♻️ RecyConnect – Application Java de gestion du recyclage
+
+# <img src="mainlogo.png" alt="RecyConnect Logo" width="40" style="vertical-align:middle;"> RecyConnect – Application Java de gestion du recyclage
 
 ![Recyclé](https://img.shields.io/badge/made%20with-recycled%20materials-brightgreen)
 ![Éco-responsable](https://img.shields.io/badge/environment-eco--friendly-green)
 
-**RecyConnect** est une application Java/JavaFX axée sur le développement durable. Elle vise à faciliter les échanges entre producteurs de déchets (supermarchés, restaurants, particuliers) et les entités de valorisation (usines, associations, citoyens engagés). Le projet s’inscrit pleinement dans une démarche éco-responsable et contribue aux Objectifs de Développement Durable (ODD).
+**RecyConnect** est une application Java/JavaFX axée sur le développement durable et l’intelligence artificielle (IA). Elle vise à faciliter les échanges entre producteurs de déchets (supermarchés, restaurants, particuliers) et les entités de valorisation (usines, associations, citoyens engagés). Le projet s’inscrit pleinement dans une démarche éco-responsable et contribue aux Objectifs de Développement Durable (ODD).
 
 ---
 ## 🎯 Objectifs de Développement Durable (ODD)
 
 RecyConnect s’inscrit pleinement dans une démarche éco-responsable en répondant à plusieurs **Objectifs de Développement Durable (ODD)** définis par les Nations Unies :
 
-- 🌱 **ODD 8** – *Travail décent & croissance économique*  
-  Promouvoir un travail décent et une croissance économique durable grâce à une économie circulaire inclusive.
-
-- 🏙️ **ODD 11** – *Villes et communautés durables*  
-  Encourager la création de circuits de recyclage locaux pour un développement urbain durable.
-
-- 🛍️ **ODD 12** – *Consommation et production responsables*  
-  Optimiser la gestion des déchets et réduire le gaspillage en favorisant le réemploi.
-
-- 🌍 **ODD 13** – *Lutte contre le changement climatique*  
-  Réduire l’empreinte carbone via le tri, la valorisation et la réduction des déchets.
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-08.jpg" width="80"/><br/>
+      <strong>ODD 8</strong><br/>
+      Travail décent et croissance économique
+    </td>
+    <td align="center">
+      <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-11.jpg" width="80"/><br/>
+      <strong>ODD 11</strong><br/>
+      Villes et communautés durables
+    </td>
+    <td align="center">
+      <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-12.jpg" width="80"/><br/>
+      <strong>ODD 12</strong><br/>
+      Consommation et production responsables
+    </td>
+    <td align="center">
+      <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-13.jpg" width="80"/><br/>
+      <strong>ODD 13</strong><br/>
+      Lutte contre le changement climatique
+    </td>
+  </tr>
+</table>
 
 ## ✨ Fonctionnalités principales
 
@@ -76,6 +90,10 @@ RecyConnect s’inscrit pleinement dans une démarche éco-responsable en répon
 - **[MapTiler Cloud](https://www.maptiler.com/cloud/)** – Amélioration des cartes
 - **[Jitsi Meet](https://jitsi.org/)** – Génération de visioconférences
 
+### 🧠 Intelligence Artificielle & IA appliquée
+- **Gemini API (Google)** – Analyse sémantique, validation de contenu
+- **Analyse vidéo par IA** – Génération automatique de résumés pour les workshops
+
 ---
 
 ## 🏁 Lancement du projet
@@ -83,3 +101,27 @@ RecyConnect s’inscrit pleinement dans une démarche éco-responsable en répon
 1. **Cloner le dépôt**
    ```bash
    git clone https://github.com/ZeinebNsiri/RecyConnect_JAVA.git
+   ```
+
+---
+
+## 📚 Projet académique
+
+Ce projet a été réalisé dans le cadre d’un projet académique à l’école d’ingénierie **ESPRIT** (École Supérieure Privée d'Ingénierie et de Technologies), démontrant la capacité à intégrer des technologies avancées telles que **JavaFX**, des **API d’IA** et des outils de **développement durable** dans une solution complète.
+
+---
+
+## 👥 Équipe projet – TechSquad
+
+Ce projet a été réalisé dans le cadre d’un projet académique à l’école **ESPRIT**, par un groupe de 6 étudiantes en ingénierie informatique, passionnées par l’innovation durable et l’intelligence artificielle.
+
+**Membres de l'équipe : TechSquad**
+- Sahar Mnif  
+- Zeineb Nsiri  
+- Mohamed Aziz Zouari
+- Samar Touil
+- Amal Eljazi
+- Eya Guirat
+
+Nous avons collaboré sur toutes les étapes du projet : conception, développement, intégration d'API et documentation. Ce travail reflète notre engagement pour un avenir plus vert et plus intelligent 🌍🤖.
+
