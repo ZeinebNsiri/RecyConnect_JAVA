@@ -1,30 +1,44 @@
 # ♻️ RecyConnect – Application Java de gestion du recyclage
 
-**RecyConnect** est une application Java/JavaFX orientée développement durable, visant à faciliter les échanges entre producteurs de déchets (supermarchés, restaurants, particuliers) et les entités de valorisation (usines, associations, citoyens engagés). Le projet s’inscrit dans une démarche éco-responsable et participe aux Objectifs de Développement Durable (ODD).
+**RecyConnect** est une application Java/JavaFX axée sur le développement durable. Elle vise à faciliter les échanges entre producteurs de déchets (supermarchés, restaurants, particuliers) et les entités de valorisation (usines, associations, citoyens engagés). Le projet s’inscrit pleinement dans une démarche éco-responsable et contribue aux Objectifs de Développement Durable (ODD).
 
 ## ✨ Fonctionnalités principales
 
 - 🔐 **Gestion des utilisateurs**
   - Création de compte avec reconnaissance faciale
   - Authentification sécurisée
+
 - 📦 **Gestion des articles**
-  - Ajout, modification et catégorisation des articles
-- 🛒 **Commandes**
-  - Création et visualisation de commandes
-  - Paiement sécurisé via Paymee ou à la livraison
-- 📝 **Posts & Communauté**
-  - Ajout et filtrage de posts par tags
-- 📅 **Événements et Workshops**
-  - Inscription, visualisation sur carte, interaction avec chatbot
+  - Ajout, modification, suppression et catégorisation des articles
+
+- 🛒 **Gestion des commandes**
+  - Création, visualisation et suivi des commandes
+  - Paiement sécurisé via Paymee ou paiement à la livraison
+
+- 📝 **Gestion des posts**
+  - Création et filtrage de posts par tags
+  - Association de médias aux publications
+
+- 📆 **Gestion des événements**
+  - Création, consultation et inscription à des événements liés au recyclage
+  - Affichage sur carte interactive avec géolocalisation
+
+- 🧪 **Gestion des workshops**
+  - Organisation et inscription à des ateliers éducatifs ou de sensibilisation
+  - Interaction avec un chatbot pour les questions fréquentes
 
 ## 🧰 Technologies utilisées
 
-- **Langage** : Java
-- **Interface utilisateur** : JavaFX
-- **Base de données** : MySQL (ou autre SGBD compatible)
-- **Connexion DB** : JDBC
-- **Reconnaissance faciale** : Intégration de technologie de détection faciale
-- **Paiement** : API Paymee (sandbox/test)
+- **Langage** : Java  
+- **Interface utilisateur** : JavaFX  
+- **Base de données** : MySQL (ou autre SGBD compatible)  
+- **Connexion DB** : JDBC  
+- **Reconnaissance faciale** : Intégration via API Face++  
+- **Paiement** : API Paymee (sandbox/test)  
+- **Modération de contenu** : Sightengine  
+- **Carte interactive** : Leaflet avec WebView  
+- **Messagerie & Notifications** : API Mailer  
+- **Génération de contenu** : Gemini API  
 
 ## 🏁 Lancement du projet
 
