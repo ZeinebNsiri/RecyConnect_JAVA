@@ -1,5 +1,5 @@
 
-# <img src="mainlogo.png" alt="RecyConnect Logo" width="40" style="vertical-align:middle;"> RecyConnect – Application Java de gestion du recyclage
+# <img src="mainlogo.png" alt="RecyConnect Logo" width="80" height="80" style="vertical-align:middle;"> **RecyConnect** – *Application Java de gestion du recyclage*
 
 ![Recyclé](https://img.shields.io/badge/Made%20with-Recycled%20Materials-4CAF50?style=flat&logo=recycle&logoColor=white&labelColor=1B5E20)
 ![Éco-responsable](https://img.shields.io/badge/Environment-Éco--responsable-2E7D32?style=flat&logo=leaf&logoColor=white&labelColor=004D40)
