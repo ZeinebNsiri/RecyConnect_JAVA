@@ -1,7 +1,7 @@
 # ♻️ RecyConnect – Application Java de gestion du recyclage
 
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) 
-[![forthebadge](https://forthebadge.com/images/badges/powered-by-electricity.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/uses-recycled-materials.svg)](https://forthebadge.com)  
+[![forthebadge](https://forthebadge.com/images/badges/eco.svg)](https://forthebadge.com)
 
 **RecyConnect** est une application Java/JavaFX axée sur le développement durable. Elle vise à faciliter les échanges entre producteurs de déchets (supermarchés, restaurants, particuliers) et les entités de valorisation (usines, associations, citoyens engagés). Le projet s’inscrit pleinement dans une démarche éco-responsable et contribue aux Objectifs de Développement Durable (ODD).
 
