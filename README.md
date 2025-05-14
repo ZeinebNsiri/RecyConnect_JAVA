@@ -97,6 +97,16 @@ RecyConnect s’inscrit pleinement dans une démarche éco-responsable en répon
 
 ---
 
+## 📸 Aperçu de l’application
+Voici quelques captures d’écran de l’interface utilisateur de RecyConnect :
+
+### 🖼️ Accueil de l'application
+<img src="java1.jfif" alt="Accueil RecyConnect" width="600"/>
+
+### 🛍️ Interface de gestion des articles
+<img src="java2.jfif" alt="Gestion des articles RecyConnect" width="600"/>
+
+---
 
 ## 📚 Projet académique
 
@@ -117,6 +127,7 @@ Ce projet a été réalisé dans le cadre d’un projet académique à l’écol
 - Eya Guirat
 
 Nous avons collaboré sur toutes les étapes du projet : conception, développement, intégration d'API et documentation. Ce travail reflète notre engagement pour un avenir plus vert et plus intelligent 🌍🤖.
+
 
 ## 🏁 Lancement du projet
 
