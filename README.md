@@ -6,6 +6,21 @@
 **RecyConnect** est une application Java/JavaFX axée sur le développement durable. Elle vise à faciliter les échanges entre producteurs de déchets (supermarchés, restaurants, particuliers) et les entités de valorisation (usines, associations, citoyens engagés). Le projet s’inscrit pleinement dans une démarche éco-responsable et contribue aux Objectifs de Développement Durable (ODD).
 
 ---
+## 🎯 Objectifs de Développement Durable (ODD)
+
+RecyConnect s’inscrit pleinement dans une démarche éco-responsable en répondant à plusieurs **Objectifs de Développement Durable (ODD)** définis par les Nations Unies :
+
+- 🌱 **ODD 8** – *Travail décent & croissance économique*  
+  Promouvoir un travail décent et une croissance économique durable grâce à une économie circulaire inclusive.
+
+- 🏙️ **ODD 11** – *Villes et communautés durables*  
+  Encourager la création de circuits de recyclage locaux pour un développement urbain durable.
+
+- 🛍️ **ODD 12** – *Consommation et production responsables*  
+  Optimiser la gestion des déchets et réduire le gaspillage en favorisant le réemploi.
+
+- 🌍 **ODD 13** – *Lutte contre le changement climatique*  
+  Réduire l’empreinte carbone via le tri, la valorisation et la réduction des déchets.
 
 ## ✨ Fonctionnalités principales
 
