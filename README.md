@@ -101,11 +101,14 @@ RecyConnect s’inscrit pleinement dans une démarche éco-responsable en répon
 Voici quelques captures d’écran de l’interface utilisateur de RecyConnect :
 
 ### 🖼️ Accueil de l'application
+<p align="center">
 <img src="java1.jfif" alt="Accueil RecyConnect" width="600"/>
+</p>
 
 ### 🛍️ Interface de gestion des articles
+<p align="center">
 <img src="java2.jfif" alt="Gestion des articles RecyConnect" width="600"/>
-
+</p>
 ---
 
 ## 📚 Projet académique
