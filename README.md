@@ -85,6 +85,8 @@ RecyConnect s’inscrit pleinement dans une démarche éco-responsable en répon
 - **[Face++ API](https://www.faceplusplus.com/)** – Reconnaissance faciale
 - **[Paymee](https://sandbox.paymee.tn/)** – Paiement sécurisé
 - **[Sightengine](https://sightengine.com/)** – Détection de contenu inapproprié
+- **[**Chatbot intégré**](https://huggingface.co/)** Interaction automatisée avec les utilisateurs pour l’assistance ou les réponses fréquentes.
+- **[**Analyse Vidéo**](https://huggingface.co/)** Analyse vidéo et géneration du description automatique    
 - **[Mailer API](https://www.mailersend.com/)** – Notification par email
 - **[Gemini API (Google)](https://deepmind.google/technologies/gemini/)** – Analyse sémantique des contenus
 - **[Leaflet](https://leafletjs.com/)** – Cartographie interactive
@@ -94,6 +96,12 @@ RecyConnect s’inscrit pleinement dans une démarche éco-responsable en répon
 ### 🧠 Intelligence Artificielle & IA appliquée
 - **Gemini API (Google)** – Analyse sémantique, validation de contenu
 - **Analyse vidéo par IA** – Génération automatique de résumés pour les workshops
+- **Chatbot intelligent** – Réponses automatiques aux questions fréquentes
+- **Event recommandation** – Recommandation d’événements à partir du traitement du langage naturel  
+- **Event Image Generation from Title and Desc** – Génération d’images d’événement à partir du titre et de la description  
+- **Reconnaissance Faciale** – Identification des visages à partir d’images ou de vidéos  
+- **Détection Mauvaises Images** – Filtrage automatique des images inappropriées ou non conformes  
+- **Analyse Vidéo to Text** – Transcription automatique du contenu vidéo en texte  
 
 ---
 
