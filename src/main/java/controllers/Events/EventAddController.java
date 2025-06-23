@@ -70,10 +70,10 @@ public class EventAddController {
             // Generate image
             String prompt = "A professional event image for: " + event.getName() + ". " + event.getDescription();
             String imageFileName = "event_" + System.currentTimeMillis() + ".png";
-            String savePath = "uploads/" + imageFileName;
+            String savePath = "C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/images/" + imageFileName;
 
             try {
-                Files.createDirectories(Paths.get("uploads"));
+                //Files.createDirectories(Paths.get("uploads"));
                 String generatedFile = ImageGenerationService.generateImage(prompt, savePath);
                 if (Files.exists(Paths.get(generatedFile))) {
                     event.setImage(imageFileName);

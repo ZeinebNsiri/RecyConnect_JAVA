@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="controllers.CommandeController"
+           style="-fx-background-color: linear-gradient(to bottom, #e0f7fa, #ffffff);">
+
+    <VBox alignment="CENTER" spacing="30" maxWidth="600"
+          style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0.1, 0, 6);">
+        <padding>
+            <Insets top="40" bottom="40" left="40" right="40"/>
+        </padding>
+
+        <!-- Titre -->
+        <Label text="Choisissez votre mode de paiement"
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #004d40;" />
+
+        <!-- Boutons radio -->
+        <VBox spacing="20" alignment="CENTER_LEFT">
+            <RadioButton fx:id="livraisonRadio" text="Payer à la livraison" style="-fx-font-size: 16px; -fx-text-fill: #00695c;">
+                <toggleGroup>
+                    <ToggleGroup fx:id="paiementGroup"/>
+                </toggleGroup>
+            </RadioButton>
+
+            <RadioButton fx:id="visaRadio" text="Payer par VISA"
+                         toggleGroup="$paiementGroup" style="-fx-font-size: 16px; -fx-text-fill: #00695c;" />
+        </VBox>
+
+        <!-- Bouton valider -->
+        <Button fx:id="finaliserBtn" text="Valider le paiement" onAction="#PayerCommande"
+                style="-fx-background-color: #00796b; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12 40; -fx-background-radius: 8;"/>
+    </VBox>
+
+</StackPane>

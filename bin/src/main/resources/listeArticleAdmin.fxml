@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<?import java.net.URL?>
+<VBox xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.ListeArticleAdminController"
+      spacing="20" style="-fx-background-color: #f0fdf4;" alignment="TOP_LEFT" prefWidth="1000">
+    <stylesheets>
+        <URL value="@ListeArticleAdmin.css" />
+    </stylesheets>
+    <padding>
+        <Insets top="20" left="30" right="30" bottom="20"/>
+    </padding>
+
+    <Label text="Tous les articles proposés chez RecyConnect" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <HBox spacing="15">
+        <TextField fx:id="nomArticleField" promptText="Nom de l'article" />
+        <TextField fx:id="proprietaireField" promptText="Nom du propriétaire" />
+        <ComboBox fx:id="categorieFilterCombo" promptText="Toutes les catégories" />
+        <Button fx:id="rechercherBtn" text="Rechercher" styleClass="btn-primary" />
+    </HBox>
+
+    <TableView fx:id="articleTable" prefHeight="500" style="-fx-background-color: white;">
+        <columns>
+            <TableColumn fx:id="idColumn" text="#" prefWidth="50"/>
+            <TableColumn fx:id="imageColumn" text="Image" prefWidth="100"/>
+            <TableColumn fx:id="nomColumn" text="Nom de l'article" prefWidth="180"/>
+            <TableColumn fx:id="categorieColumn" text="Catégorie" prefWidth="150"/>
+            <TableColumn fx:id="quantiteColumn" text="Quantité" prefWidth="100"/>
+            <TableColumn fx:id="prixColumn" text="Prix unitaire" prefWidth="120"/>
+            <TableColumn fx:id="proprietaireColumn" text="Propriétaire" prefWidth="150"/>
+            <TableColumn fx:id="actionsColumn" text="" prefWidth="100"/>
+        </columns>
+    </TableView>
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="btnPrevious" text="« Précédent" styleClass="btn-pagination" onAction="#handlePrevious" />
+        <HBox fx:id="pagination" spacing="5" alignment="CENTER" />
+        <Button fx:id="btnNext" text="Suivant »" styleClass="btn-pagination" onAction="#handleNext" />
+    </HBox>
+</VBox>

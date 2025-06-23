@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.StatController"
+            prefWidth="800" prefHeight="500"
+            stylesheets="@stat.css"
+            style="-fx-background-color: #e9f5ef;">
+
+    <VBox spacing="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="30">
+
+        <!-- Carte Statistiques -->
+        <VBox spacing="10"
+              styleClass="stat-card"
+              style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;">
+            <Label text="Statistiques Ventes" style="-fx-font-weight: bold; -fx-text-fill: #003366;" />
+
+            <HBox spacing="50">
+                <VBox>
+                    <Label text="Total des ventes - Aujourd'hui" />
+                    <Label fx:id="totalVentesLabel" text="0 TND" style="-fx-font-weight: bold;" />
+                </VBox>
+
+                <VBox>
+                    <Label text="Ventes Payées (Commandes payées)" />
+                    <Label fx:id="ventesPayeesLabel" text="0" style="-fx-font-weight: bold;" />
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- Graphiques côte à côte -->
+        <HBox spacing="20">
+            <!-- Pie Chart à gauche -->
+            <PieChart fx:id="pieChartVentes" prefHeight="250" prefWidth="350" />
+
+            <!-- Bar Chart à droite -->
+            <BarChart fx:id="barChartVisa" prefHeight="250" prefWidth="350">
+                <xAxis>
+                    <CategoryAxis fx:id="xAxis" label="Méthodes de Paiement" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="yAxis" label="Nombre de commandes" />
+                </yAxis>
+            </BarChart>
+        </HBox>
+    </VBox>
+</AnchorPane>

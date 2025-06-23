@@ -65,18 +65,105 @@ public class UtilisateurService implements IService<utilisateur> {
 
     @Override
     public void delete(utilisateur utilisateur) throws SQLException {
-        String query = "DELETE FROM `utilisateur` WHERE `email`=?";
-        PreparedStatement ps = conx.prepareStatement(query);
 
-        ps.setString(1, utilisateur.getEmail());
 
-        ps.executeUpdate();
-        System.out.println("Utilisateur deleted successfully!");
+        // Récupérer l'ID de l'utilisateur via son email
+        String getIdQuery = "SELECT id FROM utilisateur WHERE email = ?";
+        int userId = -1;
+        try (PreparedStatement ps = conx.prepareStatement(getIdQuery)) {
+            ps.setString(1, utilisateur.getEmail());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                userId = rs.getInt("id");
+            } else {
+                System.out.println("❌ Utilisateur introuvable.");
+                return;
+            }
+        }
+
+        // Supprimer les réservations associées
+        try (PreparedStatement ps = conx.prepareStatement("DELETE FROM reservation WHERE email = ?")) {
+            ps.setString(1, utilisateur.getEmail());
+            ps.executeUpdate();
+        }
+
+        // Supprimer les lignes de commande
+        try (PreparedStatement ps = conx.prepareStatement("DELETE FROM ligne_commande WHERE user_c_id = ?")) {
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+        }
+
+        // Supprimer les likes de l'utilisateur
+        try (PreparedStatement ps = conx.prepareStatement("DELETE FROM `like` WHERE user_like_id = ?")) {
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+        }
+
+        // Supprimer les commentaires de l'utilisateur
+        try (PreparedStatement ps = conx.prepareStatement("DELETE FROM commentaire WHERE user_com_id = ?")) {
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+        }
+
+        // Supprimer les articles de l'utilisateur
+        try (PreparedStatement ps = conx.prepareStatement("DELETE FROM article WHERE utilisateur_id = ?")) {
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+        }
+
+        // Supprimer les posts de l'utilisateur
+        // ⚠️ Les posts ont des dépendances avec like, commentaire, media_post déjà traitées dans PostService.delete()
+        try (PreparedStatement psGetPostIds = conx.prepareStatement("SELECT id FROM post WHERE user_p_id = ?")) {
+            psGetPostIds.setInt(1, userId);
+            ResultSet rs = psGetPostIds.executeQuery();
+            while (rs.next()) {
+                int postId = rs.getInt("id");
+
+                // Supprimer les médias
+                try (PreparedStatement ps = conx.prepareStatement("DELETE FROM media_post WHERE post_id = ?")) {
+                    ps.setInt(1, postId);
+                    ps.executeUpdate();
+                }
+
+                // Supprimer les commentaires du post
+                try (PreparedStatement ps = conx.prepareStatement("DELETE FROM commentaire WHERE post_com_id = ?")) {
+                    ps.setInt(1, postId);
+                    ps.executeUpdate();
+                }
+
+                // Supprimer les likes du post
+                try (PreparedStatement ps = conx.prepareStatement("DELETE FROM `like` WHERE post_like_id = ?")) {
+                    ps.setInt(1, postId);
+                    ps.executeUpdate();
+                }
+
+                // Supprimer le post lui-même
+                try (PreparedStatement ps = conx.prepareStatement("DELETE FROM post WHERE id = ?")) {
+                    ps.setInt(1, postId);
+                    ps.executeUpdate();
+                }
+            }
+        }
+
+        // Supprimer les ratings associés à l'utilisateur
+        String sqlDeleteRatings = "DELETE FROM rating WHERE user_id = ?";
+        try (PreparedStatement pstmt = conx.prepareStatement(sqlDeleteRatings)) {
+            pstmt.setInt(1,  userId);
+            pstmt.executeUpdate();
+        }
+
+        // Enfin, supprimer l'utilisateur
+        try (PreparedStatement ps = conx.prepareStatement("DELETE FROM utilisateur WHERE id = ?")) {
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+            System.out.println("✅ Utilisateur et toutes ses données associées supprimés.");
+        }
     }
+
 
     @Override
     public void update(utilisateur utilisateur) throws SQLException {
-        String query = "UPDATE `utilisateur` SET `email`=?, `roles`=?, `nom_user`=?, `prenom`=?, `num_tel`=?, `password`=?, `matricule_fiscale`=?, `status`=? , `photo_profil`=?,`adresse`=?,`bannedBy`=? WHERE `id`=?";
+        String query = "UPDATE `utilisateur` SET `email`=?, `roles`=?, `nom_user`=?, `prenom`=?, `num_tel`=?, `password`=?, `matricule_fiscale`=?, `status`=? , `photo_profil`=?,`adresse`=?,`banned_by`=? WHERE `id`=?";
         PreparedStatement ps = conx.prepareStatement(query);
 
         ps.setString(1, utilisateur.getEmail());
@@ -229,7 +316,7 @@ public class UtilisateurService implements IService<utilisateur> {
     }
 
     public void banUser(int userId) throws SQLException {
-        String updateStatusQuery = "UPDATE utilisateur SET status = false, ban_time = ? ,bannedBy = ?  WHERE id = ?";
+        String updateStatusQuery = "UPDATE utilisateur SET status = false, ban_time = ? ,banned_by = ?  WHERE id = ?";
         PreparedStatement ps = conx.prepareStatement(updateStatusQuery);
 
 
@@ -244,14 +331,14 @@ public class UtilisateurService implements IService<utilisateur> {
         ps.executeUpdate();
     }
     public boolean ReactiverUser (int userId) throws SQLException {
-        String query = "SELECT ban_time , bannedBy FROM utilisateur WHERE id = ? AND status = false ";
+        String query = "SELECT ban_time , banned_by FROM utilisateur WHERE id = ? AND status = false ";
         PreparedStatement ps = conx.prepareStatement(query);
         ps.setInt(1, userId);
         ResultSet rs = ps.executeQuery();
 
 
         if (rs.next()) {
-            String bannedBy = rs.getString("bannedBy");
+            String bannedBy = rs.getString("banned_by");
             if(bannedBy.equals("ADMIN")) {
                 return false;
             }

@@ -80,7 +80,7 @@ public class EventDetailsController {
 
         eventLocation.setText("📍 Lieu : " + event.getLocation());
 
-        File imageFile = new File("uploads/" + event.getImage());
+        File imageFile = new File("C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/images/" + event.getImage());
         if (imageFile.exists()) {
             eventImageView.setImage(new Image(imageFile.toURI().toString()));
         } else {

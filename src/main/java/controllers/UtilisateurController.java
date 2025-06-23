@@ -44,6 +44,7 @@ public class UtilisateurController {
     @FXML private ComboBox<String> searchRole;
     @FXML private Button btnSearch;
     @FXML private Button btnReset;
+    @FXML private TableColumn<utilisateur, Void> actionColumn;
 
     // Nouveaux éléments pour la pagination
     @FXML private Button btnPrevious;
@@ -170,6 +171,49 @@ public class UtilisateurController {
                     }
                 }
             });
+
+
+            actionColumn.setCellFactory(col -> new TableCell<>() {
+                private final Button deleteButton = new Button("Supprimer");
+
+                {
+                    deleteButton.setStyle("-fx-background-color: #dc2626; -fx-text-fill: white; -fx-cursor: hand;");
+                    deleteButton.setOnAction(e -> {
+                        utilisateur u = getTableView().getItems().get(getIndex());
+
+                        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+                        confirmation.setTitle("Confirmation de suppression");
+                        confirmation.setHeaderText(null);
+                        confirmation.setContentText("Voulez-vous vraiment supprimer cet utilisateur ?");
+
+                        confirmation.showAndWait().ifPresent(response -> {
+                            if (response == ButtonType.OK) {
+                                try {
+                                    utilisateurService.delete(u);
+                                    allUsers.remove(u); // Retirer de la liste complète
+                                    filteredUsers.remove(u); // Retirer du filtre courant
+                                    refreshPagination(); // Recalculer les pages
+                                    loadTableData();     // Rafraîchir la table
+                                } catch (SQLException ex) {
+                                    ex.printStackTrace();
+                                    showAlert("Erreur", "Impossible de supprimer l'utilisateur.");
+                                }
+                            }
+                        });
+                    });
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(deleteButton);
+                    }
+                }
+            });
+
 
             // filtre
             globalFilter.setItems(FXCollections.observableArrayList(

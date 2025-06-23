@@ -222,14 +222,14 @@ public class ModifierCours {
             currentCours.setCategorieCours(categorieCombo.getValue());
 
             if (selectedImageFile != null) {
-                Path dest = Paths.get("uploadsworkshop", selectedImageFile.getName());
+                Path dest = Paths.get("C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/images/", selectedImageFile.getName());
                 Files.createDirectories(dest.getParent());
                 Files.copy(selectedImageFile.toPath(), dest, StandardCopyOption.REPLACE_EXISTING);
                 currentCours.setImageCours(selectedImageFile.getName());
             }
 
             if (selectedVideoFile != null) {
-                Path dest = Paths.get("uploadsworkshop", selectedVideoFile.getName());
+                Path dest = Paths.get("C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/videos/", selectedVideoFile.getName());
                 Files.createDirectories(dest.getParent());
                 Files.copy(selectedVideoFile.toPath(), dest, StandardCopyOption.REPLACE_EXISTING);
                 currentCours.setVideo(selectedVideoFile.getName());

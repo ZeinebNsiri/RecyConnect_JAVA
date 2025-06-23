@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.shape.Rectangle;
 import services.EventService;
 
 import java.io.IOException;
@@ -118,15 +119,19 @@ public class ListEventsFrontController {
     private Node createEventCard(Event event) {
         Image image;
         try {
-            image = new Image("file:uploads/" + event.getImage(), 200, 150, true, true);
+            image = new Image("file:C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/images/" + event.getImage(), false);
         } catch (Exception e) {
-            image = new Image("file:uploads/default.jpg", 200, 150, true, true);
+            image = new Image("file:C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/images/default.jpg", false);
         }
 
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(220);
         imageView.setFitHeight(140);
-        imageView.setPreserveRatio(true);
+        imageView.setPreserveRatio(false);
+
+// Crop overflow and center
+        Rectangle clip = new Rectangle(220, 140);
+        imageView.setClip(clip);
 
         Label name = new Label("🎫 " + event.getName());
         name.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #014421;");

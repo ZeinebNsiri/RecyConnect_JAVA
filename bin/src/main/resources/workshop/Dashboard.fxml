@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.workshop.Dashboard"
+            fitToWidth="true"
+            style="-fx-background-color:transparent;">
+
+    <content>
+        <VBox spacing="30"
+              style="-fx-background-color: #f8f9fa;">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+
+            <Label text="Statistiques des Workshops"
+                   style="-fx-font-size: 24px; -fx-text-fill: #014421; -fx-font-weight: bold;"/>
+
+            <!-- 1) BarChart - Nombre du workshop par catégorie -->
+            <VBox spacing="10">
+                <Label text="Nombre du workshop par catégorie"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <BarChart fx:id="barChartCategory"
+                          prefHeight="300"
+                          title="Workshops par Catégorie">
+                    <xAxis>
+                        <CategoryAxis label="Catégorie"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Nombre"/>
+                    </yAxis>
+                </BarChart>
+            </VBox>
+
+            <!-- 2) PieChart - Total des notes par catégorie -->
+            <VBox spacing="10">
+                <Label text="Répartition du total des notes par catégorie"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <PieChart fx:id="pieChartRatingSum"
+                          prefHeight="300"/>
+            </VBox>
+
+            <!-- 3) PolarArea (converted to LineChart) - Moyenne des notes par Workshop -->
+            <VBox spacing="10">
+                <Label text="Moyenne de notes par Workshop"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <LineChart fx:id="polarChartAverage"
+                           title="Moyenne par Workshop"
+                           prefHeight="300">
+                    <xAxis>
+                        <CategoryAxis label="Workshop"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Moyenne"/>
+                    </yAxis>
+                </LineChart>
+            </VBox>
+
+        </VBox>
+    </content>
+</ScrollPane>

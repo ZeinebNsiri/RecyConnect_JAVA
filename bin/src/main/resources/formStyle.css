@@ -1,0 +1,53 @@
+.clean-field {
+    -fx-background-color: white;
+    -fx-border-color: #c0c0c0;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+    -fx-pref-width: 100%;
+}
+
+.clean-combo {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #c0c0c0;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+    -fx-pref-width: 100%;
+}
+
+#confirmerArticleButton {
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-font-size: 14px;
+}
+
+#annulerArticleButton {
+    -fx-background-color: #444;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-font-size: 14px;
+}
+
+
+.clean-combo {
+    -fx-background-color: #edeff1;
+    -fx-border-color: #c0c0c0;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-font-size: 14px;
+    -fx-pref-height: 40;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+}
+
+.combo-box-base {
+    -fx-padding: 0 10 0 10;
+}

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<BorderPane fx:id="rootBorderPane" fx:controller="controllers.BaseAdminController"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="1550.0" prefHeight="795.0"
+            styleClass="root">
+
+    <stylesheets>
+        <URL value="@baseAdmin.css" />
+    </stylesheets>
+    <Label fx:id="sceneReference" visible="false" />
+
+
+    <!-- ======= HEADER ======= -->
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="header">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+            <children>
+                <Label text="RecyConnect" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                <TextField promptText="recherche" prefWidth="200" />
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="notificationButton" onAction="#showNotifications" styleClass="notification-button">
+                    <graphic>
+                        <StackPane>
+                            <Label text="🔔" style="-fx-font-size: 18px;" />
+                            <Label fx:id="notifBadge" text="1" visible="false" styleClass="notif-badge" />
+                        </StackPane>
+                    </graphic>
+                </Button>
+                <MenuButton fx:id="userMenuButton">
+                    <items>
+                        <MenuItem fx:id="profilMenuItem" text="Profil">
+                            <graphic>
+                                <ImageView fitWidth="16" fitHeight="16">
+                                    <image>
+                                        <Image url="@user.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>
+
+                        <MenuItem fx:id="logoutItem" text="Déconnexion">
+                            <graphic>
+                                <ImageView fitWidth="16" fitHeight="16">
+                                    <image>
+                                        <Image url="@logout.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>                    </items>
+                </MenuButton>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- ======= SIDEBAR ======= -->
+    <left>
+        <VBox spacing="20" styleClass="sidebar" alignment="TOP_LEFT" prefWidth="300">
+            <children>
+                <Hyperlink onAction="#showDashboardView" styleClass="sidebar-link">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="DASHBOARD" size="18" fill="#4CAF50" />
+                    </graphic>
+                    <text>Dashboard</text>
+                </Hyperlink>
+
+                <Hyperlink onAction="#showUsersView" styleClass="sidebar-link">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="USERS" size="18" fill="#2196F3" />
+                    </graphic>
+                    <text>Utilisateurs</text>
+                </Hyperlink>
+
+                <TitledPane expanded="false" collapsible="true" animated="true" styleClass="menu-toggle">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontAwesomeIconView glyphName="SHOPPING_CART" size="18" fill="#FF9800" />
+                            <Label text="Ventes" styleClass="menu-title" />
+                        </HBox>
+                    </graphic>
+                    <content>
+                        <VBox spacing="5">
+                            <Hyperlink text="Catégories articles" onAction="#showCategorieView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="TAGS" size="14" fill="#FF9800" />
+                                </graphic>
+                            </Hyperlink>
+                            <Hyperlink text="Articles" onAction="#showArticlesView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="ARCHIVE" size="14" fill="#FF9800" />
+                                </graphic>
+                            </Hyperlink>
+                            <Hyperlink text="Commandes" onAction="#showCommandesView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="LIST_ALT" size="14" fill="#FF9800" />
+                                </graphic>
+                            </Hyperlink>
+                        </VBox>
+                    </content>
+                </TitledPane>
+
+                <TitledPane expanded="false" collapsible="true" animated="true" styleClass="menu-toggle">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontAwesomeIconView glyphName="CALENDAR" size="18" fill="#E91E63" />
+                            <Label text="Événement" styleClass="menu-title" />
+                        </HBox>
+                    </graphic>
+                    <content>
+                        <VBox spacing="5">
+                            <Hyperlink text="Gestion Événement" onAction="#showEvenementView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="CALENDAR_CHECK_O" size="14" fill="#E91E63" />
+                                </graphic>
+                            </Hyperlink>
+                            <Hyperlink text="Gestion Réservations" onAction="#showReservationsView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="TICKET" size="14" fill="#E91E63" />
+                                </graphic>
+                            </Hyperlink>
+                        </VBox>
+                    </content>
+                </TitledPane>
+
+                <TitledPane expanded="false" collapsible="true" animated="true" styleClass="menu-toggle">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontAwesomeIconView glyphName="LINE_CHART" size="18" fill="#9C27B0" />
+                            <Label text="Workshops" styleClass="menu-title" />
+                        </HBox>
+                    </graphic>
+                    <content>
+                        <VBox spacing="5">
+                            <Hyperlink text="Catégories workshops" onAction="#showCategorieWorkshopView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="TH_LARGE" size="14" fill="#9C27B0" />
+                                </graphic>
+                            </Hyperlink>
+                            <Hyperlink text="Workshops" onAction="#showWorkshopsView" styleClass="sidebar-link">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="GRADUATION_CAP" size="14" fill="#9C27B0" />
+                                </graphic>
+                            </Hyperlink>
+                        </VBox>
+                    </content>
+                </TitledPane>
+
+                <Hyperlink onAction="#showPostsView" styleClass="sidebar-link">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="PENCIL_SQUARE" size="18" fill="#00BCD4" />
+                    </graphic>
+                    <text>Posts</text>
+                </Hyperlink>
+            </children>
+        </VBox>
+    </left>
+
+
+    <center>
+        <StackPane fx:id="contentPane" />
+    </center>
+
+</BorderPane>

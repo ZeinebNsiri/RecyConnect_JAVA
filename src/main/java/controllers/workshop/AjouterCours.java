@@ -168,9 +168,9 @@ public class AjouterCours {
         try {
             String imageCours = "default.png";
             if (selectedImageFile != null) {
-                File uploadDir = new File("uploadsworkshop");
+                File uploadDir = new File("C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/images/");
                 if (!uploadDir.exists()) uploadDir.mkdirs();
-                Path destImg = Paths.get("uploadsworkshop", selectedImageFile.getName());
+                Path destImg = Paths.get("C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/images/", selectedImageFile.getName());
                 Files.copy(selectedImageFile.toPath(), destImg, StandardCopyOption.REPLACE_EXISTING);
                 imageCours = selectedImageFile.getName();
             }
@@ -181,9 +181,9 @@ public class AjouterCours {
 
             String video = "";
             if (selectedVideoFile != null) {
-                File uploadDir = new File("uploadsworkshop");
+                File uploadDir = new File("C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/videos/");
                 if (!uploadDir.exists()) uploadDir.mkdirs();
-                Path destVideo = Paths.get("uploadsworkshop", selectedVideoFile.getName());
+                Path destVideo = Paths.get("C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/videos/", selectedVideoFile.getName());
                 Files.copy(selectedVideoFile.toPath(), destVideo, StandardCopyOption.REPLACE_EXISTING);
                 video = selectedVideoFile.getName();
             }

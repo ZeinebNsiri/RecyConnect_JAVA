@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.workshop.ModifierCours"
+            fitToWidth="true"
+            style="-fx-background: #EDF7EF;">
+
+    <content>
+        <VBox alignment="TOP_CENTER" spacing="30" style="-fx-padding: 30;"> <!-- Padding around the card -->
+
+            <!-- 💎 White card -->
+            <VBox prefWidth="700" spacing="15"
+                  style="-fx-background-color: white;
+                         -fx-padding: 20;
+                         -fx-background-radius: 10;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4);">
+
+                <Label text="Modifier Workshop"
+                       style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                <!-- 🖼️ Image Picker -->
+                <VBox spacing="5">
+                    <Label text="Image du workshop"/>
+                    <HBox spacing="10">
+                        <Button fx:id="browseImageBtn" text="Choisir une image" onAction="#handleImageBrowse"/>
+                        <Label fx:id="imageLabel" text="Aucune image choisie"/>
+                    </HBox>
+                    <Label fx:id="errorImage" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+                </VBox>
+
+                <!-- 📝 Titre -->
+                <VBox spacing="5">
+                    <Label text="Titre du workshop"/>
+                    <TextField fx:id="titreField" promptText="Entrez le titre"/>
+                    <Label fx:id="errorTitre" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+                </VBox>
+
+                <!-- 🧩 Catégorie -->
+                <VBox spacing="5">
+                    <Label text="Catégorie du workshop"/>
+                    <ComboBox fx:id="categorieCombo" promptText="Sélectionnez une catégorie"/>
+                    <Label fx:id="errorCategorie" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+                </VBox>
+
+                <!-- 🖊️ Description -->
+                <VBox spacing="5">
+                    <Label text="Description du workshop"/>
+                    <TextArea fx:id="descriptionField" wrapText="true" prefRowCount="4"/>
+                    <Label fx:id="errorDescription" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+                </VBox>
+
+                <!-- 🎬 Vidéo -->
+                <VBox spacing="5">
+                    <Label text="Vidéo du workshop (optionnelle)"/>
+                    <HBox spacing="10">
+                        <Button fx:id="browseVideoBtn" text="Choisir une vidéo" onAction="#handleVideoBrowse"/>
+                        <Label fx:id="videoLabel" text="Aucune vidéo choisie"/>
+                    </HBox>
+                    <Label fx:id="errorVideo" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+                </VBox>
+
+                <!-- ✅ Action Buttons -->
+                <HBox alignment="CENTER" spacing="15">
+                    <Button fx:id="btnModifier"
+                            text="Modifier"
+                            onAction="#updateCours"
+                            style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+                    <Button fx:id="btnAnnuler"
+                            text="Annuler"
+                            onAction="#annulerCours"
+                            style="-fx-background-color: #6c757d; -fx-text-fill: white;"/>
+                </HBox>
+
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

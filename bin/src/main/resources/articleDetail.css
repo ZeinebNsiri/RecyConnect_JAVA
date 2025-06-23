@@ -1,0 +1,115 @@
+.root {
+    -fx-background-color: #ffffff;
+}
+
+.main-content {
+    -fx-padding: 60;
+    -fx-background-color: #ffffff;
+    -fx-spacing: 80; /* espace entre colonnes */
+}
+
+.title-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0a3e27;
+}
+
+.subtitle-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.normal-label {
+    -fx-font-size: 17px;
+    -fx-text-fill: #444444;
+}
+
+.icon-label {
+    -fx-font-size: 32px;
+    -fx-text-fill: #2e7d32;
+}
+
+.bold-label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0a3e27;
+}
+
+.small-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: #666666;
+}
+
+.green-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+}
+
+.green-button:hover {
+    -fx-background-color: #45a049;
+}
+
+/* Footer */
+.footer-section {
+    -fx-background-color: #064d2d;
+    -fx-padding: 30;
+}
+
+.footer-title {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.footer-label {
+    -fx-text-fill: white;
+}
+
+.footer-bottom {
+    -fx-background-color: #02351e;
+    -fx-padding: 10;
+}
+
+.footer-icons .label {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+}
+.back-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #0a3e27;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-underline: true;
+    -fx-alignment: CENTER_LEFT;
+}
+.back-button:hover {
+    -fx-text-fill: #4CAF50;
+    -fx-cursor: hand;
+}
+.description-section {
+    -fx-background-color: #ffffff;
+    -fx-padding: 40 60 40 60; /* haut, droite, bas, gauche */
+    -fx-background-radius: 8;
+    -fx-border-color: #dddddd;
+    -fx-border-width: 0 0 1 0; /* ligne discrète en bas */
+}
+
+.subtitle-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0a3e27; /* cohérence avec le titre principal */
+    -fx-alignment: CENTER;
+}
+
+.normal-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #444444;
+    -fx-wrap-text: true;
+    -fx-text-alignment: justify;
+    -fx-alignment: center;
+    -fx-max-width: 800;
+}

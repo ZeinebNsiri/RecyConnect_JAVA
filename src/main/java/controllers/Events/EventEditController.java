@@ -102,7 +102,7 @@ public class EventEditController {
 
             // Handle image
             if (selectedImageFile != null) {
-                Path dest = Paths.get("uploads", selectedImageFile.getName());
+                Path dest = Paths.get("C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/images/", selectedImageFile.getName());
                 Files.createDirectories(dest.getParent());
                 Files.copy(selectedImageFile.toPath(), dest, StandardCopyOption.REPLACE_EXISTING);
                 event.setImage(selectedImageFile.getName());

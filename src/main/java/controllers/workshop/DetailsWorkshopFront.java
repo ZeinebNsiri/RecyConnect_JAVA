@@ -55,7 +55,7 @@ public class DetailsWorkshopFront {
         descriptionLabel.setText(cours.getDescriptionCours());
         breadcrumbLabel.setText("Accueil / Workshops / " + cours.getTitreCours());
 
-        File imgHeader = new File("uploadsworkshop/" + cours.getImageCours());
+        File imgHeader = new File("C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/images/" + cours.getImageCours());
         if (imgHeader.exists()) {
             headerImage.setImage(new Image(imgHeader.toURI().toString()));
         }
@@ -64,7 +64,7 @@ public class DetailsWorkshopFront {
         loadExistingRating();
 
         if (cours.getVideo() != null && !cours.getVideo().isBlank()) {
-            File videoFile = new File("uploadsworkshop/" + cours.getVideo());
+            File videoFile = new File("C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/videos/" + cours.getVideo());
             if (videoFile.exists()) {
                 try {
                     Media media = new Media(videoFile.toURI().toString());

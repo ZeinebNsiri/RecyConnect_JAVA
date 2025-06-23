@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.EditPostController" spacing="10" >
+    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+    <TextArea fx:id="contentTextArea" prefRowCount="5" wrapText="true"/>
+    <Label text="Images existantes:"/>
+    <FlowPane fx:id="existingImagesPane" hgap="10" vgap="10"/>
+    <Button fx:id="addImageButton" text="Ajouter une image"/>
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="saveButton" text="Enregistrer"/>
+        <Button fx:id="cancelButton" text="Annuler"/>
+    </HBox>
+</VBox>

@@ -7,9 +7,9 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class ChatService {
-    // Choisissez un des modèles suggérés
+    // Modèle API URL
     private static final String CHAT_MODEL_API_URL = "https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1";
-    private static final String API_KEY = "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";
+    private static final String API_KEY = "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"; // Remplacez par votre clé API
 
     public static String sendMessage(String message) {
         try {
@@ -23,10 +23,23 @@ public class ChatService {
             conn.setConnectTimeout(30000); // 30 secondes timeout
             conn.setReadTimeout(30000);
 
-            // Format avec template de chat et instruction explicite
-            String inputJson = "{\"inputs\": \"<s>[INST] Réponds directement sans répéter la question. " + message + " [/INST]\", \"use_chat_template\": true}";
+            // Création du prompt avec instruction sur le recyclage
+            String recyclingPrompt =
+                    "Tu es un assistant spécialisé dans le recyclage pour l'application Recyconnect. " +
+                            "Si la question est sur le recyclage, l'écologie, la gestion des déchets ou le développement durable, " +
+                            "réponds normalement. " +
+                            "Si la question n'est pas liée au recyclage, réoriente poliment la conversation vers un aspect du recyclage. " +
+                            "Pour des salutations ou questions de base comme 'bonjour', 'comment ça va', réponds normalement tout en " +
+                            "mentionnant brièvement ton intérêt pour le recyclage. " +
+                            "Quand on te demande ce qu'est Recyconnect ou ce que l'application propose, réponds que: 'Recyconnect est une application " +
+                            "destinée à établir un lien efficace entre différents acteurs tels que professionnels et particuliers. " +
+                            "L'objectif principal est de promouvoir la réutilisation et le recyclage en facilitant l'échange de produits, " +
+                            "la publication de demandes et la sensibilisation via des événements et formations.' " +
+                            "Sois toujours amical et naturel dans tes réponses. " +
+                            "Question: " + message;
 
-
+            // Format avec template de chat et instruction sur le recyclage
+            String inputJson = "{\"inputs\": \"<s>[INST] " + recyclingPrompt + " [/INST]\", \"use_chat_template\": true}";
 
             // Envoi de la requête
             try (OutputStream os = conn.getOutputStream()) {
@@ -85,7 +98,7 @@ public class ChatService {
 
                 // Supprime les réponses vides ou trop courtes
                 if (extractedText.isEmpty() || extractedText.length() < 2) {
-                    return "⚠️ Le modèle n'a pas généré de réponse valide.";
+                    return "⚠️ Je n'ai pas pu générer de réponse. Parlons de recyclage!";
                 }
 
                 // Suppression des caractères de contrôle indésirables
@@ -95,97 +108,6 @@ public class ChatService {
             } else {
                 // Si on ne trouve pas le format attendu, retourne la réponse brute
                 return "✅ " + fullResponse.replace("\\n", "\n").replace("\\\"", "\"");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "❌ Erreur: " + e.getMessage();
-        }
-    }
-
-    public static String sendMessageAlternative(String message) {
-        try {
-            URL url = new URL(CHAT_MODEL_API_URL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Authorization", "Bearer " + API_KEY);
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setDoOutput(true);
-
-            // Format avec wait_for_model pour éviter les timeouts
-            String inputJson = "{\"inputs\": \"" + message + "\", \"wait_for_model\": true}";
-
-            try (OutputStream os = conn.getOutputStream()) {
-                os.write(inputJson.getBytes("UTF-8"));
-                os.flush();
-            }
-
-            // Vérifie si la réponse est un stream ou un objet JSON standard
-            String contentType = conn.getHeaderField("Content-Type");
-
-            if (contentType != null && contentType.contains("text/event-stream")) {
-                // Traitement des réponses en streaming
-                Scanner scanner = new Scanner(conn.getInputStream(), "UTF-8");
-                StringBuilder finalResponse = new StringBuilder();
-
-                while (scanner.hasNextLine()) {
-                    String line = scanner.nextLine();
-                    if (line.startsWith("data: ")) {
-                        String data = line.substring(6);
-                        // Traitement des données de streaming
-                        if (!data.equals("[DONE]")) {
-                            try {
-                                // Extraction du texte généré du stream
-                                int textStart = data.indexOf("\"text\":\"") + 8;
-                                int textEnd = data.indexOf("\"", textStart);
-                                if (textStart != -1 && textEnd != -1) {
-                                    finalResponse.append(data.substring(textStart, textEnd));
-                                }
-                            } catch (Exception e) {
-                                // Ignore les erreurs de parsing
-                            }
-                        }
-                    }
-                }
-                scanner.close();
-
-                return finalResponse.toString().trim();
-            } else {
-                // Traitement standard
-                Scanner scanner = new Scanner(conn.getInputStream(), "UTF-8");
-                StringBuilder response = new StringBuilder();
-                while (scanner.hasNext()) {
-                    response.append(scanner.nextLine());
-                }
-                scanner.close();
-
-                // Extraction et nettoyage
-                String fullResponse = response.toString();
-                int start = fullResponse.indexOf("\"generated_text\":\"") + 18;
-                int end = fullResponse.lastIndexOf("\"");
-
-                if (start != -1 && end != -1 && end > start) {
-                    String extractedText = fullResponse.substring(start, end)
-                            .replace("\\n", "\n")
-                            .replace("\\\"", "\"")
-                            .replace("\\\\", "\\");
-
-                    // Nettoyage complet des balises et textes répétés
-                    extractedText = extractedText
-                            .replaceAll("<s>\\s*\\[INST\\].*?\\[/INST\\]", "")
-                            .replaceAll("<s>|</s>|\\[INST\\]|\\[/INST\\]", "")
-                            .replaceAll("(?i)User:\\s*" + Pattern.quote(message) + "\\s*Assistant:", "")
-                            .replaceAll("(?i)User:|Assistant:", "")
-                            .trim();
-
-                    if (extractedText.startsWith(message)) {
-                        extractedText = extractedText.substring(message.length()).trim();
-                    }
-
-                    return extractedText;
-                } else {
-                    return "✅ " + fullResponse.replace("\\n", "\n").replace("\\\"", "\"");
-                }
             }
 
         } catch (Exception e) {

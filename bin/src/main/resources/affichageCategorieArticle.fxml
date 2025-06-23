@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.affichageCategorieArticle"
+      spacing="20" alignment="TOP_LEFT" prefWidth="900" >
+    <stylesheets>
+        <URL value="@affichageCategorieArticle.css" />
+    </stylesheets>
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+
+    <HBox spacing="10">
+        <Button fx:id="addCategorieBtn" text="➕ Ajouter une catégorie"
+                styleClass="btn-primary"
+                onAction="#ajouterCategorieAction" />
+
+        <Button text="📊 Voir Statistiques"
+                styleClass="btn-primary"
+                onAction="#goToStatistics" />
+    </HBox>
+
+
+    <ComboBox fx:id="categorieFilterCombo" promptText="Filtrer par catégorie" />
+
+    <Label text="Toutes les catégories" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+
+    <TableView fx:id="categorieTable" prefWidth="900" style="-fx-background-radius: 10;">
+        <columns>
+            <TableColumn fx:id="idColumn" text="Id" prefWidth="50"/>
+            <TableColumn fx:id="imageColumn" text="Logo" prefWidth="120"/>
+            <TableColumn fx:id="nomColumn" text="Catégorie" prefWidth="200"/>
+            <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="180"/>
+            <TableColumn fx:id="nombreArticlesColumn" text="Nombre d'articles" prefWidth="150"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="350"/>
+        </columns>
+    </TableView>
+</VBox>

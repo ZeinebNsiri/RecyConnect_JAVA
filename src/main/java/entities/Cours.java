@@ -76,7 +76,7 @@ public class Cours {
         if (imageCours == null || imageCours.isEmpty()) {
             path = "uploadsworkshop/default.png";
         } else {
-            path = "uploadsworkshop/" + imageCours;
+            path = "C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/images/" + imageCours;
         }
         File file = new File(path);
         Image img = new Image(file.toURI().toString());
@@ -92,7 +92,7 @@ public class Cours {
         if (video == null || video.trim().isEmpty()) {
             return new MediaView();
         }
-        String path = "uploadsworkshop/" + video;
+        String path = "C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/videos/" + video;
         File file = new File(path);
         if (!file.exists()) {
             return new MediaView();

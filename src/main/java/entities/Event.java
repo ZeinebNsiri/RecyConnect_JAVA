@@ -74,7 +74,7 @@ public class Event {
             return new ImageView();
         }
 
-        String path = "file:uploads/" + filename;
+        String path = "file:C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/images/" + filename;
 
         Image img = new Image(path, 50, 50, true, true);
         ImageView view = new ImageView(img);

@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 public class ImageGenerationService {
 
     private static final String API_URL = "https://modelslab.com/api/v6/realtime/text2img";
-    private static final String API_KEY = "KTTjl9EdaZEq1uv4jrdIJ6nl9ujFCfvEeALRDHgUwSLdXASyclel90zzPO5o";
+    private static final String API_KEY = "0X8T3MjaQtqOW6BAJP1O7zGmYPJYMzwU4eUrIbh4HlneirL1zYTjH6c2AE9P";
 
     public static String generateImage(String prompt, String savePath) {
         try {
@@ -68,7 +68,7 @@ public class ImageGenerationService {
 
             // Extract the image URL from the response (based on the output key)
             String imageUrl = responseBody.split("\"output\":\\[\"")[1].split("\"\\]")[0].replace("\\/", "/");
-            Files.createDirectories(Paths.get("uploads"));
+            Files.createDirectories(Paths.get("C:/Users/azizz/OneDrive/Bureau/Recyconnect/public/uploads/images/"));
 
             // Download and save the image
             try (InputStream in = new URL(imageUrl).openStream();

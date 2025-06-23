@@ -1,0 +1,49 @@
+/* Style pour tous les boutons */
+.button {
+    -fx-background-color: darkgreen;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #007f3f;
+}
+
+.button:pressed {
+    -fx-background-color: #005e2e;
+}
+
+.eye-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+.eye-button:hover {
+    -fx-text-fill: #222;
+}
+.eye-button:pressed {
+    -fx-text-fill: #000;
+}
+
+
+/* Style des champs texte personnalisés */
+.styled-textfield {
+    -fx-background-color: white;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}
+
+.styled-textfield:focused {
+    -fx-border-color: darkgreen;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0.0, 0, 2);
+}

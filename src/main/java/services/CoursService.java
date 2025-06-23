@@ -81,11 +81,31 @@ public class CoursService implements IService<Cours> {
 
     @Override
     public void delete(Cours cours) throws SQLException {
-        String query = "DELETE FROM cours WHERE id = ?";
-        try (PreparedStatement ps = conx.prepareStatement(query)) {
-            ps.setInt(1, cours.getId());
-            ps.executeUpdate();
-            System.out.println("Cours supprimé !");
+        conx.setAutoCommit(false);
+
+        try {
+            // 1. Supprimer les ratings liés au cours
+            String deleteRatingsQuery = "DELETE FROM rating WHERE cours_id = ?";
+            try (PreparedStatement psRatings = conx.prepareStatement(deleteRatingsQuery)) {
+                psRatings.setInt(1, cours.getId());
+                psRatings.executeUpdate();
+            }
+
+            // 2. Supprimer le cours
+            String deleteCoursQuery = "DELETE FROM cours WHERE id = ?";
+            try (PreparedStatement psCours = conx.prepareStatement(deleteCoursQuery)) {
+                psCours.setInt(1, cours.getId());
+                psCours.executeUpdate();
+            }
+
+            conx.commit();
+            System.out.println("Cours et ratings associés supprimés !");
+
+        } catch (SQLException e) {
+            conx.rollback();
+            throw e;
+        } finally {
+            conx.setAutoCommit(true);
         }
     }
 
